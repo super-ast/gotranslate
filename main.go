@@ -1,12 +1,41 @@
 package main
 
 import (
-	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
 	"log"
 )
+
+type superAST struct {
+}
+
+func (a superAST) Visit(node ast.Node) ast.Visitor {
+	if node == nil {
+		return nil
+	}
+	switch x := node.(type) {
+	case *ast.BasicLit:
+	case *ast.BlockStmt:
+	case *ast.CallExpr:
+	case *ast.ExprStmt:
+	case *ast.FieldList:
+	case *ast.File:
+		pname := x.Name.Name
+		if pname != "main" {
+			log.Fatalf(`Package name is not "main": "%s"`, pname)
+		}
+	case *ast.FuncDecl:
+	case *ast.FuncType:
+	case *ast.GenDecl:
+	case *ast.Ident:
+	case *ast.ImportSpec:
+	case *ast.SelectorExpr:
+	default:
+		log.Printf("Uncatched ast.Node type: %T\n", node)
+	}
+	return a
+}
 
 func main() {
 	fset := token.NewFileSet()
@@ -23,17 +52,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	ast.Inspect(f, func(n ast.Node) bool {
-		var s string
-		switch x := n.(type) {
-		case *ast.BasicLit:
-			s = x.Value
-		case *ast.Ident:
-			s = x.Name
-		}
-		if s != "" {
-			fmt.Printf("%s:\t%s\n", fset.Position(n.Pos()), s)
-		}
-		return true
-	})
+	var a superAST
+	ast.Walk(a, f)
 }
