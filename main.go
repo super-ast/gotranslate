@@ -5,7 +5,13 @@ import (
 	"go/parser"
 	"go/token"
 	"log"
+	"strconv"
 )
+
+var allowedImports = map[string]struct{}{
+	"fmt": struct{}{},
+	"log": struct{}{},
+}
 
 type superAST struct {
 	fset *token.FileSet
@@ -28,6 +34,16 @@ func (a superAST) Visit(node ast.Node) ast.Visitor {
 		pname := x.Name.Name
 		if pname != "main" {
 			log.Fatalf(`Package name is not "main": "%s"`, pname)
+		}
+		imports := x.Imports
+		for _, imp := range imports {
+			path, err := strconv.Unquote(imp.Path.Value)
+			if err != nil {
+				log.Fatalf("Error when unquoting import: %s", err)
+			}
+			if _, e := allowedImports[path]; !e {
+				log.Fatalf(`Import path not allowed: "%s"`, path)
+			}
 		}
 	case *ast.FuncDecl:
 		name := x.Name.Name
