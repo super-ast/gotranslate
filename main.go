@@ -8,12 +8,16 @@ import (
 )
 
 type superAST struct {
+	fset *token.FileSet
 }
 
 func (a superAST) Visit(node ast.Node) ast.Visitor {
 	if node == nil {
 		return nil
 	}
+	pos := a.fset.Position(node.Pos())
+	log.Printf("%#v", pos)
+	log.Printf("%T", node)
 	switch x := node.(type) {
 	case *ast.BasicLit:
 	case *ast.BlockStmt:
@@ -26,6 +30,9 @@ func (a superAST) Visit(node ast.Node) ast.Visitor {
 			log.Fatalf(`Package name is not "main": "%s"`, pname)
 		}
 	case *ast.FuncDecl:
+		name := x.Name.Name
+		params := x.Type.Params.List
+		log.Printf("func %s %v", name, params)
 	case *ast.FuncType:
 	case *ast.GenDecl:
 	case *ast.Ident:
@@ -52,6 +59,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	var a superAST
+	a := superAST{
+		fset: fset,
+	}
 	ast.Walk(a, f)
 }
