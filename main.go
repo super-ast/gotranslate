@@ -1,13 +1,20 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
+	"flag"
+	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
 	"log"
 	"os"
 	"strconv"
+)
+
+var (
+	pretty = flag.Bool("p", false, "indent (pretty print) output")
 )
 
 var allowedImports = map[string]struct{}{
@@ -102,6 +109,7 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 }
 
 func main() {
+	flag.Parse()
 	fset := token.NewFileSet()
 	src := `
 package main
@@ -120,8 +128,21 @@ func main() {
 		fset: fset,
 	}
 	ast.Walk(&a, f)
-	enc := json.NewEncoder(os.Stdout)
-	if err := enc.Encode(&a.rootBlock); err != nil {
-		log.Println(err)
+
+	if *pretty {
+		b, err := json.Marshal(&a.rootBlock)
+		if err != nil {
+			log.Fatal(err)
+		}
+		var out bytes.Buffer
+		json.Indent(&out, b, "", "  ")
+		out.WriteTo(os.Stdout)
+		fmt.Printf("\n")
+	} else {
+		enc := json.NewEncoder(os.Stdout)
+		if err := enc.Encode(&a.rootBlock); err != nil {
+			log.Println(err)
+		}
 	}
+
 }
