@@ -1,10 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"go/ast"
 	"go/parser"
 	"go/token"
 	"log"
+	"os"
 	"strconv"
 )
 
@@ -13,11 +15,34 @@ var allowedImports = map[string]struct{}{
 	"log": struct{}{},
 }
 
-type superAST struct {
-	fset *token.FileSet
+type block struct {
+	Statements []statement `json:"statements"`
 }
 
-func (a superAST) Visit(node ast.Node) ast.Visitor {
+type dataType struct {
+	Name string `json:"name"`
+}
+
+type parameter struct {
+	Name     string   `json:"name"`
+	DataType dataType `json:"data-type"`
+}
+
+type statement struct {
+	Line       int         `json:"line"`
+	Type       string      `json:"type"`
+	Name       string      `json:"name"`
+	ReturnType dataType    `json:"return-type"`
+	Parameters []parameter `json:"parameters"`
+	Block      block       `json:"block"`
+}
+
+type superAST struct {
+	fset      *token.FileSet
+	rootBlock block
+}
+
+func (a *superAST) Visit(node ast.Node) ast.Visitor {
 	if node == nil {
 		return nil
 	}
@@ -47,8 +72,24 @@ func (a superAST) Visit(node ast.Node) ast.Visitor {
 		}
 	case *ast.FuncDecl:
 		name := x.Name.Name
-		params := x.Type.Params.List
-		log.Printf("func %s %v", name, params)
+		var params, results []*ast.Field
+		if x.Type.Params != nil {
+			params = x.Type.Params.List
+		}
+		if x.Type.Results != nil {
+			results = x.Type.Results.List
+		}
+		log.Printf("func %s %v %v", name, params, results)
+		function := statement{
+			Line: pos.Line,
+			Type: "function-call",
+			Name: name,
+			ReturnType: dataType{
+				Name: "int",
+			},
+			Parameters: nil,
+		}
+		a.rootBlock.Statements = append(a.rootBlock.Statements, function)
 	case *ast.FuncType:
 	case *ast.GenDecl:
 	case *ast.Ident:
@@ -78,5 +119,9 @@ func main() {
 	a := superAST{
 		fset: fset,
 	}
-	ast.Walk(a, f)
+	ast.Walk(&a, f)
+	enc := json.NewEncoder(os.Stdout)
+	if err := enc.Encode(&a.rootBlock); err != nil {
+		log.Println(err)
+	}
 }
