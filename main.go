@@ -11,6 +11,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 )
 
 var (
@@ -45,17 +46,19 @@ type statement struct {
 }
 
 type superAST struct {
+	level     int
 	fset      *token.FileSet
 	rootBlock block
 }
 
 func (a *superAST) Visit(node ast.Node) ast.Visitor {
 	if node == nil {
+		a.level--
+		log.Printf("%s}", strings.Repeat("  ", a.level))
 		return nil
 	}
 	pos := a.fset.Position(node.Pos())
-	log.Printf("%#v", pos)
-	log.Printf("%T", node)
+	log.Printf("%s%T - %#v", strings.Repeat("  ", a.level), node, pos)
 	switch x := node.(type) {
 	case *ast.BasicLit:
 	case *ast.BlockStmt:
@@ -79,6 +82,7 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 		}
 	case *ast.FuncDecl:
 		name := x.Name.Name
+		/*
 		var params, results []*ast.Field
 		if x.Type.Params != nil {
 			params = x.Type.Params.List
@@ -86,7 +90,7 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 		if x.Type.Results != nil {
 			results = x.Type.Results.List
 		}
-		log.Printf("func %s %v %v", name, params, results)
+		*/
 		function := statement{
 			Line: pos.Line,
 			Type: "function-call",
@@ -108,6 +112,7 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 	default:
 		log.Printf("Uncatched ast.Node type: %T\n", node)
 	}
+	a.level++
 	return a
 }
 
