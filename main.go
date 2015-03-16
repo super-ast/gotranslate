@@ -94,7 +94,10 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 			ReturnType: dataType{
 				Name: "int",
 			},
-			Parameters: nil,
+			Parameters: make([]parameter, 0),
+			Block: block{
+				Statements: make([]statement, 0),
+			},
 		}
 		a.rootBlock.Statements = append(a.rootBlock.Statements, function)
 	case *ast.FuncType:
