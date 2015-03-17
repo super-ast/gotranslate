@@ -46,24 +46,39 @@ type statement struct {
 }
 
 type superAST struct {
-	level     int
-	fset      *token.FileSet
-	rootBlock block
+	nodeStack  []ast.Node
+	blockStack []*block
+	fset       *token.FileSet
+}
+
+func newSuperAST(fset *token.FileSet) *superAST {
+	a := &superAST{
+		fset: fset,
+	}
+	a.blockStack = append(a.blockStack, new(block))
+	return a
 }
 
 func (a *superAST) Visit(node ast.Node) ast.Visitor {
 	if node == nil {
-		a.level--
-		log.Printf("%s}", strings.Repeat("  ", a.level))
+		popNode := a.nodeStack[len(a.nodeStack)-1]
+		switch popNode.(type) {
+		case *ast.FuncDecl:
+			a.blockStack = a.blockStack[:len(a.blockStack)-1]
+		}
+		a.nodeStack = a.nodeStack[:len(a.nodeStack)-1]
+		log.Printf("%s}", strings.Repeat("  ", len(a.nodeStack)))
 		return nil
 	}
+	curBlock := a.blockStack[len(a.blockStack)-1]
 	pos := a.fset.Position(node.Pos())
-	log.Printf("%s%T - %#v", strings.Repeat("  ", a.level), node, pos)
+	log.Printf("%s%T - %#v", strings.Repeat("  ", len(a.nodeStack)), node, pos)
 	switch x := node.(type) {
 	case *ast.BasicLit:
 	case *ast.BlockStmt:
 	case *ast.CallExpr:
 	case *ast.ExprStmt:
+
 	case *ast.FieldList:
 	case *ast.File:
 		pname := x.Name.Name
@@ -82,18 +97,16 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 		}
 	case *ast.FuncDecl:
 		name := x.Name.Name
-		/*
-		var params, results []*ast.Field
+		/*var params, results []*ast.Field
 		if x.Type.Params != nil {
 			params = x.Type.Params.List
 		}
 		if x.Type.Results != nil {
 			results = x.Type.Results.List
-		}
-		*/
+		}*/
 		function := statement{
 			Line: pos.Line,
-			Type: "function-call",
+			Type: "function-declaration",
 			Name: name,
 			ReturnType: dataType{
 				Name: "int",
@@ -103,7 +116,8 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 				Statements: make([]statement, 0),
 			},
 		}
-		a.rootBlock.Statements = append(a.rootBlock.Statements, function)
+		curBlock.Statements = append(curBlock.Statements, function)
+		a.blockStack = append(a.blockStack, &function.Block)
 	case *ast.FuncType:
 	case *ast.GenDecl:
 	case *ast.Ident:
@@ -112,7 +126,7 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 	default:
 		log.Printf("Uncatched ast.Node type: %T\n", node)
 	}
-	a.level++
+	a.nodeStack = append(a.nodeStack, node)
 	return a
 }
 
@@ -126,29 +140,33 @@ import "fmt"
 
 func main() {
 	fmt.Println("Hello, World!")
+	fmt.Println("Hello, World2!")
 }
 `
 	f, err := parser.ParseFile(fset, "hello_world.go", src, 0)
 	if err != nil {
 		log.Fatal(err)
 	}
-	a := superAST{
-		fset: fset,
-	}
-	ast.Walk(&a, f)
+	a := newSuperAST(fset)
+	ast.Walk(a, f)
 
+	rootBlock := a.blockStack[0]
 	if *pretty {
-		b, err := json.Marshal(&a.rootBlock)
+		b, err := json.Marshal(rootBlock)
 		if err != nil {
 			log.Fatal(err)
 		}
 		var out bytes.Buffer
-		json.Indent(&out, b, "", "  ")
-		out.WriteTo(os.Stdout)
+		if err := json.Indent(&out, b, "", "  "); err != nil {
+			log.Fatal(err)
+		}
+		if _, err := out.WriteTo(os.Stdout); err != nil {
+			log.Fatal(err)
+		}
 		fmt.Printf("\n")
 	} else {
 		enc := json.NewEncoder(os.Stdout)
-		if err := enc.Encode(&a.rootBlock); err != nil {
+		if err := enc.Encode(rootBlock); err != nil {
 			log.Println(err)
 		}
 	}
