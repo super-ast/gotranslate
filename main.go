@@ -24,7 +24,7 @@ var allowedImports = map[string]struct{}{
 }
 
 type block struct {
-	Statements []statement `json:"statements"`
+	Stmts []statement `json:"statements"`
 }
 
 type dataType struct {
@@ -37,15 +37,15 @@ type parameter struct {
 }
 
 type statement struct {
-	Line       int         `json:"line"`
-	Type       string      `json:"type"`
-	Name       string      `json:"name"`
-	ReturnType *dataType   `json:"return-type,omitempty"`
-	Parameters []parameter `json:"parameters,omitempty"`
-	Arguments  []statement `json:"arguments,omitempty"`
-	Left       *statement  `json:"left,omitempty"`
-	Right      *statement  `json:"right,omitempty"`
-	Block      *block      `json:"block,omitempty"`
+	Line    int         `json:"line"`
+	Type    string      `json:"type"`
+	Name    string      `json:"name"`
+	RetType *dataType   `json:"return-type,omitempty"`
+	Params  []parameter `json:"parameters,omitempty"`
+	Args    []statement `json:"arguments,omitempty"`
+	Left    *statement  `json:"left,omitempty"`
+	Right   *statement  `json:"right,omitempty"`
+	Block   *block      `json:"block,omitempty"`
 }
 
 type superAST struct {
@@ -60,24 +60,47 @@ func newSuperAST(fset *token.FileSet) *superAST {
 		fset:      fset,
 		RootBlock: new(block),
 	}
-	a.stmtsStack = append(a.stmtsStack, &a.RootBlock.Statements)
+	a.stmtsStack = append(a.stmtsStack, &a.RootBlock.Stmts)
 	return a
+}
+
+func (a *superAST) pushNode(node ast.Node) {
+	a.nodeStack = append(a.nodeStack, node)
+}
+
+func (a *superAST) curNode() ast.Node {
+	return a.nodeStack[len(a.nodeStack)-1]
+}
+
+func (a *superAST) popNode() {
+	a.nodeStack = a.nodeStack[:len(a.nodeStack)-1]
+}
+
+func (a *superAST) pushStmts(stmts *[]statement) {
+	a.stmtsStack = append(a.stmtsStack, stmts)
+}
+
+func (a *superAST) curStmts() *[]statement {
+	return a.stmtsStack[len(a.stmtsStack)-1]
+}
+
+func (a *superAST) popStmts() {
+	a.stmtsStack = a.stmtsStack[:len(a.stmtsStack)-1]
 }
 
 func (a *superAST) Visit(node ast.Node) ast.Visitor {
 	if node == nil {
-		popNode := a.nodeStack[len(a.nodeStack)-1]
-		switch popNode.(type) {
+		switch a.curNode().(type) {
 		case *ast.CallExpr:
-			a.stmtsStack = a.stmtsStack[:len(a.stmtsStack)-1]
+			a.popStmts()
 		case *ast.FuncDecl:
-			a.stmtsStack = a.stmtsStack[:len(a.stmtsStack)-1]
+			a.popStmts()
 		}
-		a.nodeStack = a.nodeStack[:len(a.nodeStack)-1]
+		a.popNode()
 		log.Printf("%s}", strings.Repeat("  ", len(a.nodeStack)))
 		return nil
 	}
-	curStatements := a.stmtsStack[len(a.stmtsStack)-1]
+	curStmts := a.curStmts()
 	pos := a.fset.Position(node.Pos())
 	log.Printf("%s%T - %#v", strings.Repeat("  ", len(a.nodeStack)), node, pos)
 	switch x := node.(type) {
@@ -89,7 +112,7 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 			Type: "function-call",
 			Name: "print",
 		}
-		*curStatements = append(*curStatements, call)
+		*curStmts = append(*curStmts, call)
 	case *ast.ExprStmt:
 	case *ast.FieldList:
 	case *ast.File:
@@ -120,13 +143,13 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 			Line: pos.Line,
 			Type: "function-declaration",
 			Name: name,
-			ReturnType: &dataType{
+			RetType: &dataType{
 				Name: "int",
 			},
 			Block: new(block),
 		}
-		*curStatements = append(*curStatements, fn)
-		a.stmtsStack = append(a.stmtsStack, &fn.Block.Statements)
+		*curStmts = append(*curStmts, fn)
+		a.pushStmts(&fn.Block.Stmts)
 	case *ast.FuncType:
 	case *ast.GenDecl:
 	case *ast.Ident:
@@ -135,7 +158,7 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 	default:
 		log.Printf("Uncatched ast.Node type: %T\n", node)
 	}
-	a.nodeStack = append(a.nodeStack, node)
+	a.pushNode(node)
 	return a
 }
 
