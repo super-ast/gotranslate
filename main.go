@@ -40,9 +40,12 @@ type statement struct {
 	Line       int         `json:"line"`
 	Type       string      `json:"type"`
 	Name       string      `json:"name"`
-	ReturnType dataType    `json:"return-type"`
-	Parameters []parameter `json:"parameters"`
-	Block      block       `json:"block"`
+	ReturnType *dataType   `json:"return-type,omitempty"`
+	Parameters []parameter `json:"parameters,omitempty"`
+	Arguments  []statement `json:"arguments,omitempty"`
+	Left       *statement  `json:"left,omitempty"`
+	Right      *statement  `json:"right,omitempty"`
+	Block      *block      `json:"block,omitempty"`
 }
 
 type superAST struct {
@@ -77,8 +80,14 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 	case *ast.BasicLit:
 	case *ast.BlockStmt:
 	case *ast.CallExpr:
+		call := statement{
+			Line:      pos.Line,
+			Type:      "function-call",
+			Name:      "print",
+			Arguments: make([]statement, 0),
+		}
+		curBlock.Statements = append(curBlock.Statements, call)
 	case *ast.ExprStmt:
-
 	case *ast.FieldList:
 	case *ast.File:
 		pname := x.Name.Name
@@ -108,16 +117,14 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 			Line: pos.Line,
 			Type: "function-declaration",
 			Name: name,
-			ReturnType: dataType{
+			ReturnType: &dataType{
 				Name: "int",
 			},
 			Parameters: make([]parameter, 0),
-			Block: block{
-				Statements: make([]statement, 0),
-			},
+			Block:      new(block),
 		}
 		curBlock.Statements = append(curBlock.Statements, function)
-		a.blockStack = append(a.blockStack, &function.Block)
+		a.blockStack = append(a.blockStack, function.Block)
 	case *ast.FuncType:
 	case *ast.GenDecl:
 	case *ast.Ident:
@@ -140,7 +147,6 @@ import "fmt"
 
 func main() {
 	fmt.Println("Hello, World!")
-	fmt.Println("Hello, World2!")
 }
 `
 	f, err := parser.ParseFile(fset, "hello_world.go", src, 0)
