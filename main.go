@@ -81,10 +81,9 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 	case *ast.BlockStmt:
 	case *ast.CallExpr:
 		call := statement{
-			Line:      pos.Line,
-			Type:      "function-call",
-			Name:      "print",
-			Arguments: make([]statement, 0),
+			Line: pos.Line,
+			Type: "function-call",
+			Name: "print",
 		}
 		curBlock.Statements = append(curBlock.Statements, call)
 	case *ast.ExprStmt:
@@ -120,8 +119,7 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 			ReturnType: &dataType{
 				Name: "int",
 			},
-			Parameters: make([]parameter, 0),
-			Block:      new(block),
+			Block: new(block),
 		}
 		curBlock.Statements = append(curBlock.Statements, function)
 		a.blockStack = append(a.blockStack, function.Block)
