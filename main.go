@@ -49,16 +49,18 @@ type statement struct {
 }
 
 type superAST struct {
+	RootBlock  *block
 	nodeStack  []ast.Node
-	blockStack []*block
+	stmtsStack []*[]statement
 	fset       *token.FileSet
 }
 
 func newSuperAST(fset *token.FileSet) *superAST {
 	a := &superAST{
-		fset: fset,
+		fset:      fset,
+		RootBlock: new(block),
 	}
-	a.blockStack = append(a.blockStack, new(block))
+	a.stmtsStack = append(a.stmtsStack, &a.RootBlock.Statements)
 	return a
 }
 
@@ -66,14 +68,16 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 	if node == nil {
 		popNode := a.nodeStack[len(a.nodeStack)-1]
 		switch popNode.(type) {
+		case *ast.CallExpr:
+			a.stmtsStack = a.stmtsStack[:len(a.stmtsStack)-1]
 		case *ast.FuncDecl:
-			a.blockStack = a.blockStack[:len(a.blockStack)-1]
+			a.stmtsStack = a.stmtsStack[:len(a.stmtsStack)-1]
 		}
 		a.nodeStack = a.nodeStack[:len(a.nodeStack)-1]
 		log.Printf("%s}", strings.Repeat("  ", len(a.nodeStack)))
 		return nil
 	}
-	curBlock := a.blockStack[len(a.blockStack)-1]
+	curStatements := a.stmtsStack[len(a.stmtsStack)-1]
 	pos := a.fset.Position(node.Pos())
 	log.Printf("%s%T - %#v", strings.Repeat("  ", len(a.nodeStack)), node, pos)
 	switch x := node.(type) {
@@ -85,7 +89,7 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 			Type: "function-call",
 			Name: "print",
 		}
-		curBlock.Statements = append(curBlock.Statements, call)
+		*curStatements = append(*curStatements, call)
 	case *ast.ExprStmt:
 	case *ast.FieldList:
 	case *ast.File:
@@ -112,7 +116,7 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 		if x.Type.Results != nil {
 			results = x.Type.Results.List
 		}*/
-		function := statement{
+		fn := statement{
 			Line: pos.Line,
 			Type: "function-declaration",
 			Name: name,
@@ -121,8 +125,8 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 			},
 			Block: new(block),
 		}
-		curBlock.Statements = append(curBlock.Statements, function)
-		a.blockStack = append(a.blockStack, function.Block)
+		*curStatements = append(*curStatements, fn)
+		a.stmtsStack = append(a.stmtsStack, &fn.Block.Statements)
 	case *ast.FuncType:
 	case *ast.GenDecl:
 	case *ast.Ident:
@@ -154,9 +158,8 @@ func main() {
 	a := newSuperAST(fset)
 	ast.Walk(a, f)
 
-	rootBlock := a.blockStack[0]
 	if *pretty {
-		b, err := json.Marshal(rootBlock)
+		b, err := json.Marshal(a.RootBlock)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -170,7 +173,7 @@ func main() {
 		fmt.Printf("\n")
 	} else {
 		enc := json.NewEncoder(os.Stdout)
-		if err := enc.Encode(rootBlock); err != nil {
+		if err := enc.Encode(a.RootBlock); err != nil {
 			log.Println(err)
 		}
 	}
