@@ -34,6 +34,7 @@ type dataType struct {
 }
 
 type parameter struct {
+	ID       int      `json:"id"`
 	Name     string   `json:"name"`
 	DataType dataType `json:"data-type"`
 }
@@ -105,28 +106,14 @@ func strUnquote(s string) string {
 	return u
 }
 
-func fieldName(x ast.Expr) *ast.Ident {
-	switch t := x.(type) {
-	case *ast.Ident:
-		return t
-	case *ast.SelectorExpr:
-		if _, ok := t.X.(*ast.Ident); ok {
-			return t.Sel
-		}
-	case *ast.StarExpr:
-		return fieldName(t.X)
-	}
-	return nil
-}
-
-func callName(x ast.Expr) string {
+func exprToString(x ast.Expr) string {
 	switch t := x.(type) {
 	case *ast.Ident:
 		return t.Name
 	case *ast.SelectorExpr:
-		return callName(t.X) + "." + t.Sel.Name
+		return exprToString(t.X) + "." + t.Sel.Name
 	case *ast.StarExpr:
-		return callName(t.X)
+		return exprToString(t.X)
 	}
 	return ""
 }
@@ -134,6 +121,24 @@ func callName(x ast.Expr) string {
 var funcNames = map[string]string{
 	"fmt.Println": "print",
 	"println":     "print",
+}
+
+type field struct {
+	varName, typeName string
+}
+
+func flattenFieldList(fieldList *ast.FieldList) []field {
+	var fields []field
+	for _, f := range fieldList.List {
+		t := exprToString(f.Type)
+		for _, n := range f.Names {
+			fields = append(fields, field{
+				varName:  n.Name,
+				typeName: t,
+			})
+		}
+	}
+	return fields
 }
 
 func (a *superAST) Visit(node ast.Node) ast.Visitor {
@@ -173,7 +178,7 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 		a.curID++
 		*curStmts = append(*curStmts, lit)
 	case *ast.CallExpr:
-		name := callName(x.Fun)
+		name := exprToString(x.Fun)
 		if newname, e := funcNames[name]; e {
 			name = newname
 		}
@@ -199,7 +204,19 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 			ID: a.curID,
 		}
 		a.curID++
-		//params := x.Type.Params
+		for _, f := range flattenFieldList(x.Type.Params) {
+			param := parameter{
+				ID:   a.curID,
+				Name: f.varName,
+			}
+			a.curID++
+			param.DataType = dataType{
+				ID:   a.curID,
+				Name: f.typeName,
+			}
+			a.curID++
+			fn.Params = append(fn.Params, param)
+		}
 		results := x.Type.Results
 		switch results.NumFields() {
 		case 0:
@@ -208,11 +225,7 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 				fn.RetType.Name = "int"
 			}
 		case 1:
-			if i := fieldName(results.List[0].Type); i == nil {
-				fn.RetType.Name = ""
-			} else {
-				fn.RetType.Name = i.Name
-			}
+			fn.RetType.Name = exprToString(results.List[0].Type)
 		}
 		fn.Block = &block{
 			ID:    a.curID,
