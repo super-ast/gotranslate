@@ -149,7 +149,6 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 	curStmts := a.curStmts()
 	pos := a.fset.Position(node.Pos())
 	log.Printf("%s%T - %#v", strings.Repeat("  ", len(a.nodeStack)), node, pos)
-	a.pushNode(node)
 	switch x := node.(type) {
 	case *ast.File:
 		pname := x.Name.Name
@@ -231,6 +230,7 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 		log.Printf("Ignoring %T\n", node)
 		return nil
 	}
+	a.pushNode(node)
 	return a
 }
 
