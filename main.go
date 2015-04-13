@@ -11,7 +11,7 @@ import (
 	"log"
 	"os"
 	"strconv"
-	"strings"
+	//"strings"
 )
 
 var (
@@ -24,12 +24,12 @@ var allowedImports = map[string]struct{}{
 }
 
 type block struct {
-	Id    int         `json:"id"`
+	ID    int         `json:"id"`
 	Stmts []statement `json:"statements"`
 }
 
 type dataType struct {
-	Id   int    `json:"id"`
+	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
 
@@ -39,7 +39,7 @@ type parameter struct {
 }
 
 type statement struct {
-	Id      int         `json:"id"`
+	ID      int         `json:"id"`
 	Line    int         `json:"line"`
 	Type    string      `json:"type"`
 	Name    string      `json:"name,omitempty"`
@@ -65,7 +65,7 @@ func newSuperAST(fset *token.FileSet) *superAST {
 		curID: 1,
 		fset:  fset,
 		RootBlock: &block{
-			Id: 0,
+			ID: 0,
 		},
 	}
 	a.stmtsStack = append(a.stmtsStack, &a.RootBlock.Stmts)
@@ -104,6 +104,20 @@ func strUnquote(s string) string {
 	return u
 }
 
+func fieldName(x ast.Expr) *ast.Ident {
+        switch t := x.(type) {
+        case *ast.Ident:
+                return t
+        case *ast.SelectorExpr:
+                if _, ok := t.X.(*ast.Ident); ok {
+                        return t.Sel
+                }
+        case *ast.StarExpr:
+                return fieldName(t.X)
+        }
+        return nil
+}
+
 func (a *superAST) Visit(node ast.Node) ast.Visitor {
 	if node == nil {
 		switch a.curNode().(type) {
@@ -113,16 +127,16 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 			a.popStmts()
 		}
 		a.popNode()
-		log.Printf("%s}", strings.Repeat("  ", len(a.nodeStack)))
+		//log.Printf("%s}", strings.Repeat("  ", len(a.nodeStack)))
 		return nil
 	}
 	curStmts := a.curStmts()
 	pos := a.fset.Position(node.Pos())
-	log.Printf("%s%T - %#v", strings.Repeat("  ", len(a.nodeStack)), node, pos)
+	//log.Printf("%s%T - %#v", strings.Repeat("  ", len(a.nodeStack)), node, pos)
 	switch x := node.(type) {
 	case *ast.BasicLit:
 		lit := statement{
-			Id:    a.curID,
+			ID:    a.curID,
 			Line:  pos.Line,
 			Type:  "string",
 			Value: strUnquote(x.Value),
@@ -131,7 +145,7 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 		*curStmts = append(*curStmts, lit)
 	case *ast.CallExpr:
 		call := statement{
-			Id:   a.curID,
+			ID:   a.curID,
 			Line: pos.Line,
 			Type: "function-call",
 			Name: "print",
@@ -154,24 +168,34 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 		}
 	case *ast.FuncDecl:
 		name := x.Name.Name
-		/*var params, results []*ast.Field
-		if x.Type.Params != nil {
-			params = x.Type.Params.List
-		}
-		if x.Type.Results != nil {
-			results = x.Type.Results.List
-		}*/
 		fn := statement{
-			Id:    a.curID,
+			ID:    a.curID,
 			Line:  pos.Line,
 			Type:  "function-declaration",
 			Name:  name,
-			Block: new(block),
 		}
 		a.curID++
 		fn.RetType = &dataType{
-			Id:   a.curID,
-			Name: "int",
+			ID:   a.curID,
+		}
+		a.curID++
+		//params := x.Type.Params
+		results := x.Type.Results
+		switch results.NumFields() {
+		case 0:
+			fn.RetType.Name = "void"
+			if name == "main" {
+				fn.RetType.Name = "int"
+			}
+		case 1:
+			if i := fieldName(results.List[0].Type); i == nil {
+				fn.RetType.Name = ""
+			} else {
+				fn.RetType.Name = i.Name
+			}
+		}
+		fn.Block = &block{
+			ID: a.curID,
 		}
 		a.curID++
 		*curStmts = append(*curStmts, fn)
