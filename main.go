@@ -11,7 +11,7 @@ import (
 	"log"
 	"os"
 	"strconv"
-	//"strings"
+	"strings"
 )
 
 var (
@@ -127,12 +127,11 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 			a.popStmts()
 		}
 		a.popNode()
-		//log.Printf("%s}", strings.Repeat("  ", len(a.nodeStack)))
 		return nil
 	}
 	curStmts := a.curStmts()
 	pos := a.fset.Position(node.Pos())
-	//log.Printf("%s%T - %#v", strings.Repeat("  ", len(a.nodeStack)), node, pos)
+	log.Printf("%s%T - %#v", strings.Repeat("  ", len(a.nodeStack)), node, pos)
 	switch x := node.(type) {
 	case *ast.BasicLit:
 		lit := statement{
@@ -149,7 +148,6 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 			Line: pos.Line,
 			Type: "function-call",
 			Name: "print",
-			Args: make([]statement, 0),
 		}
 		a.curID++
 		*curStmts = append(*curStmts, call)
