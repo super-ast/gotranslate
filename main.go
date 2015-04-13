@@ -65,7 +65,8 @@ func newSuperAST(fset *token.FileSet) *superAST {
 		curID: 1,
 		fset:  fset,
 		RootBlock: &block{
-			ID: 0,
+			ID:    0,
+			Stmts: make([]statement, 0),
 		},
 	}
 	a.stmtsStack = append(a.stmtsStack, &a.RootBlock.Stmts)
@@ -214,7 +215,8 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 			}
 		}
 		fn.Block = &block{
-			ID: a.curID,
+			ID:    a.curID,
+			Stmts: make([]statement, 0),
 		}
 		a.curID++
 		*curStmts = append(*curStmts, fn)
