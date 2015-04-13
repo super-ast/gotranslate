@@ -133,6 +133,18 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 	pos := a.fset.Position(node.Pos())
 	log.Printf("%s%T - %#v", strings.Repeat("  ", len(a.nodeStack)), node, pos)
 	switch x := node.(type) {
+	case *ast.File:
+		pname := x.Name.Name
+		if pname != "main" {
+			log.Fatalf(`Package name is not "main": "%s"`, pname)
+		}
+		imports := x.Imports
+		for _, imp := range imports {
+			path := strUnquote(imp.Path.Value)
+			if _, e := allowedImports[path]; !e {
+				log.Fatalf(`Import path not allowed: "%s"`, path)
+			}
+		}
 	case *ast.BasicLit:
 		lit := statement{
 			ID:    a.curID,
@@ -152,18 +164,6 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 		a.curID++
 		*curStmts = append(*curStmts, call)
 		a.pushStmts(&call.Args)
-	case *ast.File:
-		pname := x.Name.Name
-		if pname != "main" {
-			log.Fatalf(`Package name is not "main": "%s"`, pname)
-		}
-		imports := x.Imports
-		for _, imp := range imports {
-			path := strUnquote(imp.Path.Value)
-			if _, e := allowedImports[path]; !e {
-				log.Fatalf(`Import path not allowed: "%s"`, path)
-			}
-		}
 	case *ast.FuncDecl:
 		name := x.Name.Name
 		fn := statement{
