@@ -24,10 +24,12 @@ var allowedImports = map[string]struct{}{
 }
 
 type block struct {
+	Id    int         `json:"id"`
 	Stmts []statement `json:"statements"`
 }
 
 type dataType struct {
+	Id   int    `json:"id"`
 	Name string `json:"name"`
 }
 
@@ -37,9 +39,11 @@ type parameter struct {
 }
 
 type statement struct {
+	Id      int         `json:"id"`
 	Line    int         `json:"line"`
 	Type    string      `json:"type"`
-	Name    string      `json:"name"`
+	Name    string      `json:"name,omitempty"`
+	Value   string      `json:"value,omitempty"`
 	RetType *dataType   `json:"return-type,omitempty"`
 	Params  []parameter `json:"parameters,omitempty"`
 	Args    []statement `json:"arguments,omitempty"`
@@ -49,6 +53,7 @@ type statement struct {
 }
 
 type superAST struct {
+	curID      int
 	RootBlock  *block
 	nodeStack  []ast.Node
 	stmtsStack []*[]statement
@@ -57,8 +62,11 @@ type superAST struct {
 
 func newSuperAST(fset *token.FileSet) *superAST {
 	a := &superAST{
-		fset:      fset,
-		RootBlock: new(block),
+		curID: 1,
+		fset:  fset,
+		RootBlock: &block{
+			Id: 0,
+		},
 	}
 	a.stmtsStack = append(a.stmtsStack, &a.RootBlock.Stmts)
 	return a
@@ -88,6 +96,14 @@ func (a *superAST) popStmts() {
 	a.stmtsStack = a.stmtsStack[:len(a.stmtsStack)-1]
 }
 
+func strUnquote(s string) string {
+	u, err := strconv.Unquote(s)
+	if err != nil {
+		log.Fatalf("Error when unquoting string: %s", err)
+	}
+	return u
+}
+
 func (a *superAST) Visit(node ast.Node) ast.Visitor {
 	if node == nil {
 		switch a.curNode().(type) {
@@ -105,16 +121,25 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 	log.Printf("%s%T - %#v", strings.Repeat("  ", len(a.nodeStack)), node, pos)
 	switch x := node.(type) {
 	case *ast.BasicLit:
-	case *ast.BlockStmt:
+		lit := statement{
+			Id:    a.curID,
+			Line:  pos.Line,
+			Type:  "string",
+			Value: strUnquote(x.Value),
+		}
+		a.curID++
+		*curStmts = append(*curStmts, lit)
 	case *ast.CallExpr:
 		call := statement{
+			Id:   a.curID,
 			Line: pos.Line,
 			Type: "function-call",
 			Name: "print",
+			Args: make([]statement, 0),
 		}
+		a.curID++
 		*curStmts = append(*curStmts, call)
-	case *ast.ExprStmt:
-	case *ast.FieldList:
+		a.pushStmts(&call.Args)
 	case *ast.File:
 		pname := x.Name.Name
 		if pname != "main" {
@@ -122,10 +147,7 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 		}
 		imports := x.Imports
 		for _, imp := range imports {
-			path, err := strconv.Unquote(imp.Path.Value)
-			if err != nil {
-				log.Fatalf("Error when unquoting import: %s", err)
-			}
+			path := strUnquote(imp.Path.Value)
 			if _, e := allowedImports[path]; !e {
 				log.Fatalf(`Import path not allowed: "%s"`, path)
 			}
@@ -140,23 +162,30 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 			results = x.Type.Results.List
 		}*/
 		fn := statement{
-			Line: pos.Line,
-			Type: "function-declaration",
-			Name: name,
-			RetType: &dataType{
-				Name: "int",
-			},
+			Id:    a.curID,
+			Line:  pos.Line,
+			Type:  "function-declaration",
+			Name:  name,
 			Block: new(block),
 		}
+		a.curID++
+		fn.RetType = &dataType{
+			Id:   a.curID,
+			Name: "int",
+		}
+		a.curID++
 		*curStmts = append(*curStmts, fn)
 		a.pushStmts(&fn.Block.Stmts)
+	case *ast.BlockStmt:
+	case *ast.ExprStmt:
+	case *ast.FieldList:
 	case *ast.FuncType:
 	case *ast.GenDecl:
 	case *ast.Ident:
-	case *ast.ImportSpec:
 	case *ast.SelectorExpr:
 	default:
-		log.Printf("Uncatched ast.Node type: %T\n", node)
+		log.Printf("Ignoring %T\n", node)
+		return nil
 	}
 	a.pushNode(node)
 	return a
