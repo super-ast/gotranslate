@@ -105,17 +105,34 @@ func strUnquote(s string) string {
 }
 
 func fieldName(x ast.Expr) *ast.Ident {
-        switch t := x.(type) {
-        case *ast.Ident:
-                return t
-        case *ast.SelectorExpr:
-                if _, ok := t.X.(*ast.Ident); ok {
-                        return t.Sel
-                }
-        case *ast.StarExpr:
-                return fieldName(t.X)
-        }
-        return nil
+	switch t := x.(type) {
+	case *ast.Ident:
+		return t
+	case *ast.SelectorExpr:
+		if _, ok := t.X.(*ast.Ident); ok {
+			return t.Sel
+		}
+	case *ast.StarExpr:
+		return fieldName(t.X)
+	}
+	return nil
+}
+
+func callName(x ast.Expr) string {
+	switch t := x.(type) {
+	case *ast.Ident:
+		return t.Name
+	case *ast.SelectorExpr:
+		return callName(t.X) + "." + t.Sel.Name
+	case *ast.StarExpr:
+		return callName(t.X)
+	}
+	return ""
+}
+
+var funcNames = map[string]string{
+	"fmt.Println": "print",
+	"println":     "print",
 }
 
 func (a *superAST) Visit(node ast.Node) ast.Visitor {
@@ -132,6 +149,7 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 	curStmts := a.curStmts()
 	pos := a.fset.Position(node.Pos())
 	log.Printf("%s%T - %#v", strings.Repeat("  ", len(a.nodeStack)), node, pos)
+	a.pushNode(node)
 	switch x := node.(type) {
 	case *ast.File:
 		pname := x.Name.Name
@@ -155,11 +173,15 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 		a.curID++
 		*curStmts = append(*curStmts, lit)
 	case *ast.CallExpr:
+		name := callName(x.Fun)
+		if newname, e := funcNames[name]; e {
+			name = newname
+		}
 		call := statement{
 			ID:   a.curID,
 			Line: pos.Line,
 			Type: "function-call",
-			Name: "print",
+			Name: name,
 		}
 		a.curID++
 		*curStmts = append(*curStmts, call)
@@ -167,14 +189,14 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 	case *ast.FuncDecl:
 		name := x.Name.Name
 		fn := statement{
-			ID:    a.curID,
-			Line:  pos.Line,
-			Type:  "function-declaration",
-			Name:  name,
+			ID:   a.curID,
+			Line: pos.Line,
+			Type: "function-declaration",
+			Name: name,
 		}
 		a.curID++
 		fn.RetType = &dataType{
-			ID:   a.curID,
+			ID: a.curID,
 		}
 		a.curID++
 		//params := x.Type.Params
@@ -209,7 +231,6 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 		log.Printf("Ignoring %T\n", node)
 		return nil
 	}
-	a.pushNode(node)
 	return a
 }
 
