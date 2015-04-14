@@ -203,18 +203,22 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			Line: pos.Line,
 			Type: "function-declaration",
 			Name: name,
-		}
-		fn.RetType = &dataType{
-			ID: a.newID(),
+			RetType: &dataType{
+				ID: a.newID(),
+			},
+			Block: &block{
+				ID:    a.newID(),
+				Stmts: make([]statement, 0),
+			},
 		}
 		for _, f := range flattenFieldList(x.Type.Params) {
 			param := parameter{
 				ID:   a.newID(),
 				Name: f.varName,
-			}
-			param.DataType = dataType{
-				ID:   a.newID(),
-				Name: f.typeName,
+				DataType: dataType{
+					ID:   a.newID(),
+					Name: f.typeName,
+				},
 			}
 			fn.Params = append(fn.Params, param)
 		}
@@ -227,10 +231,6 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			}
 		case 1:
 			fn.RetType.Name = exprToString(results.List[0].Type)
-		}
-		fn.Block = &block{
-			ID:    a.newID(),
-			Stmts: make([]statement, 0),
 		}
 		a.addStmt(fn)
 		a.pushStmts(&fn.Block.Stmts)
