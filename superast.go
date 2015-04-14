@@ -70,10 +70,16 @@ func (a *AST) pushNode(node ast.Node) {
 }
 
 func (a *AST) curNode() ast.Node {
+	if len(a.nodeStack) == 0 {
+		return nil
+	}
 	return a.nodeStack[len(a.nodeStack)-1]
 }
 
 func (a *AST) popNode() {
+	if len(a.nodeStack) == 0 {
+		return
+	}
 	a.nodeStack = a.nodeStack[:len(a.nodeStack)-1]
 }
 
@@ -82,10 +88,16 @@ func (a *AST) pushStmts(stmts *[]statement) {
 }
 
 func (a *AST) curStmts() *[]statement {
+	if len(a.stmtsStack) == 0 {
+		return nil
+	}
 	return a.stmtsStack[len(a.stmtsStack)-1]
 }
 
 func (a *AST) popStmts() {
+	if len(a.stmtsStack) == 0 {
+		return
+	}
 	a.stmtsStack = a.stmtsStack[:len(a.stmtsStack)-1]
 }
 
@@ -133,8 +145,9 @@ func flattenFieldList(fieldList *ast.FieldList) []field {
 }
 
 func (a *AST) Visit(node ast.Node) ast.Visitor {
+	parentNode := a.curNode()
 	if node == nil {
-		switch a.curNode().(type) {
+		switch parentNode.(type) {
 		case *ast.CallExpr:
 			a.popStmts()
 		case *ast.FuncDecl:
