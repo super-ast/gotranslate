@@ -87,11 +87,12 @@ func (a *AST) pushStmts(stmts *[]statement) {
 	a.stmtsStack = append(a.stmtsStack, stmts)
 }
 
-func (a *AST) curStmts() *[]statement {
+func (a *AST) addStmt(stmt statement) {
 	if len(a.stmtsStack) == 0 {
-		return nil
+		return
 	}
-	return a.stmtsStack[len(a.stmtsStack)-1]
+	curStmts := a.stmtsStack[len(a.stmtsStack)-1]
+	*curStmts = append(*curStmts, stmt)
 }
 
 func (a *AST) popStmts() {
@@ -156,7 +157,6 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		a.popNode()
 		return nil
 	}
-	curStmts := a.curStmts()
 	pos := a.fset.Position(node.Pos())
 	log.Printf("%s%T - %#v", strings.Repeat("  ", len(a.nodeStack)), node, pos)
 	switch x := node.(type) {
@@ -180,7 +180,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			Value: strUnquote(x.Value),
 		}
 		a.curID++
-		*curStmts = append(*curStmts, lit)
+		a.addStmt(lit)
 	case *ast.CallExpr:
 		name := exprToString(x.Fun)
 		if newname, e := funcNames[name]; e {
@@ -193,7 +193,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			Name: name,
 		}
 		a.curID++
-		*curStmts = append(*curStmts, call)
+		a.addStmt(call)
 		a.pushStmts(&call.Args)
 	case *ast.FuncDecl:
 		name := x.Name.Name
@@ -236,7 +236,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			Stmts: make([]statement, 0),
 		}
 		a.curID++
-		*curStmts = append(*curStmts, fn)
+		a.addStmt(fn)
 		a.pushStmts(&fn.Block.Stmts)
 	case *ast.BlockStmt:
 	case *ast.ExprStmt:
