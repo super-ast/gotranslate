@@ -65,6 +65,12 @@ func newAST(fset *token.FileSet) *AST {
 	return a
 }
 
+func (a *AST) newID() int {
+	i := a.curID
+	a.curID++
+	return i
+}
+
 func (a *AST) pushNode(node ast.Node) {
 	a.nodeStack = append(a.nodeStack, node)
 }
@@ -174,12 +180,11 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		}
 	case *ast.BasicLit:
 		lit := statement{
-			ID:    a.curID,
+			ID:    a.newID(),
 			Line:  pos.Line,
 			Type:  "string",
 			Value: strUnquote(x.Value),
 		}
-		a.curID++
 		a.addStmt(lit)
 	case *ast.CallExpr:
 		name := exprToString(x.Fun)
@@ -187,38 +192,33 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			name = newname
 		}
 		call := statement{
-			ID:   a.curID,
+			ID:   a.newID(),
 			Line: pos.Line,
 			Type: "function-call",
 			Name: name,
 		}
-		a.curID++
 		a.addStmt(call)
 		a.pushStmts(&call.Args)
 	case *ast.FuncDecl:
 		name := x.Name.Name
 		fn := statement{
-			ID:   a.curID,
+			ID:   a.newID(),
 			Line: pos.Line,
 			Type: "function-declaration",
 			Name: name,
 		}
-		a.curID++
 		fn.RetType = &dataType{
-			ID: a.curID,
+			ID: a.newID(),
 		}
-		a.curID++
 		for _, f := range flattenFieldList(x.Type.Params) {
 			param := parameter{
-				ID:   a.curID,
+				ID:   a.newID(),
 				Name: f.varName,
 			}
-			a.curID++
 			param.DataType = dataType{
-				ID:   a.curID,
+				ID:   a.newID(),
 				Name: f.typeName,
 			}
-			a.curID++
 			fn.Params = append(fn.Params, param)
 		}
 		results := x.Type.Results
@@ -232,10 +232,9 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			fn.RetType.Name = exprToString(results.List[0].Type)
 		}
 		fn.Block = &block{
-			ID:    a.curID,
+			ID:    a.newID(),
 			Stmts: make([]statement, 0),
 		}
-		a.curID++
 		a.addStmt(fn)
 		a.pushStmts(&fn.Block.Stmts)
 	case *ast.BlockStmt:
