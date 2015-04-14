@@ -1,0 +1,19 @@
+{
+  "id": 0,
+  "statements": [
+    {
+      "id": 1,
+      "line": 5,
+      "type": "function-declaration",
+      "name": "foo",
+      "return-type": {
+        "id": 2,
+        "name": "string"
+      },
+      "block": {
+        "id": 3,
+        "statements": []
+      }
+    }
+  ]
+}
