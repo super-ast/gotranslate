@@ -1,21 +1,12 @@
-package main
+package superast
 
 import (
-	"bytes"
-	"encoding/json"
-	"flag"
-	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
 	"log"
-	"os"
 	"strconv"
 	"strings"
-)
-
-var (
-	pretty = flag.Bool("p", false, "indent (pretty print) output")
 )
 
 var allowedImports = map[string]struct{}{
@@ -53,7 +44,7 @@ type statement struct {
 	Block   *block      `json:"block,omitempty"`
 }
 
-type superAST struct {
+type AST struct {
 	curID      int
 	RootBlock  *block
 	nodeStack  []ast.Node
@@ -61,8 +52,8 @@ type superAST struct {
 	fset       *token.FileSet
 }
 
-func newSuperAST(fset *token.FileSet) *superAST {
-	a := &superAST{
+func newAST(fset *token.FileSet) *AST {
+	a := &AST{
 		curID: 1,
 		fset:  fset,
 		RootBlock: &block{
@@ -74,27 +65,27 @@ func newSuperAST(fset *token.FileSet) *superAST {
 	return a
 }
 
-func (a *superAST) pushNode(node ast.Node) {
+func (a *AST) pushNode(node ast.Node) {
 	a.nodeStack = append(a.nodeStack, node)
 }
 
-func (a *superAST) curNode() ast.Node {
+func (a *AST) curNode() ast.Node {
 	return a.nodeStack[len(a.nodeStack)-1]
 }
 
-func (a *superAST) popNode() {
+func (a *AST) popNode() {
 	a.nodeStack = a.nodeStack[:len(a.nodeStack)-1]
 }
 
-func (a *superAST) pushStmts(stmts *[]statement) {
+func (a *AST) pushStmts(stmts *[]statement) {
 	a.stmtsStack = append(a.stmtsStack, stmts)
 }
 
-func (a *superAST) curStmts() *[]statement {
+func (a *AST) curStmts() *[]statement {
 	return a.stmtsStack[len(a.stmtsStack)-1]
 }
 
-func (a *superAST) popStmts() {
+func (a *AST) popStmts() {
 	a.stmtsStack = a.stmtsStack[:len(a.stmtsStack)-1]
 }
 
@@ -141,7 +132,7 @@ func flattenFieldList(fieldList *ast.FieldList) []field {
 	return fields
 }
 
-func (a *superAST) Visit(node ast.Node) ast.Visitor {
+func (a *AST) Visit(node ast.Node) ast.Visitor {
 	if node == nil {
 		switch a.curNode().(type) {
 		case *ast.CallExpr:
@@ -249,43 +240,13 @@ func (a *superAST) Visit(node ast.Node) ast.Visitor {
 	return a
 }
 
-func main() {
-	flag.Parse()
+func ParseString(src string) *AST {
 	fset := token.NewFileSet()
-	src := `
-package main
-
-import "fmt"
-
-func main() {
-	fmt.Println("Hello, World!")
-}
-`
 	f, err := parser.ParseFile(fset, "hello_world.go", src, 0)
 	if err != nil {
 		log.Fatal(err)
 	}
-	a := newSuperAST(fset)
+	a := newAST(fset)
 	ast.Walk(a, f)
-
-	if *pretty {
-		b, err := json.Marshal(a.RootBlock)
-		if err != nil {
-			log.Fatal(err)
-		}
-		var out bytes.Buffer
-		if err := json.Indent(&out, b, "", "  "); err != nil {
-			log.Fatal(err)
-		}
-		if _, err := out.WriteTo(os.Stdout); err != nil {
-			log.Fatal(err)
-		}
-		fmt.Printf("\n")
-	} else {
-		enc := json.NewEncoder(os.Stdout)
-		if err := enc.Encode(a.RootBlock); err != nil {
-			log.Println(err)
-		}
-	}
-
+	return a
 }
