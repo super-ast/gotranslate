@@ -237,7 +237,6 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 	case *ast.BlockStmt:
 	case *ast.ExprStmt:
 	case *ast.FieldList:
-	case *ast.FuncType:
 	case *ast.GenDecl:
 	case *ast.Ident:
 	case *ast.SelectorExpr:
