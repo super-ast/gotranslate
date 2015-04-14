@@ -61,7 +61,7 @@ func newAST(fset *token.FileSet) *AST {
 			Stmts: make([]statement, 0),
 		},
 	}
-	a.stmtsStack = append(a.stmtsStack, &a.RootBlock.Stmts)
+	a.pushStmts(&a.RootBlock.Stmts)
 	return a
 }
 
