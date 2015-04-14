@@ -136,9 +136,18 @@ type field struct {
 }
 
 func flattenFieldList(fieldList *ast.FieldList) []field {
+	if fieldList == nil {
+		return nil
+	}
 	var fields []field
 	for _, f := range fieldList.List {
 		t := exprToString(f.Type)
+		if len(f.Names) == 0 {
+			fields = append(fields, field{
+				varName:  "",
+				typeName: t,
+			})
+		}
 		for _, n := range f.Names {
 			fields = append(fields, field{
 				varName:  n.Name,
@@ -222,15 +231,15 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			}
 			fn.Params = append(fn.Params, param)
 		}
-		results := x.Type.Results
-		switch results.NumFields() {
+		results := flattenFieldList(x.Type.Results)
+		switch len(results) {
 		case 0:
 			fn.RetType.Name = "void"
 			if name == "main" {
 				fn.RetType.Name = "int"
 			}
 		case 1:
-			fn.RetType.Name = exprToString(results.List[0].Type)
+			fn.RetType.Name = results[0].typeName
 		}
 		a.addStmt(fn)
 		a.pushStmts(&fn.Block.Stmts)
