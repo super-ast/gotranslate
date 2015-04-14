@@ -1,0 +1,26 @@
+{
+  "id": 0,
+  "statements": [
+    {
+      "id": 1,
+      "line": 5,
+      "type": "function-declaration",
+      "name": "main",
+      "return-type": {
+        "id": 2,
+        "name": "int"
+      },
+      "block": {
+        "id": 3,
+        "statements": [
+          {
+            "id": 4,
+            "line": 6,
+            "type": "function-call",
+            "name": "print"
+          }
+        ]
+      }
+    }
+  ]
+}
