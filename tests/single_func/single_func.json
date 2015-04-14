@@ -3,7 +3,7 @@
   "statements": [
     {
       "id": 1,
-      "line": 5,
+      "line": 3,
       "type": "function-declaration",
       "name": "foo",
       "return-type": {
@@ -12,6 +12,20 @@
       },
       "block": {
         "id": 3,
+        "statements": []
+      }
+    },
+    {
+      "id": 4,
+      "line": 7,
+      "type": "function-declaration",
+      "name": "main",
+      "return-type": {
+        "id": 5,
+        "name": "int"
+      },
+      "block": {
+        "id": 6,
         "statements": []
       }
     }

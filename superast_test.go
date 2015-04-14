@@ -29,6 +29,13 @@ func doTest(t *testing.T, name string, in, out io.Reader) {
 	}
 	a := NewAST(fset)
 	ast.Walk(a, f)
+	jsonWant, err := ioutil.ReadAll(out)
+	if err != nil {
+		t.Errorf("Failed reading json file: %s", err)
+	}
+	if string(jsonWant) != string(toJSON(t, a)) {
+		t.Errorf("Mismatching JSON outputs in the test '%s'", name)
+	}
 }
 
 const testsDir = "tests"
