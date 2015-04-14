@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -30,15 +29,11 @@ func main() {
 	ast.Walk(a, f)
 
 	if *pretty {
-		b, err := json.Marshal(a.RootBlock)
+		b, err := json.MarshalIndent(a.RootBlock, "", "  ")
 		if err != nil {
 			log.Fatal(err)
 		}
-		var out bytes.Buffer
-		if err := json.Indent(&out, b, "", "  "); err != nil {
-			log.Fatal(err)
-		}
-		if _, err := out.WriteTo(os.Stdout); err != nil {
+		if _, err := os.Stdout.Write(b); err != nil {
 			log.Fatal(err)
 		}
 		fmt.Printf("\n")
