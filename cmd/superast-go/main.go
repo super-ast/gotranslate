@@ -5,6 +5,9 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"go/ast"
+	"go/parser"
+	"go/token"
 	"log"
 	"os"
 
@@ -17,19 +20,17 @@ var (
 
 func main() {
 	flag.Parse()
-	src := `
-package main
 
-import "fmt"
-
-func main() {
-	fmt.Println("Hello, World!")
-}
-`
-	ast := superast.ParseString(src)
+	fset := token.NewFileSet()
+	f, err := parser.ParseFile(fset, "stdin.go", os.Stdin, 0)
+	if err != nil {
+		log.Fatal(err)
+	}
+	a := superast.NewAST(fset)
+	ast.Walk(a, f)
 
 	if *pretty {
-		b, err := json.Marshal(ast.RootBlock)
+		b, err := json.Marshal(a.RootBlock)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -43,7 +44,7 @@ func main() {
 		fmt.Printf("\n")
 	} else {
 		enc := json.NewEncoder(os.Stdout)
-		if err := enc.Encode(ast.RootBlock); err != nil {
+		if err := enc.Encode(a.RootBlock); err != nil {
 			log.Println(err)
 		}
 	}

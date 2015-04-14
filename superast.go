@@ -2,7 +2,6 @@ package superast
 
 import (
 	"go/ast"
-	"go/parser"
 	"go/token"
 	"log"
 	"strconv"
@@ -52,7 +51,7 @@ type AST struct {
 	fset       *token.FileSet
 }
 
-func newAST(fset *token.FileSet) *AST {
+func NewAST(fset *token.FileSet) *AST {
 	a := &AST{
 		curID: 1,
 		fset:  fset,
@@ -249,16 +248,5 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		return nil
 	}
 	a.pushNode(node)
-	return a
-}
-
-func ParseString(src string) *AST {
-	fset := token.NewFileSet()
-	f, err := parser.ParseFile(fset, "hello_world.go", src, 0)
-	if err != nil {
-		log.Fatal(err)
-	}
-	a := newAST(fset)
-	ast.Walk(a, f)
 	return a
 }
