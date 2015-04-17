@@ -13,8 +13,8 @@ var allowedImports = map[string]struct{}{
 }
 
 type block struct {
-	ID    int         `json:"id"`
-	Stmts []statement `json:"statements"`
+	ID    int          `json:"id"`
+	Stmts []*statement `json:"statements"`
 }
 
 type dataType struct {
@@ -29,26 +29,26 @@ type parameter struct {
 }
 
 type statement struct {
-	ID       int         `json:"id"`
-	Line     int         `json:"line"`
-	Type     string      `json:"type"`
-	Name     string      `json:"name,omitempty"`
-	Value    string      `json:"value,omitempty"`
-	DataType *dataType   `json:"data-type,omitempty"`
-	RetType  *dataType   `json:"return-type,omitempty"`
-	Params   []parameter `json:"parameters,omitempty"`
-	Args     []statement `json:"arguments,omitempty"`
-	Init     *statement  `json:"init,omitempty"`
-	Left     *statement  `json:"left,omitempty"`
-	Right    *statement  `json:"right,omitempty"`
-	Block    *block      `json:"block,omitempty"`
+	ID       int          `json:"id"`
+	Line     int          `json:"line"`
+	Type     string       `json:"type"`
+	Name     string       `json:"name,omitempty"`
+	Value    string       `json:"value,omitempty"`
+	DataType *dataType    `json:"data-type,omitempty"`
+	RetType  *dataType    `json:"return-type,omitempty"`
+	Params   []parameter  `json:"parameters,omitempty"`
+	Args     []*statement `json:"arguments,omitempty"`
+	Init     *statement   `json:"init,omitempty"`
+	Left     *statement   `json:"left,omitempty"`
+	Right    *statement   `json:"right,omitempty"`
+	Block    *block       `json:"block,omitempty"`
 }
 
 type AST struct {
 	curID      int
 	RootBlock  *block
 	nodeStack  []ast.Node
-	stmtsStack []*[]statement
+	stmtsStack []*[]*statement
 	fset       *token.FileSet
 }
 
@@ -58,7 +58,7 @@ func NewAST(fset *token.FileSet) *AST {
 		fset:  fset,
 		RootBlock: &block{
 			ID:    0,
-			Stmts: make([]statement, 0),
+			Stmts: make([]*statement, 0),
 		},
 	}
 	a.pushStmts(&a.RootBlock.Stmts)
@@ -89,18 +89,16 @@ func (a *AST) popNode() {
 	a.nodeStack = a.nodeStack[:len(a.nodeStack)-1]
 }
 
-func (a *AST) pushStmts(stmts *[]statement) {
+func (a *AST) pushStmts(stmts *[]*statement) {
 	a.stmtsStack = append(a.stmtsStack, stmts)
 }
 
-func (a *AST) newStmt() *statement {
+func (a *AST) addStmt(stmt *statement) {
 	if len(a.stmtsStack) == 0 {
-		return nil
+		return
 	}
 	curStmts := a.stmtsStack[len(a.stmtsStack)-1]
-	*curStmts = append(*curStmts, statement{})
-	list := *curStmts
-	return &list[len(list)-1]
+	*curStmts = append(*curStmts, stmt)
 }
 
 func (a *AST) popStmts() {
@@ -203,30 +201,29 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			}
 		}
 	case *ast.BasicLit:
-		lit := a.newStmt()
-		*lit = statement{
+		lit := &statement{
 			ID:    a.newID(),
 			Line:  pos.Line,
 			Type:  "string",
 			Value: strUnquote(x.Value),
 		}
+		a.addStmt(lit)
 	case *ast.CallExpr:
 		name := exprToString(x.Fun)
 		if newname, e := funcNames[name]; e {
 			name = newname
 		}
-		call := a.newStmt()
-		*call = statement{
+		call := &statement{
 			ID:   a.newID(),
 			Line: pos.Line,
 			Type: "function-call",
 			Name: name,
 		}
+		a.addStmt(call)
 		a.pushStmts(&call.Args)
 	case *ast.FuncDecl:
 		name := x.Name.Name
-		fn := a.newStmt()
-		*fn = statement{
+		fn := &statement{
 			ID:   a.newID(),
 			Line: pos.Line,
 			Type: "function-declaration",
@@ -236,7 +233,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			},
 			Block: &block{
 				ID:    a.newID(),
-				Stmts: make([]statement, 0),
+				Stmts: make([]*statement, 0),
 			},
 		}
 		for _, f := range flattenFieldList(x.Type.Params) {
@@ -260,6 +257,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		case 1:
 			fn.RetType.Name = results[0].typeName
 		}
+		a.addStmt(fn)
 		a.pushStmts(&fn.Block.Stmts)
 	case *ast.AssignStmt:
 		for i, expr := range x.Lhs {
@@ -267,8 +265,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			l, _ := x.Rhs[i].(*ast.BasicLit)
 			value := strUnquote(l.Value)
 			typeName := nameBasicLitKind(l.Kind)
-			asg := a.newStmt()
-			*asg = statement{
+			asg := &statement{
 				ID:   a.newID(),
 				Line: pos.Line,
 				Type: "variable-declaration",
@@ -283,6 +280,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 					Value: value,
 				},
 			}
+			a.addStmt(asg)
 		}
 		return nil
 	case *ast.BlockStmt:
