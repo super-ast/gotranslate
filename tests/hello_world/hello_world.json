@@ -17,7 +17,15 @@
             "id": 4,
             "line": 6,
             "type": "function-call",
-            "name": "print"
+            "name": "print",
+            "arguments": [
+              {
+                "id": 5,
+                "line": 6,
+                "type": "string",
+                "value": "Hello, World!"
+              }
+            ]
           }
         ]
       }
