@@ -23,23 +23,25 @@ type dataType struct {
 }
 
 type parameter struct {
-	ID       int      `json:"id"`
-	Name     string   `json:"name"`
-	DataType dataType `json:"data-type"`
+	ID       int       `json:"id"`
+	Name     string    `json:"name"`
+	DataType *dataType `json:"data-type,omitempty"`
 }
 
 type statement struct {
-	ID      int         `json:"id"`
-	Line    int         `json:"line"`
-	Type    string      `json:"type"`
-	Name    string      `json:"name,omitempty"`
-	Value   string      `json:"value,omitempty"`
-	RetType *dataType   `json:"return-type,omitempty"`
-	Params  []parameter `json:"parameters,omitempty"`
-	Args    []statement `json:"arguments,omitempty"`
-	Left    *statement  `json:"left,omitempty"`
-	Right   *statement  `json:"right,omitempty"`
-	Block   *block      `json:"block,omitempty"`
+	ID       int         `json:"id"`
+	Line     int         `json:"line"`
+	Type     string      `json:"type"`
+	Name     string      `json:"name,omitempty"`
+	Value    string      `json:"value,omitempty"`
+	DataType *dataType   `json:"data-type,omitempty"`
+	RetType  *dataType   `json:"return-type,omitempty"`
+	Params   []parameter `json:"parameters,omitempty"`
+	Args     []statement `json:"arguments,omitempty"`
+	Init     *statement  `json:"init,omitempty"`
+	Left     *statement  `json:"left,omitempty"`
+	Right    *statement  `json:"right,omitempty"`
+	Block    *block      `json:"block,omitempty"`
 }
 
 type AST struct {
@@ -111,7 +113,7 @@ func (a *AST) popStmts() {
 func strUnquote(s string) string {
 	u, err := strconv.Unquote(s)
 	if err != nil {
-		log.Fatalf("Error when unquoting string: %s", err)
+		return s
 	}
 	return u
 }
@@ -158,6 +160,20 @@ func flattenFieldList(fieldList *ast.FieldList) []field {
 		}
 	}
 	return fields
+}
+
+func nameBasicLitKind(kind token.Token) string {
+	switch kind {
+	case token.INT:
+		return "int"
+	case token.FLOAT:
+		return "double"
+	case token.CHAR:
+		return "char"
+	case token.STRING:
+		return "string"
+	}
+	return ""
 }
 
 func (a *AST) Visit(node ast.Node) ast.Visitor {
@@ -227,7 +243,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			param := parameter{
 				ID:   a.newID(),
 				Name: f.varName,
-				DataType: dataType{
+				DataType: &dataType{
 					ID:   a.newID(),
 					Name: f.typeName,
 				},
@@ -245,6 +261,30 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			fn.RetType.Name = results[0].typeName
 		}
 		a.pushStmts(&fn.Block.Stmts)
+	case *ast.AssignStmt:
+		for i, expr := range x.Lhs {
+			n := exprToString(expr)
+			l, _ := x.Rhs[i].(*ast.BasicLit)
+			value := strUnquote(l.Value)
+			typeName := nameBasicLitKind(l.Kind)
+			asg := a.newStmt()
+			*asg = statement{
+				ID:   a.newID(),
+				Line: pos.Line,
+				Type: "variable-declaration",
+				Name: n,
+				DataType: &dataType{
+					ID:   a.newID(),
+					Name: typeName,
+				},
+				Init: &statement{
+					ID:    a.newID(),
+					Type:  typeName,
+					Value: value,
+				},
+			}
+		}
+		return nil
 	case *ast.BlockStmt:
 	case *ast.ExprStmt:
 	case *ast.FieldList:
