@@ -55,8 +55,7 @@ func NewAST(fset *token.FileSet) *AST {
 		curID: 1,
 		fset:  fset,
 		RootBlock: &block{
-			ID:    0,
-			Stmts: make([]statement, 0),
+			ID: 0,
 		},
 	}
 	a.pushStmts(&a.RootBlock.Stmts)
@@ -91,12 +90,14 @@ func (a *AST) pushStmts(stmts *[]statement) {
 	a.stmtsStack = append(a.stmtsStack, stmts)
 }
 
-func (a *AST) addStmt(stmt statement) {
+func (a *AST) newStmt() *statement {
 	if len(a.stmtsStack) == 0 {
-		return
+		return nil
 	}
 	curStmts := a.stmtsStack[len(a.stmtsStack)-1]
-	*curStmts = append(*curStmts, stmt)
+	*curStmts = append(*curStmts, statement{})
+	list := *curStmts
+	return &list[len(list)-1]
 }
 
 func (a *AST) popStmts() {
@@ -185,29 +186,30 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			}
 		}
 	case *ast.BasicLit:
-		lit := statement{
+		lit := a.newStmt()
+		*lit = statement{
 			ID:    a.newID(),
 			Line:  pos.Line,
 			Type:  "string",
 			Value: strUnquote(x.Value),
 		}
-		a.addStmt(lit)
 	case *ast.CallExpr:
 		name := exprToString(x.Fun)
 		if newname, e := funcNames[name]; e {
 			name = newname
 		}
-		call := statement{
+		call := a.newStmt()
+		*call = statement{
 			ID:   a.newID(),
 			Line: pos.Line,
 			Type: "function-call",
 			Name: name,
 		}
-		a.addStmt(call)
 		a.pushStmts(&call.Args)
 	case *ast.FuncDecl:
 		name := x.Name.Name
-		fn := statement{
+		fn := a.newStmt()
+		*fn = statement{
 			ID:   a.newID(),
 			Line: pos.Line,
 			Type: "function-declaration",
@@ -216,8 +218,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				ID: a.newID(),
 			},
 			Block: &block{
-				ID:    a.newID(),
-				Stmts: make([]statement, 0),
+				ID: a.newID(),
 			},
 		}
 		for _, f := range flattenFieldList(x.Type.Params) {
@@ -241,7 +242,6 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		case 1:
 			fn.RetType.Name = results[0].typeName
 		}
-		a.addStmt(fn)
 		a.pushStmts(&fn.Block.Stmts)
 	case *ast.BlockStmt:
 	case *ast.ExprStmt:
