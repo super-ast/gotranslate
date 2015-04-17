@@ -55,7 +55,8 @@ func NewAST(fset *token.FileSet) *AST {
 		curID: 1,
 		fset:  fset,
 		RootBlock: &block{
-			ID: 0,
+			ID:    0,
+			Stmts: make([]statement, 0),
 		},
 	}
 	a.pushStmts(&a.RootBlock.Stmts)
@@ -218,7 +219,8 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				ID: a.newID(),
 			},
 			Block: &block{
-				ID: a.newID(),
+				ID:    a.newID(),
+				Stmts: make([]statement, 0),
 			},
 		}
 		for _, f := range flattenFieldList(x.Type.Params) {
