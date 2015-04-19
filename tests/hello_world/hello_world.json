@@ -8,7 +8,7 @@
       "name": "main",
       "return-type": {
         "id": 2,
-        "name": "int"
+        "name": "void"
       },
       "block": {
         "id": 3,

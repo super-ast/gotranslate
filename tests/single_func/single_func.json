@@ -22,7 +22,7 @@
       "name": "main",
       "return-type": {
         "id": 5,
-        "name": "int"
+        "name": "void"
       },
       "block": {
         "id": 6,

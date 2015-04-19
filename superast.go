@@ -251,9 +251,6 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		switch len(results) {
 		case 0:
 			fn.RetType.Name = "void"
-			if name == "main" {
-				fn.RetType.Name = "int"
-			}
 		case 1:
 			fn.RetType.Name = results[0].typeName
 		}
