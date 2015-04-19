@@ -2,6 +2,7 @@ package superast
 
 import (
 	"encoding/json"
+	"flag"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -9,10 +10,12 @@ import (
 	"os"
 	"path"
 	"testing"
-	"flag"
 )
 
-var write = flag.Bool("write", false, "Write json results")
+var (
+	write = flag.Bool("write", false, "Write json results")
+	name  = flag.String("name", "", "Test name")
+)
 
 func init() {
 	flag.Parse()
@@ -72,10 +75,14 @@ func TestCases(t *testing.T) {
 	if err != nil {
 		return
 	}
-	for _, e := range entries {
-		if !e.IsDir() {
-			continue
+	if *name != "" {
+		doTest(t, *name)
+	} else {
+		for _, e := range entries {
+			if !e.IsDir() {
+				continue
+			}
+			doTest(t, e.Name())
 		}
-		doTest(t, e.Name())
 	}
 }
