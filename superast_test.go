@@ -5,12 +5,18 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
-	"io"
 	"io/ioutil"
 	"os"
 	"path"
 	"testing"
+	"flag"
 )
+
+var write = flag.Bool("write", false, "Write json results")
+
+func init() {
+	flag.Parse()
+}
 
 func toJSON(t *testing.T, a *AST) []byte {
 	b, err := json.MarshalIndent(a.RootBlock, "", "  ")
@@ -21,24 +27,45 @@ func toJSON(t *testing.T, a *AST) []byte {
 	return b
 }
 
-func doTest(t *testing.T, name string, in, out io.Reader) {
+const testsDir = "tests"
+
+func doTest(t *testing.T, name string) {
 	fset := token.NewFileSet()
+	in, err := os.Open(path.Join(testsDir, name, name+".go"))
+	if err != nil {
+		t.Errorf("Failed opening file: %s", err)
+	}
 	f, err := parser.ParseFile(fset, name+".go", in, 0)
 	if err != nil {
 		t.Errorf("Failed parsing source file: %s", err)
 	}
 	a := NewAST(fset)
 	ast.Walk(a, f)
-	jsonWant, err := ioutil.ReadAll(out)
-	if err != nil {
-		t.Errorf("Failed reading json file: %s", err)
-	}
-	if string(jsonWant) != string(toJSON(t, a)) {
-		t.Errorf("Mismatching JSON outputs in the test '%s'", name)
+	got := toJSON(t, a)
+	outPath := path.Join(testsDir, name, name+".json")
+	if *write {
+		out, err := os.Create(outPath)
+		if err != nil {
+			t.Errorf("Failed opening file: %s", err)
+		}
+		_, err = out.Write(got)
+		if err != nil {
+			t.Errorf("Failed writing json file: %s", err)
+		}
+	} else {
+		out, err := os.Open(outPath)
+		if err != nil {
+			t.Errorf("Failed opening file: %s", err)
+		}
+		want, err := ioutil.ReadAll(out)
+		if err != nil {
+			t.Errorf("Failed reading json file: %s", err)
+		}
+		if string(want) != string(got) {
+			t.Errorf("Mismatching JSON outputs in the test '%s'", name)
+		}
 	}
 }
-
-const testsDir = "tests"
 
 func TestCases(t *testing.T) {
 	entries, err := ioutil.ReadDir(testsDir)
@@ -49,15 +76,6 @@ func TestCases(t *testing.T) {
 		if !e.IsDir() {
 			continue
 		}
-		name := e.Name()
-		in, err := os.Open(path.Join(testsDir, name, name+".go"))
-		if err != nil {
-			t.Errorf("Failed opening file: %s", err)
-		}
-		out, err := os.Open(path.Join(testsDir, name, name+".json"))
-		if err != nil {
-			t.Errorf("Failed opening file: %s", err)
-		}
-		doTest(t, name, in, out)
+		doTest(t, e.Name())
 	}
 }
