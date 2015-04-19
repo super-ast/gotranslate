@@ -200,6 +200,19 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				log.Fatalf(`Import path not allowed: "%s"`, path)
 			}
 		}
+	case *ast.Ident:
+		switch parentNode.(type) {
+		case *ast.CallExpr:
+		default:
+			return nil
+		}
+		id := &statement{
+			ID:    a.newID(),
+			Line:  pos.Line,
+			Type:  "identifier",
+			Value: x.Name,
+		}
+		a.addStmt(id)
 	case *ast.BasicLit:
 		lit := &statement{
 			ID:    a.newID(),
@@ -284,7 +297,6 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 	case *ast.ExprStmt:
 	case *ast.FieldList:
 	case *ast.GenDecl:
-	case *ast.Ident:
 	case *ast.SelectorExpr:
 	default:
 		return nil

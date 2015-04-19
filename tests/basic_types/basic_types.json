@@ -65,7 +65,27 @@
             "id": 13,
             "line": 9,
             "type": "function-call",
-            "name": "print"
+            "name": "print",
+            "arguments": [
+              {
+                "id": 14,
+                "line": 9,
+                "type": "identifier",
+                "value": "i"
+              },
+              {
+                "id": 15,
+                "line": 9,
+                "type": "identifier",
+                "value": "f"
+              },
+              {
+                "id": 16,
+                "line": 9,
+                "type": "identifier",
+                "value": "s"
+              }
+            ]
           }
         ]
       }
