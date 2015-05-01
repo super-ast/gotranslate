@@ -1,0 +1,116 @@
+{
+  "id": 0,
+  "statements": [
+    {
+      "id": 1,
+      "line": 5,
+      "type": "function-declaration",
+      "name": "main",
+      "return-type": {
+        "id": 2,
+        "name": "void"
+      },
+      "block": {
+        "id": 3,
+        "statements": [
+          {
+            "id": 4,
+            "line": 8,
+            "type": "variable-declaration",
+            "name": "a",
+            "data-type": {
+              "id": 5,
+              "name": "int"
+            },
+            "init": {
+              "id": 6,
+              "line": 0,
+              "type": "int",
+              "value": "3"
+            }
+          },
+          {
+            "id": 7,
+            "line": 8,
+            "type": "variable-declaration",
+            "name": "b",
+            "data-type": {
+              "id": 8,
+              "name": "string"
+            },
+            "init": {
+              "id": 9,
+              "line": 0,
+              "type": "string",
+              "value": "foo"
+            }
+          },
+          {
+            "id": 10,
+            "line": 9,
+            "type": "variable-declaration",
+            "name": "c",
+            "data-type": {
+              "id": 11,
+              "name": "int"
+            },
+            "init": {
+              "id": 12,
+              "line": 0,
+              "type": "int",
+              "value": "5"
+            }
+          },
+          {
+            "id": 13,
+            "line": 9,
+            "type": "variable-declaration",
+            "name": "d",
+            "data-type": {
+              "id": 14,
+              "name": "int"
+            },
+            "init": {
+              "id": 15,
+              "line": 0,
+              "type": "int",
+              "value": "6"
+            }
+          },
+          {
+            "id": 16,
+            "line": 10,
+            "type": "function-call",
+            "name": "print",
+            "arguments": [
+              {
+                "id": 17,
+                "line": 10,
+                "type": "identifier",
+                "value": "a"
+              },
+              {
+                "id": 18,
+                "line": 10,
+                "type": "identifier",
+                "value": "b"
+              },
+              {
+                "id": 19,
+                "line": 10,
+                "type": "identifier",
+                "value": "c"
+              },
+              {
+                "id": 20,
+                "line": 10,
+                "type": "identifier",
+                "value": "d"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

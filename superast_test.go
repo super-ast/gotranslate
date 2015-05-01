@@ -34,7 +34,7 @@ const testsDir = "tests"
 
 func doTest(t *testing.T, name string) {
 	fset := token.NewFileSet()
-	in, err := os.Open(path.Join(testsDir, name, name+".go"))
+	in, err := os.Open(path.Join(testsDir, name, "in.go"))
 	if err != nil {
 		t.Errorf("Failed opening file: %s", err)
 	}
@@ -45,7 +45,7 @@ func doTest(t *testing.T, name string) {
 	a := NewAST(fset)
 	ast.Walk(a, f)
 	got := toJSON(t, a)
-	outPath := path.Join(testsDir, name, name+".json")
+	outPath := path.Join(testsDir, name, "out.json")
 	if *write {
 		out, err := os.Create(outPath)
 		if err != nil {
