@@ -33,10 +33,10 @@ func main() {
 		b, err = json.Marshal(a.RootBlock)
 	}
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Could not generate json: %v", err)
 	}
 	if _, err = os.Stdout.Write(b); err != nil {
-		log.Fatal(err)
+		log.Fatalf("Could not output json: %v", err)
 	}
 	fmt.Println()
 }
