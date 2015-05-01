@@ -120,6 +120,8 @@ func exprToString(x ast.Expr) string {
 	switch t := x.(type) {
 	case *ast.Ident:
 		return t.Name
+	case *ast.BasicLit:
+		return t.Value
 	case *ast.SelectorExpr:
 		return exprToString(t.X) + "." + t.Sel.Name
 	case *ast.StarExpr:
@@ -160,18 +162,18 @@ func flattenFieldList(fieldList *ast.FieldList) []field {
 	return fields
 }
 
-func nameBasicLitKind(kind token.Token) string {
-	switch kind {
-	case token.INT:
-		return "int"
-	case token.FLOAT:
-		return "double"
-	case token.CHAR:
-		return "char"
-	case token.STRING:
-		return "string"
-	}
-	return ""
+var basicLitName = map[token.Token]string{
+	token.INT: "int",
+	token.FLOAT: "double",
+	token.CHAR: "char",
+	token.STRING: "string",
+}
+
+var zeroValues = map[string]string{
+	"int": "0",
+	"double": "0.0",
+	"char": `'\0'`,
+	"string": `""`,
 }
 
 func (a *AST) Visit(node ast.Node) ast.Visitor {
@@ -269,12 +271,44 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		}
 		a.addStmt(fn)
 		a.pushStmts(&fn.Block.Stmts)
+	case *ast.DeclStmt:
+		log.Printf("%#v", x.Decl)
+		gd, _ := x.Decl.(*ast.GenDecl)
+		for _, spec := range gd.Specs {
+			switch s := spec.(type) {
+			case *ast.ValueSpec:
+				t := exprToString(s.Type)
+				for i, id := range s.Names {
+					n := exprToString(id)
+					v, _ := zeroValues[t]
+					if s.Values != nil {
+						v = exprToString(s.Values[i])
+					}
+					decl := &statement{
+						ID:   a.newID(),
+						Line: pos.Line,
+						Type: "variable-declaration",
+						Name: n,
+						DataType: &dataType{
+							ID:   a.newID(),
+							Name: t,
+						},
+						Init: &statement{
+							ID:    a.newID(),
+							Type:  t,
+							Value: v,
+						},
+					}
+					a.addStmt(decl)
+				}
+			}
+		}
 	case *ast.AssignStmt:
 		for i, expr := range x.Lhs {
 			n := exprToString(expr)
 			l, _ := x.Rhs[i].(*ast.BasicLit)
 			value := strUnquote(l.Value)
-			typeName := nameBasicLitKind(l.Kind)
+			typeName, _ := basicLitName[l.Kind]
 			asg := &statement{
 				ID:   a.newID(),
 				Line: pos.Line,
