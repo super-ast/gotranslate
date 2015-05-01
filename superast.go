@@ -5,6 +5,7 @@ import (
 	"go/token"
 	"log"
 	"strconv"
+	"strings"
 )
 
 var allowedImports = map[string]struct{}{
@@ -13,8 +14,8 @@ var allowedImports = map[string]struct{}{
 }
 
 type block struct {
-	ID    int          `json:"id"`
-	Stmts []*statement `json:"statements"`
+	ID    int           `json:"id"`
+	Stmts []stmt `json:"statements"`
 }
 
 type dataType struct {
@@ -22,33 +23,43 @@ type dataType struct {
 	Name string `json:"name"`
 }
 
-type parameter struct {
+type varDecl struct {
 	ID       int       `json:"id"`
 	Name     string    `json:"name"`
 	DataType *dataType `json:"data-type,omitempty"`
 }
 
+type stmt interface{}
+
 type statement struct {
-	ID       int          `json:"id"`
-	Line     int          `json:"line"`
-	Type     string       `json:"type"`
-	Name     string       `json:"name,omitempty"`
-	Value    string       `json:"value,omitempty"`
-	DataType *dataType    `json:"data-type,omitempty"`
-	RetType  *dataType    `json:"return-type,omitempty"`
-	Params   []parameter  `json:"parameters,omitempty"`
-	Args     []*statement `json:"arguments,omitempty"`
-	Init     *statement   `json:"init,omitempty"`
-	Left     *statement   `json:"left,omitempty"`
-	Right    *statement   `json:"right,omitempty"`
-	Block    *block       `json:"block,omitempty"`
+	ID       int           `json:"id"`
+	Line     int           `json:"line"`
+	Type     string        `json:"type"`
+	Name     string        `json:"name,omitempty"`
+	Value    string        `json:"value,omitempty"`
+	DataType *dataType     `json:"data-type,omitempty"`
+	RetType  *dataType     `json:"return-type,omitempty"`
+	Params   []varDecl     `json:"parameters,omitempty"`
+	Args     []stmt `json:"arguments,omitempty"`
+	Init     *statement    `json:"init,omitempty"`
+	Left     *statement    `json:"left,omitempty"`
+	Right    *statement    `json:"right,omitempty"`
+	Block    *block        `json:"block,omitempty"`
+}
+
+type structDecl struct {
+	ID       int       `json:"id"`
+	Line     int       `json:"line"`
+	Type     string    `json:"type"`
+	Name     string    `json:"name,omitempty"`
+	Attrs    []varDecl `json:"attributes,omitempty"`
 }
 
 type AST struct {
 	curID      int
 	RootBlock  *block
 	nodeStack  []ast.Node
-	stmtsStack []*[]*statement
+	stmtsStack []*[]stmt
 	fset       *token.FileSet
 }
 
@@ -58,7 +69,7 @@ func NewAST(fset *token.FileSet) *AST {
 		fset:  fset,
 		RootBlock: &block{
 			ID:    0,
-			Stmts: make([]*statement, 0),
+			Stmts: make([]stmt, 0),
 		},
 	}
 	a.pushStmts(&a.RootBlock.Stmts)
@@ -89,16 +100,16 @@ func (a *AST) popNode() {
 	a.nodeStack = a.nodeStack[:len(a.nodeStack)-1]
 }
 
-func (a *AST) pushStmts(stmts *[]*statement) {
+func (a *AST) pushStmts(stmts *[]stmt) {
 	a.stmtsStack = append(a.stmtsStack, stmts)
 }
 
-func (a *AST) addStmt(stmt *statement) {
+func (a *AST) addStmt(s stmt) {
 	if len(a.stmtsStack) == 0 {
 		return
 	}
 	curStmts := a.stmtsStack[len(a.stmtsStack)-1]
-	*curStmts = append(*curStmts, stmt)
+	*curStmts = append(*curStmts, s)
 }
 
 func (a *AST) popStmts() {
@@ -126,6 +137,8 @@ func exprToString(x ast.Expr) string {
 		return exprToString(t.X) + "." + t.Sel.Name
 	case *ast.StarExpr:
 		return exprToString(t.X)
+	default:
+		log.Printf("foo %T\n", t)
 	}
 	return ""
 }
@@ -189,6 +202,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		return nil
 	}
 	pos := a.fset.Position(node.Pos())
+	log.Printf("%s%T - %#v", strings.Repeat("  ", len(a.nodeStack)), node, pos)
 	switch x := node.(type) {
 	case *ast.File:
 		pname := x.Name.Name
@@ -201,6 +215,32 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			if _, e := allowedImports[path]; !e {
 				log.Fatalf(`Import path not allowed: "%s"`, path)
 			}
+		}
+	case *ast.TypeSpec:
+		n := ""
+		if x.Name != nil {
+			n = exprToString(x.Name)
+		}
+		switch t := x.Type.(type) {
+		case *ast.StructType:
+			decl := &structDecl{
+				ID:    a.newID(),
+				Line:  pos.Line,
+				Type:  "struct-declaration",
+				Name:  n,
+			}
+			for _, f := range flattenFieldList(t.Fields) {
+				attr := varDecl{
+					ID:   a.newID(),
+					Name: f.varName,
+					DataType: &dataType{
+						ID:   a.newID(),
+						Name: f.typeName,
+					},
+				}
+				decl.Attrs = append(decl.Attrs, attr)
+			}
+			a.addStmt(decl)
 		}
 	case *ast.Ident:
 		switch parentNode.(type) {
@@ -248,11 +288,11 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			},
 			Block: &block{
 				ID:    a.newID(),
-				Stmts: make([]*statement, 0),
+				Stmts: make([]stmt, 0),
 			},
 		}
 		for _, f := range flattenFieldList(x.Type.Params) {
-			param := parameter{
+			param := varDecl{
 				ID:   a.newID(),
 				Name: f.varName,
 				DataType: &dataType{
@@ -333,6 +373,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 	case *ast.GenDecl:
 	case *ast.SelectorExpr:
 	default:
+		log.Printf("Ignoring %T\n", node)
 		return nil
 	}
 	a.pushNode(node)
