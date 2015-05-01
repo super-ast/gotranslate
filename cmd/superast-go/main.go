@@ -13,14 +13,11 @@ import (
 	"github.com/mvdan/superast"
 )
 
-var (
-	pretty = flag.Bool("p", false, "indent (pretty print) output")
-)
+var pretty = flag.Bool("p", false, "pretty print output")
 
 func main() {
 	flag.Parse()
 
-	var err error
 	fset := token.NewFileSet()
 	f, err := parser.ParseFile(fset, "stdin.go", os.Stdin, 0)
 	if err != nil {
