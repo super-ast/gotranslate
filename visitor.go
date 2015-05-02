@@ -19,14 +19,15 @@ type AST struct {
 	nodeStack  []ast.Node
 	stmtsStack []*[]stmt
 	fset       *token.FileSet
+	pos        token.Position
 }
 
 func NewAST(fset *token.FileSet) *AST {
 	a := &AST{
-		fset:  fset,
+		fset: fset,
 	}
 	a.RootBlock = &block{
-		id: a.newID(),
+		id:    a.newID(),
 		Stmts: make([]stmt, 0),
 	}
 	a.pushStmts(&a.RootBlock.Stmts)
@@ -37,6 +38,10 @@ func (a *AST) newID() id {
 	i := a.curID
 	a.curID++
 	return id{ID: i}
+}
+
+func (a *AST) line() line {
+	return line{Line: a.pos.Line}
 }
 
 func (a *AST) pushNode(node ast.Node) {
@@ -158,8 +163,8 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		a.popNode()
 		return nil
 	}
-	pos := a.fset.Position(node.Pos())
-	log.Printf("%s%T - %#v", strings.Repeat("  ", len(a.nodeStack)), node, pos)
+	a.pos = a.fset.Position(node.Pos())
+	log.Printf("%s%T - %#v", strings.Repeat("  ", len(a.nodeStack)), node, a.pos)
 	switch x := node.(type) {
 	case *ast.File:
 		pname := x.Name.Name
@@ -182,7 +187,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		case *ast.StructType:
 			decl := &structDecl{
 				id:   a.newID(),
-				Line: pos.Line,
+				line: a.line(),
 				Type: "struct-declaration",
 				Name: n,
 			}
@@ -207,7 +212,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		}
 		id := &identifier{
 			id:    a.newID(),
-			Line:  pos.Line,
+			line:  a.line(),
 			Type:  "identifier",
 			Value: x.Name,
 		}
@@ -215,7 +220,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 	case *ast.BasicLit:
 		lit := &statement{
 			id:    a.newID(),
-			Line:  pos.Line,
+			line:  a.line(),
 			Type:  "string",
 			Value: strUnquote(x.Value),
 		}
@@ -227,7 +232,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		}
 		call := &statement{
 			id:   a.newID(),
-			Line: pos.Line,
+			line: a.line(),
 			Type: "function-call",
 			Name: name,
 		}
@@ -237,14 +242,14 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		name := x.Name.Name
 		fn := &statement{
 			id:   a.newID(),
-			Line: pos.Line,
+			line: a.line(),
 			Type: "function-declaration",
 			Name: name,
 			RetType: &dataType{
 				id: a.newID(),
 			},
 			Block: &block{
-				id: a.newID(),
+				id:    a.newID(),
 				Stmts: make([]stmt, 0),
 			},
 		}
@@ -283,7 +288,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 					}
 					decl := &statement{
 						id:   a.newID(),
-						Line: pos.Line,
+						line: a.line(),
 						Type: "variable-declaration",
 						Name: n,
 						DataType: &dataType{
@@ -308,7 +313,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			typeName, _ := basicLitName[l.Kind]
 			asg := &statement{
 				id:   a.newID(),
-				Line: pos.Line,
+				line: a.line(),
 				Type: "variable-declaration",
 				Name: n,
 				DataType: &dataType{

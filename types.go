@@ -4,6 +4,10 @@ type id struct {
 	ID int `json:"id"`
 }
 
+type line struct {
+	Line int `json:"line"`
+}
+
 type block struct {
 	id
 	Stmts []stmt `json:"statements"`
@@ -24,7 +28,7 @@ type stmt interface{}
 
 type statement struct {
 	id
-	Line     int        `json:"line"`
+	line
 	Type     string     `json:"type"`
 	Name     string     `json:"name,omitempty"`
 	Value    string     `json:"value,omitempty"`
@@ -40,16 +44,15 @@ type statement struct {
 
 type identifier struct {
 	id
-	Line     int    `json:"line"`
-	Type     string `json:"type"`
-	Value    string `json:"value"`
+	line
+	Type  string `json:"type"`
+	Value string `json:"value"`
 }
 
 type structDecl struct {
 	id
-	Line  int       `json:"line"`
+	line
 	Type  string    `json:"type"`
 	Name  string    `json:"name"`
 	Attrs []varDecl `json:"attributes"`
 }
-
