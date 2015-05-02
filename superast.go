@@ -14,7 +14,7 @@ var allowedImports = map[string]struct{}{
 }
 
 type block struct {
-	ID    int           `json:"id"`
+	ID    int    `json:"id"`
 	Stmts []stmt `json:"statements"`
 }
 
@@ -32,27 +32,34 @@ type varDecl struct {
 type stmt interface{}
 
 type statement struct {
-	ID       int           `json:"id"`
-	Line     int           `json:"line"`
-	Type     string        `json:"type"`
-	Name     string        `json:"name,omitempty"`
-	Value    string        `json:"value,omitempty"`
-	DataType *dataType     `json:"data-type,omitempty"`
-	RetType  *dataType     `json:"return-type,omitempty"`
-	Params   []varDecl     `json:"parameters,omitempty"`
-	Args     []stmt `json:"arguments,omitempty"`
-	Init     *statement    `json:"init,omitempty"`
-	Left     *statement    `json:"left,omitempty"`
-	Right    *statement    `json:"right,omitempty"`
-	Block    *block        `json:"block,omitempty"`
+	ID       int        `json:"id"`
+	Line     int        `json:"line"`
+	Type     string     `json:"type"`
+	Name     string     `json:"name,omitempty"`
+	Value    string     `json:"value,omitempty"`
+	DataType *dataType  `json:"data-type,omitempty"`
+	RetType  *dataType  `json:"return-type,omitempty"`
+	Params   []varDecl  `json:"parameters,omitempty"`
+	Args     []stmt     `json:"arguments,omitempty"`
+	Init     *statement `json:"init,omitempty"`
+	Left     *statement `json:"left,omitempty"`
+	Right    *statement `json:"right,omitempty"`
+	Block    *block     `json:"block,omitempty"`
+}
+
+type identifier struct {
+	ID       int    `json:"id"`
+	Line     int    `json:"line"`
+	Type     string `json:"type"`
+	Value    string `json:"value"`
 }
 
 type structDecl struct {
-	ID       int       `json:"id"`
-	Line     int       `json:"line"`
-	Type     string    `json:"type"`
-	Name     string    `json:"name,omitempty"`
-	Attrs    []varDecl `json:"attributes,omitempty"`
+	ID    int       `json:"id"`
+	Line  int       `json:"line"`
+	Type  string    `json:"type"`
+	Name  string    `json:"name"`
+	Attrs []varDecl `json:"attributes"`
 }
 
 type AST struct {
@@ -176,16 +183,16 @@ func flattenFieldList(fieldList *ast.FieldList) []field {
 }
 
 var basicLitName = map[token.Token]string{
-	token.INT: "int",
-	token.FLOAT: "double",
-	token.CHAR: "char",
+	token.INT:    "int",
+	token.FLOAT:  "double",
+	token.CHAR:   "char",
 	token.STRING: "string",
 }
 
 var zeroValues = map[string]string{
-	"int": "0",
+	"int":    "0",
 	"double": "0.0",
-	"char": `'\0'`,
+	"char":   `'\0'`,
 	"string": `""`,
 }
 
@@ -224,10 +231,10 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		switch t := x.Type.(type) {
 		case *ast.StructType:
 			decl := &structDecl{
-				ID:    a.newID(),
-				Line:  pos.Line,
-				Type:  "struct-declaration",
-				Name:  n,
+				ID:   a.newID(),
+				Line: pos.Line,
+				Type: "struct-declaration",
+				Name: n,
 			}
 			for _, f := range flattenFieldList(t.Fields) {
 				attr := varDecl{
@@ -248,7 +255,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		default:
 			return nil
 		}
-		id := &statement{
+		id := &identifier{
 			ID:    a.newID(),
 			Line:  pos.Line,
 			Type:  "identifier",
