@@ -194,6 +194,8 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			for _, f := range flattenFieldList(t.Fields) {
 				attr := varDecl{
 					id:   a.newID(),
+					line: a.line(),
+					Type: "variable-declaration",
 					Name: f.varName,
 					DataType: &dataType{
 						id:   a.newID(),
@@ -256,6 +258,8 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		for _, f := range flattenFieldList(x.Type.Params) {
 			param := varDecl{
 				id:   a.newID(),
+				line: a.line(),
+				Type: "variable-declaration",
 				Name: f.varName,
 				DataType: &dataType{
 					id:   a.newID(),
@@ -286,7 +290,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 					if s.Values != nil {
 						v = exprToString(s.Values[i])
 					}
-					decl := &statement{
+					decl := &varDecl{
 						id:   a.newID(),
 						line: a.line(),
 						Type: "variable-declaration",
@@ -311,7 +315,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			l, _ := x.Rhs[i].(*ast.BasicLit)
 			value := strUnquote(l.Value)
 			typeName, _ := basicLitName[l.Kind]
-			asg := &statement{
+			asg := &varDecl{
 				id:   a.newID(),
 				line: a.line(),
 				Type: "variable-declaration",
