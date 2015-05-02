@@ -5,7 +5,6 @@ import (
 	"go/token"
 	"log"
 	"strconv"
-	"strings"
 )
 
 var allowedImports = map[string]struct{}{
@@ -98,8 +97,6 @@ func exprString(x ast.Expr) string {
 		return exprString(t.X) + "." + t.Sel.Name
 	case *ast.StarExpr:
 		return exprString(t.X)
-	default:
-		log.Printf("foo %T\n", t)
 	}
 	return ""
 }
@@ -164,7 +161,6 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		return nil
 	}
 	a.pos = a.fset.Position(node.Pos())
-	log.Printf("%s%T", strings.Repeat("  ", len(a.nodeStack)), node)
 	switch x := node.(type) {
 	case *ast.File:
 		pname := x.Name.Name
@@ -343,7 +339,6 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 	case *ast.ExprStmt:
 	case *ast.GenDecl:
 	default:
-		log.Printf("Ignoring %T\n", node)
 		return nil
 	}
 	a.pushNode(node)
