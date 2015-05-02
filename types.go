@@ -23,10 +23,10 @@ type dataType struct {
 type varDecl struct {
 	id
 	line
-	Type     string     `json:"type"`
-	Name     string     `json:"name"`
-	DataType *dataType  `json:"data-type"`
-	Init     *statement `json:"init,omitempty"`
+	Type     string      `json:"type"`
+	Name     string      `json:"name"`
+	DataType *dataType   `json:"data-type"`
+	Init     *identifier `json:"init,omitempty"`
 }
 
 type funcDecl struct {
@@ -53,8 +53,8 @@ type statement struct {
 type identifier struct {
 	id
 	line
-	Type  string `json:"type"`
-	Value string `json:"value"`
+	Type  string      `json:"type"`
+	Value interface{} `json:"value"`
 }
 
 type funcCall struct {

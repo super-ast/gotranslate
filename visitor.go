@@ -220,7 +220,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		}
 		a.addStmt(id)
 	case *ast.BasicLit:
-		lit := &statement{
+		lit := &identifier{
 			id:    a.newID(),
 			line:  a.line(),
 			Type:  "string",
@@ -299,7 +299,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 							id:   a.newID(),
 							Name: t,
 						},
-						Init: &statement{
+						Init: &identifier{
 							id:    a.newID(),
 							Type:  t,
 							Value: v,
@@ -324,7 +324,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 					id:   a.newID(),
 					Name: typeName,
 				},
-				Init: &statement{
+				Init: &identifier{
 					id:    a.newID(),
 					Type:  typeName,
 					Value: value,
