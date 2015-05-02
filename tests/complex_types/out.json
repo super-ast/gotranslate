@@ -1,0 +1,80 @@
+{
+  "id": 0,
+  "statements": [
+    {
+      "id": 1,
+      "line": 5,
+      "type": "struct-declaration",
+      "name": "foo",
+      "attributes": [
+        {
+          "id": 2,
+          "line": 5,
+          "type": "variable-declaration",
+          "name": "a",
+          "data-type": {
+            "id": 3,
+            "name": "string"
+          }
+        },
+        {
+          "id": 4,
+          "line": 5,
+          "type": "variable-declaration",
+          "name": "b",
+          "data-type": {
+            "id": 5,
+            "name": "int"
+          }
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "line": 10,
+      "type": "function-declaration",
+      "name": "main",
+      "return-type": {
+        "id": 7,
+        "name": "void"
+      },
+      "block": {
+        "id": 8,
+        "statements": [
+          {
+            "id": 9,
+            "line": 11,
+            "type": "variable-declaration",
+            "name": "f1",
+            "data-type": {
+              "id": 10,
+              "name": "foo"
+            },
+            "init": {
+              "id": 11,
+              "line": 0,
+              "type": "foo",
+              "value": null
+            }
+          },
+          {
+            "id": 12,
+            "line": 12,
+            "type": "variable-declaration",
+            "name": "f2",
+            "data-type": {
+              "id": 13,
+              "name": "foo"
+            },
+            "init": {
+              "id": 14,
+              "line": 0,
+              "type": "foo",
+              "value": null
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

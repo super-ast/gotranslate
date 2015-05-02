@@ -88,16 +88,16 @@ func strUnquote(s string) string {
 	return u
 }
 
-func exprToString(x ast.Expr) string {
+func exprString(x ast.Expr) string {
 	switch t := x.(type) {
 	case *ast.Ident:
 		return t.Name
 	case *ast.BasicLit:
 		return t.Value
 	case *ast.SelectorExpr:
-		return exprToString(t.X) + "." + t.Sel.Name
+		return exprString(t.X) + "." + t.Sel.Name
 	case *ast.StarExpr:
-		return exprToString(t.X)
+		return exprString(t.X)
 	default:
 		log.Printf("foo %T\n", t)
 	}
@@ -120,7 +120,7 @@ func flattenFieldList(fieldList *ast.FieldList) []field {
 	}
 	var fields []field
 	for _, f := range fieldList.List {
-		t := exprToString(f.Type)
+		t := exprString(f.Type)
 		if len(f.Names) == 0 {
 			fields = append(fields, field{
 				varName:  "",
@@ -181,7 +181,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 	case *ast.TypeSpec:
 		n := ""
 		if x.Name != nil {
-			n = exprToString(x.Name)
+			n = exprString(x.Name)
 		}
 		switch t := x.Type.(type) {
 		case *ast.StructType:
@@ -228,7 +228,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		}
 		a.addStmt(lit)
 	case *ast.CallExpr:
-		name := exprToString(x.Fun)
+		name := exprString(x.Fun)
 		if newname, e := funcNames[name]; e {
 			name = newname
 		}
@@ -282,12 +282,12 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		for _, spec := range gd.Specs {
 			switch s := spec.(type) {
 			case *ast.ValueSpec:
-				t := exprToString(s.Type)
+				t := exprString(s.Type)
 				for i, id := range s.Names {
-					n := exprToString(id)
+					n := exprString(id)
 					v, _ := zeroValues[t]
 					if s.Values != nil {
-						v = exprToString(s.Values[i])
+						v = exprString(s.Values[i])
 					}
 					decl := &varDecl{
 						id:   a.newID(),
@@ -310,10 +310,17 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		}
 	case *ast.AssignStmt:
 		for i, expr := range x.Lhs {
-			n := exprToString(expr)
-			l, _ := x.Rhs[i].(*ast.BasicLit)
-			value := strUnquote(l.Value)
-			typeName, _ := basicLitName[l.Kind]
+			n := exprString(expr)
+			var v value
+			var t string
+			switch r := x.Rhs[i].(type) {
+			case *ast.BasicLit:
+				t, _ = basicLitName[r.Kind]
+				v = strUnquote(r.Value)
+			case *ast.CompositeLit:
+				t = exprString(r.Type)
+			default:
+			}
 			asg := &varDecl{
 				id:   a.newID(),
 				line: a.line(),
@@ -321,12 +328,12 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				Name: n,
 				DataType: &dataType{
 					id:   a.newID(),
-					Name: typeName,
+					Name: t,
 				},
 				Init: &identifier{
 					id:    a.newID(),
-					Type:  typeName,
-					Value: value,
+					Type:  t,
+					Value: v,
 				},
 			}
 			a.addStmt(asg)
