@@ -144,7 +144,7 @@ var basicLitName = map[token.Token]string{
 	token.STRING: "string",
 }
 
-var zeroValues = map[string]interface{}{
+var zeroValues = map[string]value{
 	"int":    0,
 	"double": 0.0,
 	"char":   `'\0'`,

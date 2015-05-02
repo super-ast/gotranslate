@@ -14,6 +14,7 @@ type block struct {
 }
 
 type stmt interface{}
+type value interface{}
 
 type dataType struct {
 	id
@@ -42,8 +43,8 @@ type funcDecl struct {
 type identifier struct {
 	id
 	line
-	Type  string      `json:"type"`
-	Value interface{} `json:"value"`
+	Type  string `json:"type"`
+	Value value  `json:"value"`
 }
 
 type funcCall struct {
