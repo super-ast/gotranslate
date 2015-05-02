@@ -44,13 +44,9 @@ type statement struct {
 	Name     string     `json:"name,omitempty"`
 	Value    string     `json:"value,omitempty"`
 	DataType *dataType  `json:"data-type,omitempty"`
-	RetType  *dataType  `json:"return-type,omitempty"`
-	Params   []varDecl  `json:"parameters,omitempty"`
-	Args     []stmt     `json:"arguments,omitempty"`
 	Init     *statement `json:"init,omitempty"`
 	Left     *statement `json:"left,omitempty"`
 	Right    *statement `json:"right,omitempty"`
-	Block    *block     `json:"block,omitempty"`
 }
 
 type identifier struct {
