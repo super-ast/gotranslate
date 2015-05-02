@@ -39,17 +39,6 @@ type funcDecl struct {
 	Block   *block    `json:"block"`
 }
 
-type statement struct {
-	id
-	line
-	Type     string     `json:"type"`
-	Name     string     `json:"name,omitempty"`
-	Value    string     `json:"value,omitempty"`
-	DataType *dataType  `json:"data-type,omitempty"`
-	Left     *statement `json:"left,omitempty"`
-	Right    *statement `json:"right,omitempty"`
-}
-
 type identifier struct {
 	id
 	line
