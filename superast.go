@@ -13,18 +13,22 @@ var allowedImports = map[string]struct{}{
 	"log": struct{}{},
 }
 
+type id struct {
+	ID int `json:"id"`
+}
+
 type block struct {
-	ID    int    `json:"id"`
+	id
 	Stmts []stmt `json:"statements"`
 }
 
 type dataType struct {
-	ID   int    `json:"id"`
+	id
 	Name string `json:"name"`
 }
 
 type varDecl struct {
-	ID       int       `json:"id"`
+	id
 	Name     string    `json:"name"`
 	DataType *dataType `json:"data-type,omitempty"`
 }
@@ -32,7 +36,7 @@ type varDecl struct {
 type stmt interface{}
 
 type statement struct {
-	ID       int        `json:"id"`
+	id
 	Line     int        `json:"line"`
 	Type     string     `json:"type"`
 	Name     string     `json:"name,omitempty"`
@@ -48,14 +52,14 @@ type statement struct {
 }
 
 type identifier struct {
-	ID       int    `json:"id"`
+	id
 	Line     int    `json:"line"`
 	Type     string `json:"type"`
 	Value    string `json:"value"`
 }
 
 type structDecl struct {
-	ID    int       `json:"id"`
+	id
 	Line  int       `json:"line"`
 	Type  string    `json:"type"`
 	Name  string    `json:"name"`
@@ -72,21 +76,20 @@ type AST struct {
 
 func NewAST(fset *token.FileSet) *AST {
 	a := &AST{
-		curID: 1,
 		fset:  fset,
-		RootBlock: &block{
-			ID:    0,
-			Stmts: make([]stmt, 0),
-		},
+	}
+	a.RootBlock = &block{
+		id: a.newID(),
+		Stmts: make([]stmt, 0),
 	}
 	a.pushStmts(&a.RootBlock.Stmts)
 	return a
 }
 
-func (a *AST) newID() int {
+func (a *AST) newID() id {
 	i := a.curID
 	a.curID++
-	return i
+	return id{ID: i}
 }
 
 func (a *AST) pushNode(node ast.Node) {
@@ -231,17 +234,17 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		switch t := x.Type.(type) {
 		case *ast.StructType:
 			decl := &structDecl{
-				ID:   a.newID(),
+				id:   a.newID(),
 				Line: pos.Line,
 				Type: "struct-declaration",
 				Name: n,
 			}
 			for _, f := range flattenFieldList(t.Fields) {
 				attr := varDecl{
-					ID:   a.newID(),
+					id:   a.newID(),
 					Name: f.varName,
 					DataType: &dataType{
-						ID:   a.newID(),
+						id:   a.newID(),
 						Name: f.typeName,
 					},
 				}
@@ -256,7 +259,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			return nil
 		}
 		id := &identifier{
-			ID:    a.newID(),
+			id:    a.newID(),
 			Line:  pos.Line,
 			Type:  "identifier",
 			Value: x.Name,
@@ -264,7 +267,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		a.addStmt(id)
 	case *ast.BasicLit:
 		lit := &statement{
-			ID:    a.newID(),
+			id:    a.newID(),
 			Line:  pos.Line,
 			Type:  "string",
 			Value: strUnquote(x.Value),
@@ -276,7 +279,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			name = newname
 		}
 		call := &statement{
-			ID:   a.newID(),
+			id:   a.newID(),
 			Line: pos.Line,
 			Type: "function-call",
 			Name: name,
@@ -286,24 +289,24 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 	case *ast.FuncDecl:
 		name := x.Name.Name
 		fn := &statement{
-			ID:   a.newID(),
+			id:   a.newID(),
 			Line: pos.Line,
 			Type: "function-declaration",
 			Name: name,
 			RetType: &dataType{
-				ID: a.newID(),
+				id: a.newID(),
 			},
 			Block: &block{
-				ID:    a.newID(),
+				id: a.newID(),
 				Stmts: make([]stmt, 0),
 			},
 		}
 		for _, f := range flattenFieldList(x.Type.Params) {
 			param := varDecl{
-				ID:   a.newID(),
+				id:   a.newID(),
 				Name: f.varName,
 				DataType: &dataType{
-					ID:   a.newID(),
+					id:   a.newID(),
 					Name: f.typeName,
 				},
 			}
@@ -332,16 +335,16 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 						v = exprToString(s.Values[i])
 					}
 					decl := &statement{
-						ID:   a.newID(),
+						id:   a.newID(),
 						Line: pos.Line,
 						Type: "variable-declaration",
 						Name: n,
 						DataType: &dataType{
-							ID:   a.newID(),
+							id:   a.newID(),
 							Name: t,
 						},
 						Init: &statement{
-							ID:    a.newID(),
+							id:    a.newID(),
 							Type:  t,
 							Value: v,
 						},
@@ -357,16 +360,16 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			value := strUnquote(l.Value)
 			typeName, _ := basicLitName[l.Kind]
 			asg := &statement{
-				ID:   a.newID(),
+				id:   a.newID(),
 				Line: pos.Line,
 				Type: "variable-declaration",
 				Name: n,
 				DataType: &dataType{
-					ID:   a.newID(),
+					id:   a.newID(),
 					Name: typeName,
 				},
 				Init: &statement{
-					ID:    a.newID(),
+					id:    a.newID(),
 					Type:  typeName,
 					Value: value,
 				},
