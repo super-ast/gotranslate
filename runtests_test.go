@@ -30,11 +30,15 @@ func toJSON(t *testing.T, a *AST) []byte {
 	return b
 }
 
-const testsDir = "tests"
+const (
+	testsDir = "tests"
+	inFilename = "in.go"
+	outFilename = "out.json"
+)
 
 func doTest(t *testing.T, name string) {
 	fset := token.NewFileSet()
-	in, err := os.Open(path.Join(testsDir, name, "in.go"))
+	in, err := os.Open(path.Join(testsDir, name, inFilename))
 	if err != nil {
 		t.Errorf("Failed opening file: %s", err)
 	}
@@ -45,7 +49,7 @@ func doTest(t *testing.T, name string) {
 	a := NewAST(fset)
 	ast.Walk(a, f)
 	got := toJSON(t, a)
-	outPath := path.Join(testsDir, name, "out.json")
+	outPath := path.Join(testsDir, name, outFilename)
 	if *write {
 		out, err := os.Create(outPath)
 		if err != nil {
