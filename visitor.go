@@ -242,13 +242,20 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		a.pushStmts(&call.Args)
 	case *ast.FuncDecl:
 		name := x.Name.Name
+		retType := "void"
+		results := flattenFieldList(x.Type.Results)
+		switch len(results) {
+		case 1:
+			retType = results[0].typeName
+		}
 		fn := &funcDecl{
 			id:   a.newID(),
 			line: a.line(),
 			Type: "function-declaration",
 			Name: name,
 			RetType: &dataType{
-				id: a.newID(),
+				id:   a.newID(),
+				Name: retType,
 			},
 			Block: &block{
 				id:    a.newID(),
@@ -267,13 +274,6 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				},
 			}
 			fn.Params = append(fn.Params, param)
-		}
-		results := flattenFieldList(x.Type.Results)
-		switch len(results) {
-		case 0:
-			fn.RetType.Name = "void"
-		case 1:
-			fn.RetType.Name = results[0].typeName
 		}
 		a.addStmt(fn)
 		a.pushStmts(&fn.Block.Stmts)
