@@ -10,7 +10,6 @@ import (
 
 var allowedImports = map[string]struct{}{
 	"fmt": struct{}{},
-	"log": struct{}{},
 }
 
 type AST struct {
@@ -106,6 +105,7 @@ func exprToString(x ast.Expr) string {
 }
 
 var funcNames = map[string]string{
+	"fmt.Print":   "print",
 	"fmt.Println": "print",
 	"println":     "print",
 }
