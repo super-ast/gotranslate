@@ -341,9 +341,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		return nil
 	case *ast.BlockStmt:
 	case *ast.ExprStmt:
-	case *ast.FieldList:
 	case *ast.GenDecl:
-	case *ast.SelectorExpr:
 	default:
 		log.Printf("Ignoring %T\n", node)
 		return nil
