@@ -22,8 +22,19 @@ type dataType struct {
 
 type varDecl struct {
 	id
+	line
 	Name     string    `json:"name"`
-	DataType *dataType `json:"data-type,omitempty"`
+	DataType *dataType `json:"data-type"`
+}
+
+type funcDecl struct {
+	id
+	line
+	Type    string    `json:"type"`
+	Name    string    `json:"name"`
+	Params  []varDecl `json:"parameters,omitempty"`
+	RetType *dataType `json:"return-type"`
+	Block   *block    `json:"block"`
 }
 
 type statement struct {
@@ -52,9 +63,9 @@ type identifier struct {
 type funcCall struct {
 	id
 	line
-	Type  string `json:"type"`
-	Name  string `json:"name"`
-	Args  []stmt `json:"arguments"`
+	Type string `json:"type"`
+	Name string `json:"name"`
+	Args []stmt `json:"arguments"`
 }
 
 type structDecl struct {

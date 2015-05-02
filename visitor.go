@@ -240,7 +240,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		a.pushStmts(&call.Args)
 	case *ast.FuncDecl:
 		name := x.Name.Name
-		fn := &statement{
+		fn := &funcDecl{
 			id:   a.newID(),
 			line: a.line(),
 			Type: "function-declaration",
