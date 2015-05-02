@@ -144,11 +144,11 @@ var basicLitName = map[token.Token]string{
 	token.STRING: "string",
 }
 
-var zeroValues = map[string]string{
-	"int":    "0",
-	"double": "0.0",
+var zeroValues = map[string]interface{}{
+	"int":    0,
+	"double": 0.0,
 	"char":   `'\0'`,
-	"string": `""`,
+	"string": "",
 }
 
 func (a *AST) Visit(node ast.Node) ast.Visitor {
@@ -164,7 +164,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		return nil
 	}
 	a.pos = a.fset.Position(node.Pos())
-	log.Printf("%s%T - %#v", strings.Repeat("  ", len(a.nodeStack)), node, a.pos)
+	log.Printf("%s%T", strings.Repeat("  ", len(a.nodeStack)), node)
 	switch x := node.(type) {
 	case *ast.File:
 		pname := x.Name.Name
@@ -278,7 +278,6 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		a.addStmt(fn)
 		a.pushStmts(&fn.Block.Stmts)
 	case *ast.DeclStmt:
-		log.Printf("%#v", x.Decl)
 		gd, _ := x.Decl.(*ast.GenDecl)
 		for _, spec := range gd.Specs {
 			switch s := spec.(type) {

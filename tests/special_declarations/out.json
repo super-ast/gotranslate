@@ -26,7 +26,7 @@
               "id": 6,
               "line": 0,
               "type": "int",
-              "value": "0"
+              "value": 0
             }
           },
           {
@@ -42,7 +42,7 @@
               "id": 9,
               "line": 0,
               "type": "string",
-              "value": "\"\""
+              "value": ""
             }
           },
           {
@@ -58,7 +58,7 @@
               "id": 12,
               "line": 0,
               "type": "int",
-              "value": "0"
+              "value": 0
             }
           },
           {
@@ -74,7 +74,7 @@
               "id": 15,
               "line": 0,
               "type": "int",
-              "value": "0"
+              "value": 0
             }
           },
           {
