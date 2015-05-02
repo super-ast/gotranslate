@@ -13,6 +13,8 @@ type block struct {
 	Stmts []stmt `json:"statements"`
 }
 
+type stmt interface{}
+
 type dataType struct {
 	id
 	Name string `json:"name"`
@@ -23,8 +25,6 @@ type varDecl struct {
 	Name     string    `json:"name"`
 	DataType *dataType `json:"data-type,omitempty"`
 }
-
-type stmt interface{}
 
 type statement struct {
 	id
@@ -47,6 +47,14 @@ type identifier struct {
 	line
 	Type  string `json:"type"`
 	Value string `json:"value"`
+}
+
+type funcCall struct {
+	id
+	line
+	Type  string `json:"type"`
+	Name  string `json:"name"`
+	Args  []stmt `json:"arguments"`
 }
 
 type structDecl struct {

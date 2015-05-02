@@ -230,7 +230,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		if newname, e := funcNames[name]; e {
 			name = newname
 		}
-		call := &statement{
+		call := &funcCall{
 			id:   a.newID(),
 			line: a.line(),
 			Type: "function-call",
