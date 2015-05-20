@@ -4,8 +4,9 @@ type id struct {
 	ID int `json:"id"`
 }
 
-type line struct {
+type pos struct {
 	Line int `json:"line"`
+	Col  int `json:"col"`
 }
 
 type block struct {
@@ -23,7 +24,7 @@ type dataType struct {
 
 type varDecl struct {
 	id
-	line
+	pos
 	Type     string      `json:"type"`
 	Name     string      `json:"name"`
 	DataType *dataType   `json:"data-type"`
@@ -32,7 +33,7 @@ type varDecl struct {
 
 type funcDecl struct {
 	id
-	line
+	pos
 	Type    string    `json:"type"`
 	Name    string    `json:"name"`
 	Params  []varDecl `json:"parameters,omitempty"`
@@ -42,14 +43,14 @@ type funcDecl struct {
 
 type identifier struct {
 	id
-	line
+	pos
 	Type  string `json:"type"`
 	Value value  `json:"value"`
 }
 
 type funcCall struct {
 	id
-	line
+	pos
 	Type string `json:"type"`
 	Name string `json:"name"`
 	Args []stmt `json:"arguments"`
@@ -57,7 +58,7 @@ type funcCall struct {
 
 type structDecl struct {
 	id
-	line
+	pos
 	Type  string    `json:"type"`
 	Name  string    `json:"name"`
 	Attrs []varDecl `json:"attributes"`

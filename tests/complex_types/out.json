@@ -4,12 +4,14 @@
     {
       "id": 1,
       "line": 5,
+      "col": 6,
       "type": "struct-declaration",
       "name": "foo",
       "attributes": [
         {
           "id": 2,
           "line": 5,
+          "col": 6,
           "type": "variable-declaration",
           "name": "a",
           "data-type": {
@@ -20,6 +22,7 @@
         {
           "id": 4,
           "line": 5,
+          "col": 6,
           "type": "variable-declaration",
           "name": "b",
           "data-type": {
@@ -32,6 +35,7 @@
     {
       "id": 6,
       "line": 10,
+      "col": 1,
       "type": "function-declaration",
       "name": "main",
       "return-type": {
@@ -44,6 +48,7 @@
           {
             "id": 9,
             "line": 11,
+            "col": 2,
             "type": "variable-declaration",
             "name": "f1",
             "data-type": {
@@ -53,6 +58,7 @@
             "init": {
               "id": 11,
               "line": 0,
+              "col": 0,
               "type": "foo",
               "value": null
             }
@@ -60,6 +66,7 @@
           {
             "id": 12,
             "line": 12,
+            "col": 2,
             "type": "variable-declaration",
             "name": "f2",
             "data-type": {
@@ -69,6 +76,7 @@
             "init": {
               "id": 14,
               "line": 0,
+              "col": 0,
               "type": "foo",
               "value": null
             }

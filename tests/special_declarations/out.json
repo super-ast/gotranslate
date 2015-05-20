@@ -4,6 +4,7 @@
     {
       "id": 1,
       "line": 5,
+      "col": 1,
       "type": "function-declaration",
       "name": "main",
       "return-type": {
@@ -16,6 +17,7 @@
           {
             "id": 4,
             "line": 6,
+            "col": 2,
             "type": "variable-declaration",
             "name": "i",
             "data-type": {
@@ -25,6 +27,7 @@
             "init": {
               "id": 6,
               "line": 0,
+              "col": 0,
               "type": "int",
               "value": 0
             }
@@ -32,6 +35,7 @@
           {
             "id": 7,
             "line": 7,
+            "col": 2,
             "type": "variable-declaration",
             "name": "s",
             "data-type": {
@@ -41,6 +45,7 @@
             "init": {
               "id": 9,
               "line": 0,
+              "col": 0,
               "type": "string",
               "value": ""
             }
@@ -48,6 +53,7 @@
           {
             "id": 10,
             "line": 8,
+            "col": 2,
             "type": "variable-declaration",
             "name": "i1",
             "data-type": {
@@ -57,6 +63,7 @@
             "init": {
               "id": 12,
               "line": 0,
+              "col": 0,
               "type": "int",
               "value": 0
             }
@@ -64,6 +71,7 @@
           {
             "id": 13,
             "line": 8,
+            "col": 2,
             "type": "variable-declaration",
             "name": "i2",
             "data-type": {
@@ -73,6 +81,7 @@
             "init": {
               "id": 15,
               "line": 0,
+              "col": 0,
               "type": "int",
               "value": 0
             }
@@ -80,6 +89,7 @@
           {
             "id": 16,
             "line": 9,
+            "col": 2,
             "type": "variable-declaration",
             "name": "i3",
             "data-type": {
@@ -89,6 +99,7 @@
             "init": {
               "id": 18,
               "line": 0,
+              "col": 0,
               "type": "int",
               "value": "4"
             }
@@ -96,6 +107,7 @@
           {
             "id": 19,
             "line": 9,
+            "col": 2,
             "type": "variable-declaration",
             "name": "i4",
             "data-type": {
@@ -105,6 +117,7 @@
             "init": {
               "id": 21,
               "line": 0,
+              "col": 0,
               "type": "int",
               "value": "5"
             }
@@ -112,6 +125,7 @@
           {
             "id": 22,
             "line": 10,
+            "col": 2,
             "type": "variable-declaration",
             "name": "a",
             "data-type": {
@@ -121,6 +135,7 @@
             "init": {
               "id": 24,
               "line": 0,
+              "col": 0,
               "type": "int",
               "value": "3"
             }
@@ -128,6 +143,7 @@
           {
             "id": 25,
             "line": 10,
+            "col": 2,
             "type": "variable-declaration",
             "name": "b",
             "data-type": {
@@ -137,6 +153,7 @@
             "init": {
               "id": 27,
               "line": 0,
+              "col": 0,
               "type": "string",
               "value": "foo"
             }
@@ -144,6 +161,7 @@
           {
             "id": 28,
             "line": 11,
+            "col": 2,
             "type": "variable-declaration",
             "name": "c",
             "data-type": {
@@ -153,6 +171,7 @@
             "init": {
               "id": 30,
               "line": 0,
+              "col": 0,
               "type": "int",
               "value": "5"
             }
@@ -160,6 +179,7 @@
           {
             "id": 31,
             "line": 11,
+            "col": 2,
             "type": "variable-declaration",
             "name": "d",
             "data-type": {
@@ -169,6 +189,7 @@
             "init": {
               "id": 33,
               "line": 0,
+              "col": 0,
               "type": "int",
               "value": "6"
             }
@@ -176,54 +197,63 @@
           {
             "id": 34,
             "line": 12,
+            "col": 2,
             "type": "function-call",
             "name": "print",
             "arguments": [
               {
                 "id": 35,
                 "line": 12,
+                "col": 14,
                 "type": "identifier",
                 "value": "a"
               },
               {
                 "id": 36,
                 "line": 12,
+                "col": 17,
                 "type": "identifier",
                 "value": "b"
               },
               {
                 "id": 37,
                 "line": 12,
+                "col": 20,
                 "type": "identifier",
                 "value": "c"
               },
               {
                 "id": 38,
                 "line": 12,
+                "col": 23,
                 "type": "identifier",
                 "value": "d"
               },
               {
                 "id": 39,
                 "line": 12,
+                "col": 26,
                 "type": "identifier",
                 "value": "i1"
               },
               {
                 "id": 40,
                 "line": 12,
+                "col": 30,
                 "type": "identifier",
                 "value": "i2"
               },
               {
                 "id": 41,
                 "line": 12,
+                "col": 34,
                 "type": "identifier",
                 "value": "i3"
               },
               {
                 "id": 42,
                 "line": 12,
+                "col": 38,
                 "type": "identifier",
                 "value": "i4"
               }

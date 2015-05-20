@@ -4,6 +4,7 @@
     {
       "id": 1,
       "line": 3,
+      "col": 1,
       "type": "function-declaration",
       "name": "foo",
       "return-type": {
@@ -18,6 +19,7 @@
     {
       "id": 4,
       "line": 7,
+      "col": 1,
       "type": "function-declaration",
       "name": "main",
       "return-type": {
