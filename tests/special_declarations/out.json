@@ -127,7 +127,7 @@
             "line": 10,
             "col": 2,
             "type": "variable-declaration",
-            "name": "a",
+            "name": "i",
             "data-type": {
               "id": 23,
               "name": "int"
@@ -145,7 +145,7 @@
             "line": 10,
             "col": 2,
             "type": "variable-declaration",
-            "name": "b",
+            "name": "s",
             "data-type": {
               "id": 26,
               "name": "string"
@@ -206,14 +206,14 @@
                 "line": 12,
                 "col": 14,
                 "type": "identifier",
-                "value": "a"
+                "value": "i"
               },
               {
                 "id": 36,
                 "line": 12,
                 "col": 17,
                 "type": "identifier",
-                "value": "b"
+                "value": "s"
               },
               {
                 "id": 37,

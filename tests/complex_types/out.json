@@ -80,6 +80,29 @@
               "type": "foo",
               "value": null
             }
+          },
+          {
+            "id": 15,
+            "line": 16,
+            "col": 2,
+            "type": "function-call",
+            "name": "print",
+            "arguments": [
+              {
+                "id": 16,
+                "line": 16,
+                "col": 14,
+                "type": "identifier",
+                "value": "f1"
+              },
+              {
+                "id": 17,
+                "line": 16,
+                "col": 18,
+                "type": "identifier",
+                "value": "f2"
+              }
+            ]
           }
         ]
       }
