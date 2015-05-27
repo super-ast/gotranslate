@@ -300,31 +300,32 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 	case *ast.DeclStmt:
 		gd, _ := x.Decl.(*ast.GenDecl)
 		for _, spec := range gd.Specs {
-			switch s := spec.(type) {
-			case *ast.ValueSpec:
-				for i, t := range flattenNames(s.Type, s.Names) {
-					var vType string
-					if t.dType != nil {
-						vType = t.dType.Name
-					}
-					v, _ := zeroValues[vType]
-					if s.Values != nil {
-						v = exprString(s.Values[i])
-					}
-					decl := &varDecl{
-						id:   a.newID(),
-						pos:  a.pos(),
-						Type: "variable-declaration",
-						Name: t.vName,
-						DataType: a.assignIdToDataType(t.dType),
-						Init: &identifier{
-							id:    a.newID(),
-							Type:  vType,
-							Value: v,
-						},
-					}
-					a.addStmt(decl)
+			s, e := spec.(*ast.ValueSpec)
+			if !e {
+				continue
+			}
+			for i, t := range flattenNames(s.Type, s.Names) {
+				var vType string
+				if t.dType != nil {
+					vType = t.dType.Name
 				}
+				v, _ := zeroValues[vType]
+				if s.Values != nil {
+					v = exprString(s.Values[i])
+				}
+				decl := &varDecl{
+					id:   a.newID(),
+					pos:  a.pos(),
+					Type: "variable-declaration",
+					Name: t.vName,
+					DataType: a.assignIdToDataType(t.dType),
+					Init: &identifier{
+						id:    a.newID(),
+						Type:  vType,
+						Value: v,
+					},
+				}
+				a.addStmt(decl)
 			}
 		}
 	case *ast.AssignStmt:
