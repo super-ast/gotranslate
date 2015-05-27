@@ -97,8 +97,18 @@ func exprString(x ast.Expr) string {
 		return exprString(t.X) + "." + t.Sel.Name
 	case *ast.StarExpr:
 		return exprString(t.X)
+	default:
+		log.Printf("exprString: %#v", x)
 	}
 	return ""
+}
+
+func exprType(x ast.Expr) *dataType {
+	switch x.(type) {
+	default:
+		log.Printf("%#v", x)
+	}
+	return nil
 }
 
 var funcNames = map[string]string{
@@ -108,7 +118,8 @@ var funcNames = map[string]string{
 }
 
 type field struct {
-	varName, typeName string
+	vName string
+	dType *dataType
 }
 
 func flattenFieldList(fieldList *ast.FieldList) []field {
@@ -117,17 +128,17 @@ func flattenFieldList(fieldList *ast.FieldList) []field {
 	}
 	var fields []field
 	for _, f := range fieldList.List {
-		t := exprString(f.Type)
+		t := exprType(f.Type)
 		if len(f.Names) == 0 {
 			fields = append(fields, field{
-				varName:  "",
-				typeName: t,
+				vName:  "",
+				dType: t,
 			})
 		}
 		for _, n := range f.Names {
 			fields = append(fields, field{
-				varName:  n.Name,
-				typeName: t,
+				vName:  n.Name,
+				dType: t,
 			})
 		}
 	}
@@ -192,11 +203,8 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 					id:   a.newID(),
 					pos:  a.pos(),
 					Type: "variable-declaration",
-					Name: f.varName,
-					DataType: &dataType{
-						id:   a.newID(),
-						Name: f.typeName,
-					},
+					Name: f.vName,
+					DataType: f.dType,
 				}
 				decl.Attrs = append(decl.Attrs, attr)
 			}
@@ -238,21 +246,18 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		a.pushStmts(&call.Args)
 	case *ast.FuncDecl:
 		name := x.Name.Name
-		retType := "void"
+		var retType *dataType
 		results := flattenFieldList(x.Type.Results)
 		switch len(results) {
 		case 1:
-			retType = results[0].typeName
+			retType = results[0].dType
 		}
 		fn := &funcDecl{
 			id:   a.newID(),
 			pos:  a.pos(),
 			Type: "function-declaration",
 			Name: name,
-			RetType: &dataType{
-				id:   a.newID(),
-				Name: retType,
-			},
+			RetType: retType,
 			Block: &block{
 				id:    a.newID(),
 				Stmts: make([]stmt, 0),
@@ -263,11 +268,8 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				id:   a.newID(),
 				pos:  a.pos(),
 				Type: "variable-declaration",
-				Name: f.varName,
-				DataType: &dataType{
-					id:   a.newID(),
-					Name: f.typeName,
-				},
+				Name: f.vName,
+				DataType: f.dType,
 			}
 			fn.Params = append(fn.Params, param)
 		}

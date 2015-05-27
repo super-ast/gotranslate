@@ -103,6 +103,24 @@
                 "value": "f2"
               }
             ]
+          },
+          {
+            "id": 18,
+            "line": 17,
+            "col": 2,
+            "type": "variable-declaration",
+            "name": "s1",
+            "data-type": {
+              "id": 19,
+              "name": ""
+            },
+            "init": {
+              "id": 20,
+              "line": 0,
+              "col": 0,
+              "type": "",
+              "value": null
+            }
           }
         ]
       }

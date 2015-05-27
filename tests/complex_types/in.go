@@ -14,7 +14,7 @@ func main() {
 		b: 3,
 	}
 	fmt.Println(f1, f2)
-	//var s1 []int
+	var s1 []int
 	//s2 := []string{"test1", "test2"}
 	//fmt.Println(f1, f2, s1, s2)
 }

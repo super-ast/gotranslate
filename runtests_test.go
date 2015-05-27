@@ -31,8 +31,8 @@ func toJSON(t *testing.T, a *AST) []byte {
 }
 
 const (
-	testsDir = "tests"
-	inFilename = "in.go"
+	testsDir    = "tests"
+	inFilename  = "in.go"
 	outFilename = "out.json"
 )
 

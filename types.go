@@ -19,7 +19,8 @@ type value interface{}
 
 type dataType struct {
 	id
-	Name string `json:"name"`
+	Name    string    `json:"name"`
+	subType *dataType `json:"data-type,omitempty"`
 }
 
 type varDecl struct {
