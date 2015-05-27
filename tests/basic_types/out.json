@@ -22,8 +22,8 @@
             },
             "init": {
               "id": 5,
-              "line": 0,
-              "col": 0,
+              "line": 6,
+              "col": 2,
               "type": "int",
               "value": "3"
             }
@@ -40,8 +40,8 @@
             },
             "init": {
               "id": 8,
-              "line": 0,
-              "col": 0,
+              "line": 7,
+              "col": 2,
               "type": "double",
               "value": "5.5"
             }
@@ -58,8 +58,8 @@
             },
             "init": {
               "id": 11,
-              "line": 0,
-              "col": 0,
+              "line": 8,
+              "col": 2,
               "type": "string",
               "value": "foo"
             }

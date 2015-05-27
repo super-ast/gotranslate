@@ -22,8 +22,8 @@
             },
             "init": {
               "id": 5,
-              "line": 0,
-              "col": 0,
+              "line": 6,
+              "col": 2,
               "type": "int",
               "value": 0
             }
@@ -40,8 +40,8 @@
             },
             "init": {
               "id": 8,
-              "line": 0,
-              "col": 0,
+              "line": 7,
+              "col": 2,
               "type": "string",
               "value": ""
             }
@@ -58,8 +58,8 @@
             },
             "init": {
               "id": 11,
-              "line": 0,
-              "col": 0,
+              "line": 8,
+              "col": 2,
               "type": "int",
               "value": 0
             }
@@ -76,8 +76,8 @@
             },
             "init": {
               "id": 14,
-              "line": 0,
-              "col": 0,
+              "line": 8,
+              "col": 2,
               "type": "int",
               "value": 0
             }
@@ -94,8 +94,8 @@
             },
             "init": {
               "id": 17,
-              "line": 0,
-              "col": 0,
+              "line": 9,
+              "col": 2,
               "type": "int",
               "value": "4"
             }
@@ -112,8 +112,8 @@
             },
             "init": {
               "id": 20,
-              "line": 0,
-              "col": 0,
+              "line": 9,
+              "col": 2,
               "type": "int",
               "value": "5"
             }
@@ -130,8 +130,8 @@
             },
             "init": {
               "id": 23,
-              "line": 0,
-              "col": 0,
+              "line": 10,
+              "col": 2,
               "type": "int",
               "value": "3"
             }
@@ -148,8 +148,8 @@
             },
             "init": {
               "id": 26,
-              "line": 0,
-              "col": 0,
+              "line": 10,
+              "col": 2,
               "type": "string",
               "value": "foo"
             }
@@ -166,8 +166,8 @@
             },
             "init": {
               "id": 29,
-              "line": 0,
-              "col": 0,
+              "line": 11,
+              "col": 2,
               "type": "int",
               "value": "5"
             }
@@ -184,8 +184,8 @@
             },
             "init": {
               "id": 32,
-              "line": 0,
-              "col": 0,
+              "line": 11,
+              "col": 2,
               "type": "int",
               "value": "6"
             }

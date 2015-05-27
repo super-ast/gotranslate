@@ -53,8 +53,8 @@
             },
             "init": {
               "id": 10,
-              "line": 0,
-              "col": 0,
+              "line": 11,
+              "col": 2,
               "type": "foo",
               "value": null
             }
@@ -71,8 +71,8 @@
             },
             "init": {
               "id": 13,
-              "line": 0,
-              "col": 0,
+              "line": 12,
+              "col": 2,
               "type": "foo",
               "value": null
             }
@@ -116,8 +116,8 @@
             },
             "init": {
               "id": 20,
-              "line": 0,
-              "col": 0,
+              "line": 17,
+              "col": 2,
               "type": "vector",
               "value": null
             }

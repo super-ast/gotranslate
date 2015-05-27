@@ -330,6 +330,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 					DataType: a.assignIdToDataType(t.dType),
 					Init: &identifier{
 						id:    a.newID(),
+						pos:  a.pos(),
 						Type:  vType,
 						Value: v,
 					},
@@ -361,6 +362,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				},
 				Init: &identifier{
 					id:    a.newID(),
+					pos:  a.pos(),
 					Type:  t,
 					Value: v,
 				},
