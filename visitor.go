@@ -7,10 +7,6 @@ import (
 	"strconv"
 )
 
-var allowedImports = map[string]struct{}{
-	"fmt": struct{}{},
-}
-
 type AST struct {
 	curID      int
 	RootBlock  *block
@@ -194,14 +190,6 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 	}
 	a.position = a.fset.Position(node.Pos())
 	switch x := node.(type) {
-	case *ast.File:
-		imports := x.Imports
-		for _, imp := range imports {
-			path := strUnquote(imp.Path.Value)
-			if _, e := allowedImports[path]; !e {
-				log.Fatalf(`Import path not allowed: "%s"`, path)
-			}
-		}
 	case *ast.TypeSpec:
 		n := ""
 		if x.Name != nil {
@@ -350,6 +338,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			a.addStmt(asg)
 		}
 		return nil
+	case *ast.File:
 	case *ast.BlockStmt:
 	case *ast.ExprStmt:
 	case *ast.GenDecl:
