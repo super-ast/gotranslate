@@ -177,8 +177,9 @@ func (a *AST) assignIdToDataType(dType *dataType) *dataType {
 	if dType == nil {
 		return nil
 	}
-	dType.id = a.newID()
-	return dType
+	dTypeCopy := *dType
+	dTypeCopy.id = a.newID()
+	return &dTypeCopy
 }
 
 func (a *AST) Visit(node ast.Node) ast.Visitor {
