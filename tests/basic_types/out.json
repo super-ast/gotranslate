@@ -69,7 +69,7 @@
             "line": 9,
             "col": 2,
             "type": "function-call",
-            "name": "print",
+            "name": "fmt.Println",
             "arguments": [
               {
                 "id": 13,

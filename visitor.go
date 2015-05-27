@@ -122,12 +122,6 @@ func exprType(x ast.Expr) *dataType {
 	return nil
 }
 
-var funcNames = map[string]string{
-	"fmt.Print":   "print",
-	"fmt.Println": "print",
-	"println":     "print",
-}
-
 type namedType struct {
 	vName string
 	dType *dataType
@@ -264,9 +258,6 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		a.addStmt(lit)
 	case *ast.CallExpr:
 		name := exprString(x.Fun)
-		if newname, e := funcNames[name]; e {
-			name = newname
-		}
 		call := &funcCall{
 			id:   a.newID(),
 			pos:  a.pos(),
