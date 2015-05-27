@@ -111,7 +111,7 @@ func exprType(x ast.Expr) *dataType {
 	switch t := x.(type) {
 	case *ast.ArrayType:
 		return &dataType{
-			Name: "vector",
+			Name:    "vector",
 			SubType: exprType(t.Elt),
 		}
 	}
@@ -128,13 +128,13 @@ func flattenNames(baseType ast.Expr, names []*ast.Ident) []namedType {
 	t := exprType(baseType)
 	if len(names) == 0 {
 		types = append(types, namedType{
-			vName:  "",
+			vName: "",
 			dType: t,
 		})
 	}
 	for _, n := range names {
 		types = append(types, namedType{
-			vName:  n.Name,
+			vName: n.Name,
 			dType: t,
 		})
 	}
@@ -217,10 +217,10 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			}
 			for _, f := range flattenFieldList(t.Fields) {
 				attr := varDecl{
-					id:   a.newID(),
-					pos:  a.pos(),
-					Type: "variable-declaration",
-					Name: f.vName,
+					id:       a.newID(),
+					pos:      a.pos(),
+					Type:     "variable-declaration",
+					Name:     f.vName,
 					DataType: a.assignIdToDataType(f.dType),
 				}
 				decl.Attrs = append(decl.Attrs, attr)
@@ -267,10 +267,10 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			retType = results[0].dType
 		}
 		fn := &funcDecl{
-			id:   a.newID(),
-			pos:  a.pos(),
-			Type: "function-declaration",
-			Name: name,
+			id:      a.newID(),
+			pos:     a.pos(),
+			Type:    "function-declaration",
+			Name:    name,
 			RetType: a.assignIdToDataType(retType),
 			Block: &block{
 				id:    a.newID(),
@@ -279,10 +279,10 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		}
 		for _, f := range flattenFieldList(x.Type.Params) {
 			param := varDecl{
-				id:   a.newID(),
-				pos:  a.pos(),
-				Type: "variable-declaration",
-				Name: f.vName,
+				id:       a.newID(),
+				pos:      a.pos(),
+				Type:     "variable-declaration",
+				Name:     f.vName,
 				DataType: a.assignIdToDataType(f.dType),
 			}
 			fn.Params = append(fn.Params, param)
@@ -303,14 +303,14 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 					v = exprString(s.Values[i])
 				}
 				decl := &varDecl{
-					id:   a.newID(),
-					pos:  a.pos(),
-					Type: "variable-declaration",
-					Name: t.vName,
+					id:       a.newID(),
+					pos:      a.pos(),
+					Type:     "variable-declaration",
+					Name:     t.vName,
 					DataType: a.assignIdToDataType(t.dType),
 					Init: &identifier{
 						id:    a.newID(),
-						pos:  a.pos(),
+						pos:   a.pos(),
 						Type:  vType,
 						Value: v,
 					},
@@ -342,7 +342,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				},
 				Init: &identifier{
 					id:    a.newID(),
-					pos:  a.pos(),
+					pos:   a.pos(),
 					Type:  t,
 					Value: v,
 				},
