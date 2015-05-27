@@ -123,32 +123,40 @@ var funcNames = map[string]string{
 	"println":     "print",
 }
 
-type field struct {
+type namedType struct {
 	vName string
 	dType *dataType
 }
 
-func flattenFieldList(fieldList *ast.FieldList) []field {
+func flattenNames(baseType ast.Expr, names []*ast.Ident) []namedType {
+	var types []namedType
+	t := exprType(baseType)
+	if len(names) == 0 {
+		types = append(types, namedType{
+			vName:  "",
+			dType: t,
+		})
+	}
+	for _, n := range names {
+		types = append(types, namedType{
+			vName:  n.Name,
+			dType: t,
+		})
+	}
+	return types
+}
+
+func flattenFieldList(fieldList *ast.FieldList) []namedType {
 	if fieldList == nil {
 		return nil
 	}
-	var fields []field
+	var types []namedType
 	for _, f := range fieldList.List {
-		t := exprType(f.Type)
-		if len(f.Names) == 0 {
-			fields = append(fields, field{
-				vName:  "",
-				dType: t,
-			})
-		}
-		for _, n := range f.Names {
-			fields = append(fields, field{
-				vName:  n.Name,
-				dType: t,
-			})
+		for _, t := range flattenNames(f.Type, f.Names) {
+			types = append(types, t)
 		}
 	}
-	return fields
+	return types
 }
 
 var basicLitName = map[token.Token]string{
