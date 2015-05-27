@@ -199,10 +199,6 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 	a.position = a.fset.Position(node.Pos())
 	switch x := node.(type) {
 	case *ast.File:
-		pname := x.Name.Name
-		if pname != "main" {
-			log.Fatalf(`Package name is not "main": "%s"`, pname)
-		}
 		imports := x.Imports
 		for _, imp := range imports {
 			path := strUnquote(imp.Path.Value)
