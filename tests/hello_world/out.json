@@ -7,22 +7,18 @@
       "col": 1,
       "type": "function-declaration",
       "name": "main",
-      "return-type": {
-        "id": 2,
-        "name": "void"
-      },
       "block": {
-        "id": 3,
+        "id": 2,
         "statements": [
           {
-            "id": 4,
+            "id": 3,
             "line": 6,
             "col": 2,
             "type": "function-call",
             "name": "print",
             "arguments": [
               {
-                "id": 5,
+                "id": 4,
                 "line": 6,
                 "col": 14,
                 "type": "string",

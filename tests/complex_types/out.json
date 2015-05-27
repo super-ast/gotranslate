@@ -38,25 +38,21 @@
       "col": 1,
       "type": "function-declaration",
       "name": "main",
-      "return-type": {
-        "id": 7,
-        "name": "void"
-      },
       "block": {
-        "id": 8,
+        "id": 7,
         "statements": [
           {
-            "id": 9,
+            "id": 8,
             "line": 11,
             "col": 2,
             "type": "variable-declaration",
             "name": "f1",
             "data-type": {
-              "id": 10,
+              "id": 9,
               "name": "foo"
             },
             "init": {
-              "id": 11,
+              "id": 10,
               "line": 0,
               "col": 0,
               "type": "foo",
@@ -64,17 +60,17 @@
             }
           },
           {
-            "id": 12,
+            "id": 11,
             "line": 12,
             "col": 2,
             "type": "variable-declaration",
             "name": "f2",
             "data-type": {
-              "id": 13,
+              "id": 12,
               "name": "foo"
             },
             "init": {
-              "id": 14,
+              "id": 13,
               "line": 0,
               "col": 0,
               "type": "foo",
@@ -82,21 +78,21 @@
             }
           },
           {
-            "id": 15,
+            "id": 14,
             "line": 16,
             "col": 2,
             "type": "function-call",
             "name": "print",
             "arguments": [
               {
-                "id": 16,
+                "id": 15,
                 "line": 16,
                 "col": 14,
                 "type": "identifier",
                 "value": "f1"
               },
               {
-                "id": 17,
+                "id": 16,
                 "line": 16,
                 "col": 18,
                 "type": "identifier",
@@ -105,17 +101,17 @@
             ]
           },
           {
-            "id": 18,
+            "id": 17,
             "line": 17,
             "col": 2,
             "type": "variable-declaration",
             "name": "s1",
             "data-type": {
-              "id": 19,
+              "id": 18,
               "name": ""
             },
             "init": {
-              "id": 20,
+              "id": 19,
               "line": 0,
               "col": 0,
               "type": "",

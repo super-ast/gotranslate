@@ -104,9 +104,15 @@ func exprString(x ast.Expr) string {
 }
 
 func exprType(x ast.Expr) *dataType {
+	s := exprString(x)
+	if s != "" {
+		return &dataType{
+			Name: s,
+		}
+	}
 	switch x.(type) {
 	default:
-		log.Printf("%#v", x)
+		log.Printf("exprType: %#v", x)
 	}
 	return nil
 }
@@ -159,6 +165,14 @@ var zeroValues = map[string]value{
 	"string": "",
 }
 
+func (a *AST) assignIdToDataType(dType *dataType) *dataType {
+	if dType == nil {
+		return nil
+	}
+	dType.id = a.newID()
+	return dType
+}
+
 func (a *AST) Visit(node ast.Node) ast.Visitor {
 	parentNode := a.curNode()
 	if node == nil {
@@ -204,7 +218,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 					pos:  a.pos(),
 					Type: "variable-declaration",
 					Name: f.vName,
-					DataType: f.dType,
+					DataType: a.assignIdToDataType(f.dType),
 				}
 				decl.Attrs = append(decl.Attrs, attr)
 			}
@@ -257,7 +271,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			pos:  a.pos(),
 			Type: "function-declaration",
 			Name: name,
-			RetType: retType,
+			RetType: a.assignIdToDataType(retType),
 			Block: &block{
 				id:    a.newID(),
 				Stmts: make([]stmt, 0),
@@ -269,7 +283,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				pos:  a.pos(),
 				Type: "variable-declaration",
 				Name: f.vName,
-				DataType: f.dType,
+				DataType: a.assignIdToDataType(f.dType),
 			}
 			fn.Params = append(fn.Params, param)
 		}

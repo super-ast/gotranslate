@@ -22,12 +22,8 @@
       "col": 1,
       "type": "function-declaration",
       "name": "main",
-      "return-type": {
-        "id": 5,
-        "name": "void"
-      },
       "block": {
-        "id": 6,
+        "id": 5,
         "statements": []
       }
     }

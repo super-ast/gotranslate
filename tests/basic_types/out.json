@@ -7,25 +7,21 @@
       "col": 1,
       "type": "function-declaration",
       "name": "main",
-      "return-type": {
-        "id": 2,
-        "name": "void"
-      },
       "block": {
-        "id": 3,
+        "id": 2,
         "statements": [
           {
-            "id": 4,
+            "id": 3,
             "line": 6,
             "col": 2,
             "type": "variable-declaration",
             "name": "i",
             "data-type": {
-              "id": 5,
+              "id": 4,
               "name": "int"
             },
             "init": {
-              "id": 6,
+              "id": 5,
               "line": 0,
               "col": 0,
               "type": "int",
@@ -33,17 +29,17 @@
             }
           },
           {
-            "id": 7,
+            "id": 6,
             "line": 7,
             "col": 2,
             "type": "variable-declaration",
             "name": "f",
             "data-type": {
-              "id": 8,
+              "id": 7,
               "name": "double"
             },
             "init": {
-              "id": 9,
+              "id": 8,
               "line": 0,
               "col": 0,
               "type": "double",
@@ -51,17 +47,17 @@
             }
           },
           {
-            "id": 10,
+            "id": 9,
             "line": 8,
             "col": 2,
             "type": "variable-declaration",
             "name": "s",
             "data-type": {
-              "id": 11,
+              "id": 10,
               "name": "string"
             },
             "init": {
-              "id": 12,
+              "id": 11,
               "line": 0,
               "col": 0,
               "type": "string",
@@ -69,28 +65,28 @@
             }
           },
           {
-            "id": 13,
+            "id": 12,
             "line": 9,
             "col": 2,
             "type": "function-call",
             "name": "print",
             "arguments": [
               {
-                "id": 14,
+                "id": 13,
                 "line": 9,
                 "col": 14,
                 "type": "identifier",
                 "value": "i"
               },
               {
-                "id": 15,
+                "id": 14,
                 "line": 9,
                 "col": 17,
                 "type": "identifier",
                 "value": "f"
               },
               {
-                "id": 16,
+                "id": 15,
                 "line": 9,
                 "col": 20,
                 "type": "identifier",
