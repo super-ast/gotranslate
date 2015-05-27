@@ -106,12 +106,19 @@
             "col": 2,
             "type": "variable-declaration",
             "name": "s1",
-            "data-type": null,
-            "init": {
+            "data-type": {
               "id": 18,
+              "name": "vector",
+              "data-type": {
+                "id": 19,
+                "name": "int"
+              }
+            },
+            "init": {
+              "id": 20,
               "line": 0,
               "col": 0,
-              "type": "",
+              "type": "vector",
               "value": null
             }
           }

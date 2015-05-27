@@ -110,7 +110,12 @@ func exprType(x ast.Expr) *dataType {
 			Name: s,
 		}
 	}
-	switch x.(type) {
+	switch t := x.(type) {
+	case *ast.ArrayType:
+		return &dataType{
+			Name: "vector",
+			SubType: exprType(t.Elt),
+		}
 	default:
 		log.Printf("exprType: %#v", x)
 	}
@@ -179,6 +184,9 @@ func (a *AST) assignIdToDataType(dType *dataType) *dataType {
 	}
 	dTypeCopy := *dType
 	dTypeCopy.id = a.newID()
+	if dTypeCopy.SubType != nil {
+		dTypeCopy.SubType = a.assignIdToDataType(dTypeCopy.SubType)
+	}
 	return &dTypeCopy
 }
 
