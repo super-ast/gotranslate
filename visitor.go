@@ -97,8 +97,6 @@ func exprString(x ast.Expr) string {
 		return exprString(t.X) + "." + t.Sel.Name
 	case *ast.StarExpr:
 		return exprString(t.X)
-	default:
-		log.Printf("exprString: %#v", x)
 	}
 	return ""
 }
@@ -116,8 +114,6 @@ func exprType(x ast.Expr) *dataType {
 			Name: "vector",
 			SubType: exprType(t.Elt),
 		}
-	default:
-		log.Printf("exprType: %#v", x)
 	}
 	return nil
 }
@@ -301,10 +297,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				continue
 			}
 			for i, t := range flattenNames(s.Type, s.Names) {
-				var vType string
-				if t.dType != nil {
-					vType = t.dType.Name
-				}
+				vType := t.dType.Name
 				v, _ := zeroValues[vType]
 				if s.Values != nil {
 					v = exprString(s.Values[i])
