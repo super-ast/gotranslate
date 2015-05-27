@@ -3,7 +3,6 @@ package superast
 import (
 	"go/ast"
 	"go/token"
-	"log"
 	"strconv"
 )
 
@@ -98,8 +97,7 @@ func exprString(x ast.Expr) string {
 }
 
 func exprType(x ast.Expr) *dataType {
-	s := exprString(x)
-	if s != "" {
+	if s := exprString(x); s != "" {
 		return &dataType{
 			Name: s,
 		}
@@ -120,14 +118,13 @@ type namedType struct {
 }
 
 func flattenNames(baseType ast.Expr, names []*ast.Ident) []namedType {
-	var types []namedType
 	t := exprType(baseType)
 	if len(names) == 0 {
-		types = append(types, namedType{
-			vName: "",
-			dType: t,
-		})
+		return []namedType{
+			{ vName: "", dType: t, },
+		}
 	}
+	var types []namedType
 	for _, n := range names {
 		types = append(types, namedType{
 			vName: n.Name,
