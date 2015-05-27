@@ -302,10 +302,12 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		for _, spec := range gd.Specs {
 			switch s := spec.(type) {
 			case *ast.ValueSpec:
-				t := exprString(s.Type)
-				for i, id := range s.Names {
-					n := exprString(id)
-					v, _ := zeroValues[t]
+				for i, t := range flattenNames(s.Type, s.Names) {
+					var vType string
+					if t.dType != nil {
+						vType = t.dType.Name
+					}
+					v, _ := zeroValues[vType]
 					if s.Values != nil {
 						v = exprString(s.Values[i])
 					}
@@ -313,14 +315,11 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 						id:   a.newID(),
 						pos:  a.pos(),
 						Type: "variable-declaration",
-						Name: n,
-						DataType: &dataType{
-							id:   a.newID(),
-							Name: t,
-						},
+						Name: t.vName,
+						DataType: a.assignIdToDataType(t.dType),
 						Init: &identifier{
 							id:    a.newID(),
-							Type:  t,
+							Type:  vType,
 							Value: v,
 						},
 					}
