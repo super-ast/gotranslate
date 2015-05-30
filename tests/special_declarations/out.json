@@ -122,7 +122,7 @@
             "id": 21,
             "line": 10,
             "col": 2,
-            "type": "variable-declaration",
+            "type": "=",
             "name": "i",
             "data-type": {
               "id": 22,
@@ -140,7 +140,7 @@
             "id": 24,
             "line": 10,
             "col": 2,
-            "type": "variable-declaration",
+            "type": "=",
             "name": "s",
             "data-type": {
               "id": 25,

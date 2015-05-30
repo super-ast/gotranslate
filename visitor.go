@@ -3,7 +3,9 @@ package superast
 import (
 	"go/ast"
 	"go/token"
+	"log"
 	"strconv"
+	"strings"
 )
 
 type AST struct {
@@ -186,6 +188,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		return nil
 	}
 	a.position = a.fset.Position(node.Pos())
+	log.Printf("%s%#v", strings.Repeat("  ", len(a.nodeStack)), node)
 	switch x := node.(type) {
 	case *ast.TypeSpec:
 		n := ""
@@ -304,6 +307,13 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			}
 		}
 	case *ast.AssignStmt:
+		var aType string
+		switch x.Tok {
+		case token.DEFINE:
+			aType = "variable-declaration"
+		default:
+			aType = x.Tok.String()
+		}
 		for i, expr := range x.Lhs {
 			n := exprString(expr)
 			var v value
@@ -319,7 +329,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			asg := &varDecl{
 				id:   a.newID(),
 				pos:  a.pos(),
-				Type: "variable-declaration",
+				Type: aType,
 				Name: n,
 				DataType: &dataType{
 					id:   a.newID(),
