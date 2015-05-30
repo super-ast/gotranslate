@@ -45,7 +45,7 @@
             "id": 8,
             "line": 7,
             "col": 2,
-            "type": "=",
+            "type": "+=",
             "left": {
               "id": 9,
               "line": 7,
@@ -56,51 +56,31 @@
             "right": {
               "id": 10,
               "line": 7,
-              "col": 6,
-              "type": "int",
-              "value": 4
-            }
-          },
-          {
-            "id": 11,
-            "line": 8,
-            "col": 2,
-            "type": "+=",
-            "left": {
-              "id": 12,
-              "line": 8,
-              "col": 2,
-              "type": "identifier",
-              "value": "i"
-            },
-            "right": {
-              "id": 13,
-              "line": 8,
               "col": 7,
               "type": "/",
               "left": {
-                "id": 14,
-                "line": 8,
+                "id": 11,
+                "line": 7,
                 "col": 8,
                 "type": "*",
                 "left": {
-                  "id": 15,
-                  "line": 8,
+                  "id": 12,
+                  "line": 7,
                   "col": 8,
                   "type": "int",
                   "value": 2
                 },
                 "right": {
-                  "id": 16,
-                  "line": 8,
+                  "id": 13,
+                  "line": 7,
                   "col": 12,
                   "type": "int",
                   "value": 4
                 }
               },
               "right": {
-                "id": 17,
-                "line": 8,
+                "id": 14,
+                "line": 7,
                 "col": 17,
                 "type": "int",
                 "value": 3
@@ -108,18 +88,63 @@
             }
           },
           {
+            "id": 15,
+            "line": 8,
+            "col": 2,
+            "type": "variable-declaration",
+            "name": "j",
+            "data-type": {
+              "id": 16,
+              "name": "int"
+            },
+            "init": {
+              "id": 17,
+              "line": 8,
+              "col": 2,
+              "type": "int",
+              "value": 0
+            }
+          },
+          {
             "id": 18,
             "line": 9,
+            "col": 2,
+            "type": "=",
+            "left": {
+              "id": 19,
+              "line": 9,
+              "col": 2,
+              "type": "identifier",
+              "value": "j"
+            },
+            "right": {
+              "id": 20,
+              "line": 9,
+              "col": 6,
+              "type": "int",
+              "value": 4
+            }
+          },
+          {
+            "id": 21,
+            "line": 10,
             "col": 2,
             "type": "function-call",
             "name": "fmt.Println",
             "arguments": [
               {
-                "id": 19,
-                "line": 9,
+                "id": 22,
+                "line": 10,
                 "col": 14,
                 "type": "identifier",
                 "value": "i"
+              },
+              {
+                "id": 23,
+                "line": 10,
+                "col": 17,
+                "type": "identifier",
+                "value": "j"
               }
             ]
           }
