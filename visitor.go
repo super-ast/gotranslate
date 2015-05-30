@@ -176,7 +176,7 @@ var basicLitName = map[token.Token]string{
 var zeroValues = map[string]value{
 	"int":    0,
 	"double": 0.0,
-	"char":   `'\0'`,
+	"char":   '\x00',
 	"string": "",
 }
 
