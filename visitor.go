@@ -39,8 +39,7 @@ func (a *AST) newPos(p token.Pos) pos {
 }
 
 func (a *AST) nodePos(n ast.Node) pos {
-	position := a.fset.Position(n.Pos())
-	return pos{Line: position.Line, Col: position.Column}
+	return a.newPos(n.Pos())
 }
 
 func (a *AST) curPos() pos {
