@@ -33,12 +33,14 @@
             "line": 7,
             "col": 2,
             "type": "=",
-            "name": "i",
-            "data-type": {
+            "left": {
               "id": 7,
-              "name": ""
+              "line": 7,
+              "col": 2,
+              "type": "identifier",
+              "value": "i"
             },
-            "init": {
+            "right": {
               "id": 8,
               "line": 7,
               "col": 6,
@@ -57,12 +59,14 @@
             "line": 8,
             "col": 2,
             "type": "=",
-            "name": "i",
-            "data-type": {
+            "left": {
               "id": 11,
-              "name": ""
+              "line": 8,
+              "col": 2,
+              "type": "identifier",
+              "value": "i"
             },
-            "init": {
+            "right": {
               "id": 12,
               "line": 8,
               "col": 6,
@@ -81,12 +85,14 @@
             "line": 9,
             "col": 2,
             "type": "=",
-            "name": "i",
-            "data-type": {
+            "left": {
               "id": 15,
-              "name": ""
+              "line": 9,
+              "col": 2,
+              "type": "identifier",
+              "value": "i"
             },
-            "init": {
+            "right": {
               "id": 16,
               "line": 9,
               "col": 6,

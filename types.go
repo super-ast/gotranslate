@@ -43,6 +43,14 @@ type funcDecl struct {
 	Block   *block    `json:"block"`
 }
 
+type binary struct {
+	id
+	pos
+	Type  string `json:"type"`
+	Left  expr   `json:"left"`
+	Right expr   `json:"right"`
+}
+
 type identifier struct {
 	id
 	pos
@@ -53,8 +61,8 @@ type identifier struct {
 type unary struct {
 	id
 	pos
-	Type  string `json:"type"`
-	Expr  expr   `json:"expression"`
+	Type string `json:"type"`
+	Expr expr   `json:"expression"`
 }
 
 type funcCall struct {

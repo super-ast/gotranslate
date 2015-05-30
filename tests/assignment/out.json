@@ -33,12 +33,14 @@
             "line": 7,
             "col": 2,
             "type": "=",
-            "name": "i",
-            "data-type": {
+            "left": {
               "id": 7,
-              "name": "int"
+              "line": 7,
+              "col": 2,
+              "type": "identifier",
+              "value": "i"
             },
-            "init": {
+            "right": {
               "id": 8,
               "line": 7,
               "col": 6,
@@ -51,12 +53,14 @@
             "line": 8,
             "col": 2,
             "type": "+=",
-            "name": "i",
-            "data-type": {
+            "left": {
               "id": 10,
-              "name": "int"
+              "line": 8,
+              "col": 2,
+              "type": "identifier",
+              "value": "i"
             },
-            "init": {
+            "right": {
               "id": 11,
               "line": 8,
               "col": 7,

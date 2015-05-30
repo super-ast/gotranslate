@@ -123,12 +123,14 @@
             "line": 10,
             "col": 2,
             "type": "=",
-            "name": "i",
-            "data-type": {
+            "left": {
               "id": 22,
-              "name": "int"
+              "line": 10,
+              "col": 2,
+              "type": "identifier",
+              "value": "i"
             },
-            "init": {
+            "right": {
               "id": 23,
               "line": 10,
               "col": 9,
@@ -141,12 +143,14 @@
             "line": 10,
             "col": 2,
             "type": "=",
-            "name": "s",
-            "data-type": {
+            "left": {
               "id": 25,
-              "name": "string"
+              "line": 10,
+              "col": 5,
+              "type": "identifier",
+              "value": "s"
             },
-            "init": {
+            "right": {
               "id": 26,
               "line": 10,
               "col": 12,

@@ -342,33 +342,38 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			}
 		}
 	case *ast.AssignStmt:
-		aType := x.Tok.String()
-		switch x.Tok {
-		case token.DEFINE:
-			aType = "variable-declaration"
-		}
 		for i, l := range x.Lhs {
-			var t string
 			r := x.Rhs[i]
+			var t string
 			switch rx := r.(type) {
 			case *ast.BasicLit:
 				t, _ = basicLitName[rx.Kind]
 			case *ast.CompositeLit:
 				t = exprString(rx.Type)
-			default:
 			}
-			asg := &varDecl{
-				id:   a.newID(),
-				pos:  a.curPos(),
-				Type: aType,
-				Name: exprString(l),
-				DataType: &dataType{
+			var s stmt
+			if x.Tok == token.DEFINE {
+				s = &varDecl{
 					id:   a.newID(),
-					Name: t,
-				},
-				Init: a.parseExpr(r),
+					pos:  a.curPos(),
+					Type: "variable-declaration",
+					Name: exprString(l),
+					DataType: &dataType{
+						id:   a.newID(),
+						Name: t,
+					},
+					Init: a.parseExpr(r),
+				}
+			} else {
+				s = &binary{
+					id:    a.newID(),
+					pos:   a.curPos(),
+					Type:  x.Tok.String(),
+					Left:  a.parseExpr(l),
+					Right: a.parseExpr(r),
+				}
 			}
-			a.addStmt(asg)
+			a.addStmt(s)
 		}
 		return nil
 	case *ast.File:
