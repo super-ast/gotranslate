@@ -344,6 +344,33 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			a.addStmt(asg)
 		}
 		return nil
+	case *ast.UnaryExpr:
+		var e expr
+		switch y := x.X.(type) {
+		case *ast.Ident:
+			e = &identifier{
+				id:    a.newID(),
+				pos:   a.pos(),
+				Type:  "identifier",
+				Value: y.Name,
+			}
+		case *ast.BasicLit:
+			lType, _ := basicLitName[y.Kind]
+			e = &identifier{
+				id:    a.newID(),
+				pos:   a.pos(),
+				Type:  lType,
+				Value: strUnquote(y.Value),
+			}
+		}
+		unary := &unary{
+			id:   a.newID(),
+			pos:  a.pos(),
+			Type: x.Op.String(),
+			Expr: e,
+		}
+		a.addStmt(unary)
+		return nil
 	case *ast.File:
 	case *ast.BlockStmt:
 	case *ast.ExprStmt:

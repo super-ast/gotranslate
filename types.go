@@ -15,6 +15,7 @@ type block struct {
 }
 
 type stmt interface{}
+type expr interface{}
 type value interface{}
 
 type dataType struct {
@@ -47,6 +48,13 @@ type identifier struct {
 	pos
 	Type  string `json:"type"`
 	Value value  `json:"value"`
+}
+
+type unary struct {
+	id
+	pos
+	Type  string `json:"type"`
+	Expr  expr   `json:"expression"`
 }
 
 type funcCall struct {
