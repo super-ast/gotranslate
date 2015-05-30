@@ -43,7 +43,7 @@
               "line": 7,
               "col": 6,
               "type": "int",
-              "value": "3"
+              "value": 3
             }
           },
           {
@@ -61,7 +61,7 @@
               "line": 8,
               "col": 7,
               "type": "int",
-              "value": "2"
+              "value": 2
             }
           },
           {

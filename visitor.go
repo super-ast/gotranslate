@@ -81,14 +81,6 @@ func (a *AST) popStmts() {
 	a.stmtsStack = a.stmtsStack[:len(a.stmtsStack)-1]
 }
 
-func strUnquote(s string) string {
-	u, err := strconv.Unquote(s)
-	if err != nil {
-		return s
-	}
-	return u
-}
-
 func exprString(x ast.Expr) string {
 	switch t := x.(type) {
 	case *ast.Ident:
@@ -101,6 +93,31 @@ func exprString(x ast.Expr) string {
 		return exprString(t.X)
 	}
 	return ""
+}
+
+func exprValue(x ast.Expr) value {
+	switch t := x.(type) {
+	case *ast.BasicLit:
+		switch t.Kind {
+		case token.INT:
+			i, _ := strconv.ParseInt(t.Value, 10, 0)
+			return i
+		case token.FLOAT:
+			f, _ := strconv.ParseFloat(t.Value, 64)
+			return f
+		case token.CHAR:
+			r, _, _, _ := strconv.UnquoteChar(t.Value, '\'')
+			return r
+		case token.STRING:
+			s, _ := strconv.Unquote(t.Value)
+			return s
+		}
+		return t.Value
+	}
+	if v := exprString(x); v != "" {
+		return v
+	}
+	return nil
 }
 
 func exprType(x ast.Expr) *dataType {
@@ -183,7 +200,7 @@ func (a *AST) parseExpr(expr ast.Expr) expr {
 			id:    a.newID(),
 			pos:   a.newPos(x.ValuePos),
 			Type:  lType,
-			Value: strUnquote(x.Value),
+			Value: exprValue(x),
 		}
 	case *ast.UnaryExpr:
 		return &unary{
@@ -312,7 +329,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				vType := t.dType.Name
 				v, _ := zeroValues[vType]
 				if s.Values != nil {
-					v = exprString(s.Values[i])
+					v = exprValue(s.Values[i])
 				}
 				decl := &varDecl{
 					id:       a.newID(),
