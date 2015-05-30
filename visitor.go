@@ -192,6 +192,17 @@ func (a *AST) parseExpr(expr ast.Expr) expr {
 			Type: x.Op.String(),
 			Expr: a.parseExpr(x.X),
 		}
+	case *ast.CallExpr:
+		call := &funcCall{
+			id:   a.newID(),
+			pos:  a.curPos(),
+			Type: "function-call",
+			Name: exprString(x.Fun),
+		}
+		for _, e := range x.Args {
+			call.Args = append(call.Args, a.parseExpr(e))
+		}
+		return call
 	}
 	return nil
 }
@@ -252,16 +263,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		lit := a.parseExpr(x)
 		a.addStmt(lit)
 	case *ast.CallExpr:
-		name := exprString(x.Fun)
-		call := &funcCall{
-			id:   a.newID(),
-			pos:  a.curPos(),
-			Type: "function-call",
-			Name: name,
-		}
-		for _, e := range x.Args {
-			call.Args = append(call.Args, a.parseExpr(e))
-		}
+		call := a.parseExpr(x)
 		a.addStmt(call)
 		return nil
 	case *ast.FuncDecl:
