@@ -70,7 +70,7 @@ type funcCall struct {
 	pos
 	Type string `json:"type"`
 	Name string `json:"name"`
-	Args []stmt `json:"arguments"`
+	Args []expr `json:"arguments"`
 }
 
 type structDecl struct {
