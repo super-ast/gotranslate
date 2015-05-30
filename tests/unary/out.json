@@ -23,7 +23,7 @@
             "init": {
               "id": 5,
               "line": 6,
-              "col": 2,
+              "col": 7,
               "type": "int",
               "value": "3"
             }
@@ -46,7 +46,7 @@
               "expression": {
                 "id": 9,
                 "line": 7,
-                "col": 2,
+                "col": 7,
                 "type": "identifier",
                 "value": "i"
               }
@@ -70,7 +70,7 @@
               "expression": {
                 "id": 13,
                 "line": 8,
-                "col": 2,
+                "col": 7,
                 "type": "identifier",
                 "value": "i"
               }
@@ -104,7 +104,7 @@
                   "expression": {
                     "id": 19,
                     "line": 9,
-                    "col": 2,
+                    "col": 9,
                     "type": "identifier",
                     "value": "i"
                   }

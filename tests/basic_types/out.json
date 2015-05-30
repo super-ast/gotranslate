@@ -23,7 +23,7 @@
             "init": {
               "id": 5,
               "line": 6,
-              "col": 2,
+              "col": 7,
               "type": "int",
               "value": "3"
             }
@@ -41,7 +41,7 @@
             "init": {
               "id": 8,
               "line": 7,
-              "col": 2,
+              "col": 7,
               "type": "double",
               "value": "5.5"
             }
@@ -59,7 +59,7 @@
             "init": {
               "id": 11,
               "line": 8,
-              "col": 2,
+              "col": 7,
               "type": "string",
               "value": "foo"
             }

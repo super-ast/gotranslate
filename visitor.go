@@ -14,7 +14,7 @@ type AST struct {
 	nodeStack  []ast.Node
 	stmtsStack []*[]stmt
 	fset       *token.FileSet
-	position   token.Position
+	pos        token.Pos
 }
 
 func NewAST(fset *token.FileSet) *AST {
@@ -35,8 +35,13 @@ func (a *AST) newID() id {
 	return id{ID: i}
 }
 
-func (a *AST) pos() pos {
-	return pos{Line: a.position.Line, Col: a.position.Column}
+func (a *AST) newPos(p token.Pos) pos {
+	position := a.fset.Position(p)
+	return pos{Line: position.Line, Col: position.Column}
+}
+
+func (a *AST) curPos() pos {
+	return a.newPos(a.pos)
 }
 
 func (a *AST) pushNode(node ast.Node) {
@@ -168,7 +173,7 @@ func (a *AST) parseExpr(expr ast.Expr) expr {
 	case *ast.Ident:
 		return &identifier{
 			id:    a.newID(),
-			pos:   a.pos(),
+			pos:   a.newPos(x.NamePos),
 			Type:  "identifier",
 			Value: x.Name,
 		}
@@ -176,14 +181,14 @@ func (a *AST) parseExpr(expr ast.Expr) expr {
 		lType, _ := basicLitName[x.Kind]
 		return &identifier{
 			id:    a.newID(),
-			pos:   a.pos(),
+			pos:   a.newPos(x.ValuePos),
 			Type:  lType,
 			Value: strUnquote(x.Value),
 		}
 	case *ast.UnaryExpr:
 		return &unary{
 			id:   a.newID(),
-			pos:  a.pos(),
+			pos:  a.curPos(),
 			Type: x.Op.String(),
 			Expr: a.parseExpr(x.X),
 		}
@@ -215,7 +220,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		a.popNode()
 		return nil
 	}
-	a.position = a.fset.Position(node.Pos())
+	a.pos = node.Pos()
 	log.Printf("%s%#v", strings.Repeat("  ", len(a.nodeStack)), node)
 	switch x := node.(type) {
 	case *ast.TypeSpec:
@@ -227,14 +232,14 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		case *ast.StructType:
 			decl := &structDecl{
 				id:   a.newID(),
-				pos:  a.pos(),
+				pos:  a.curPos(),
 				Type: "struct-declaration",
 				Name: n,
 			}
 			for _, f := range flattenFieldList(t.Fields) {
 				attr := varDecl{
 					id:       a.newID(),
-					pos:      a.pos(),
+					pos:      a.curPos(),
 					Type:     "variable-declaration",
 					Name:     f.vName,
 					DataType: a.assignIdToDataType(f.dType),
@@ -243,14 +248,6 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			}
 			a.addStmt(decl)
 		}
-	case *ast.Ident:
-		switch parentNode.(type) {
-		case *ast.CallExpr:
-		default:
-			return nil
-		}
-		id := a.parseExpr(x)
-		a.addStmt(id)
 	case *ast.BasicLit:
 		lit := a.parseExpr(x)
 		a.addStmt(lit)
@@ -258,12 +255,15 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		name := exprString(x.Fun)
 		call := &funcCall{
 			id:   a.newID(),
-			pos:  a.pos(),
+			pos:  a.curPos(),
 			Type: "function-call",
 			Name: name,
 		}
+		for _, e := range x.Args {
+			call.Args = append(call.Args, a.parseExpr(e))
+		}
 		a.addStmt(call)
-		a.pushStmts(&call.Args)
+		return nil
 	case *ast.FuncDecl:
 		name := x.Name.Name
 		var retType *dataType
@@ -274,7 +274,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		}
 		fn := &funcDecl{
 			id:      a.newID(),
-			pos:     a.pos(),
+			pos:     a.curPos(),
 			Type:    "function-declaration",
 			Name:    name,
 			RetType: a.assignIdToDataType(retType),
@@ -286,7 +286,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		for _, f := range flattenFieldList(x.Type.Params) {
 			param := varDecl{
 				id:       a.newID(),
-				pos:      a.pos(),
+				pos:      a.curPos(),
 				Type:     "variable-declaration",
 				Name:     f.vName,
 				DataType: a.assignIdToDataType(f.dType),
@@ -310,13 +310,13 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				}
 				decl := &varDecl{
 					id:       a.newID(),
-					pos:      a.pos(),
+					pos:      a.curPos(),
 					Type:     "variable-declaration",
 					Name:     t.vName,
 					DataType: a.assignIdToDataType(t.dType),
 					Init: &identifier{
 						id:    a.newID(),
-						pos:   a.pos(),
+						pos:   a.curPos(),
 						Type:  vType,
 						Value: v,
 					},
@@ -342,7 +342,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			}
 			asg := &varDecl{
 				id:   a.newID(),
-				pos:  a.pos(),
+				pos:  a.curPos(),
 				Type: aType,
 				Name: exprString(l),
 				DataType: &dataType{

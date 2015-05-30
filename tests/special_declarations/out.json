@@ -131,7 +131,7 @@
             "init": {
               "id": 23,
               "line": 10,
-              "col": 2,
+              "col": 9,
               "type": "int",
               "value": "3"
             }
@@ -149,7 +149,7 @@
             "init": {
               "id": 26,
               "line": 10,
-              "col": 2,
+              "col": 12,
               "type": "string",
               "value": "foo"
             }
@@ -167,7 +167,7 @@
             "init": {
               "id": 29,
               "line": 11,
-              "col": 2,
+              "col": 10,
               "type": "int",
               "value": "5"
             }
@@ -185,7 +185,7 @@
             "init": {
               "id": 32,
               "line": 11,
-              "col": 2,
+              "col": 13,
               "type": "int",
               "value": "6"
             }
