@@ -41,7 +41,7 @@
             "init": {
               "id": 8,
               "line": 7,
-              "col": 2,
+              "col": 6,
               "type": "-",
               "expression": {
                 "id": 9,
@@ -65,7 +65,7 @@
             "init": {
               "id": 12,
               "line": 8,
-              "col": 2,
+              "col": 6,
               "type": "+",
               "expression": {
                 "id": 13,
@@ -89,17 +89,17 @@
             "init": {
               "id": 16,
               "line": 9,
-              "col": 2,
+              "col": 6,
               "type": "-",
               "expression": {
                 "id": 17,
                 "line": 9,
-                "col": 2,
+                "col": 7,
                 "type": "+",
                 "expression": {
                   "id": 18,
                   "line": 9,
-                  "col": 2,
+                  "col": 8,
                   "type": "-",
                   "expression": {
                     "id": 19,

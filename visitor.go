@@ -188,7 +188,7 @@ func (a *AST) parseExpr(expr ast.Expr) expr {
 	case *ast.UnaryExpr:
 		return &unary{
 			id:   a.newID(),
-			pos:  a.curPos(),
+			pos:  a.newPos(x.OpPos),
 			Type: x.Op.String(),
 			Expr: a.parseExpr(x.X),
 		}
