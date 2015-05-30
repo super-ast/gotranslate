@@ -307,12 +307,10 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			}
 		}
 	case *ast.AssignStmt:
-		var aType string
+		aType := x.Tok.String()
 		switch x.Tok {
 		case token.DEFINE:
 			aType = "variable-declaration"
-		default:
-			aType = x.Tok.String()
 		}
 		for i, expr := range x.Lhs {
 			n := exprString(expr)
