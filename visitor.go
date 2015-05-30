@@ -262,6 +262,10 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 	case *ast.BasicLit:
 		lit := a.parseExpr(x)
 		a.addStmt(lit)
+	case *ast.UnaryExpr:
+		unary := a.parseExpr(x)
+		a.addStmt(unary)
+		return nil
 	case *ast.CallExpr:
 		call := a.parseExpr(x)
 		a.addStmt(call)
@@ -355,10 +359,6 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			}
 			a.addStmt(asg)
 		}
-		return nil
-	case *ast.UnaryExpr:
-		unary := a.parseExpr(x)
-		a.addStmt(unary)
 		return nil
 	case *ast.File:
 	case *ast.BlockStmt:
