@@ -229,10 +229,11 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		}
 		a.addStmt(id)
 	case *ast.BasicLit:
+		lType, _ := basicLitName[x.Kind]
 		lit := &identifier{
 			id:    a.newID(),
 			pos:   a.pos(),
-			Type:  "string",
+			Type:  lType,
 			Value: strUnquote(x.Value),
 		}
 		a.addStmt(lit)
