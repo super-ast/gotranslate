@@ -215,6 +215,16 @@ func (a *AST) parseExpr(expr ast.Expr) expr {
 			call.Args = append(call.Args, a.parseExpr(e))
 		}
 		return call
+	case *ast.BinaryExpr:
+		return &binary{
+			id:    a.newID(),
+			pos:   a.newPos(x.OpPos),
+			Type:  x.Op.String(),
+			Left:  a.parseExpr(x.X),
+			Right: a.parseExpr(x.Y),
+		}
+	case *ast.ParenExpr:
+		return a.parseExpr(x.X)
 	}
 	return nil
 }
