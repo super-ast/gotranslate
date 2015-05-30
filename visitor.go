@@ -121,7 +121,7 @@ func flattenNames(baseType ast.Expr, names []*ast.Ident) []namedType {
 	t := exprType(baseType)
 	if len(names) == 0 {
 		return []namedType{
-			{ vName: "", dType: t, },
+			{vName: "", dType: t},
 		}
 	}
 	var types []namedType
