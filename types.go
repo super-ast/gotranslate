@@ -27,10 +27,10 @@ type dataType struct {
 type varDecl struct {
 	id
 	pos
-	Type     string      `json:"type"`
-	Name     string      `json:"name"`
-	DataType *dataType   `json:"data-type"`
-	Init     *identifier `json:"init,omitempty"`
+	Type     string    `json:"type"`
+	Name     string    `json:"name"`
+	DataType *dataType `json:"data-type"`
+	Init     expr      `json:"init,omitempty"`
 }
 
 type funcDecl struct {

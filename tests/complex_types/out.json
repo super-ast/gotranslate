@@ -68,31 +68,24 @@
             "data-type": {
               "id": 12,
               "name": "foo"
-            },
-            "init": {
-              "id": 13,
-              "line": 12,
-              "col": 2,
-              "type": "foo",
-              "value": null
             }
           },
           {
-            "id": 14,
+            "id": 13,
             "line": 16,
             "col": 2,
             "type": "variable-declaration",
             "name": "s1",
             "data-type": {
-              "id": 15,
+              "id": 14,
               "name": "vector",
               "data-type": {
-                "id": 16,
+                "id": 15,
                 "name": "int"
               }
             },
             "init": {
-              "id": 17,
+              "id": 16,
               "line": 16,
               "col": 2,
               "type": "vector",
@@ -100,53 +93,46 @@
             }
           },
           {
-            "id": 18,
+            "id": 17,
             "line": 17,
             "col": 2,
             "type": "variable-declaration",
             "name": "s2",
             "data-type": {
-              "id": 19,
+              "id": 18,
               "name": ""
-            },
-            "init": {
-              "id": 20,
-              "line": 17,
-              "col": 2,
-              "type": "",
-              "value": null
             }
           },
           {
-            "id": 21,
+            "id": 19,
             "line": 18,
             "col": 2,
             "type": "function-call",
             "name": "fmt.Println",
             "arguments": [
               {
-                "id": 22,
+                "id": 20,
                 "line": 18,
                 "col": 14,
                 "type": "identifier",
                 "value": "f1"
               },
               {
-                "id": 23,
+                "id": 21,
                 "line": 18,
                 "col": 18,
                 "type": "identifier",
                 "value": "f2"
               },
               {
-                "id": 24,
+                "id": 22,
                 "line": 18,
                 "col": 22,
                 "type": "identifier",
                 "value": "s1"
               },
               {
-                "id": 25,
+                "id": 23,
                 "line": 18,
                 "col": 26,
                 "type": "identifier",

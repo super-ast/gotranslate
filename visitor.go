@@ -163,6 +163,27 @@ var zeroValues = map[string]value{
 	"string": "",
 }
 
+func (a *AST) parseExpr(expr ast.Expr) expr {
+	switch x := expr.(type) {
+	case *ast.Ident:
+		return &identifier{
+			id:    a.newID(),
+			pos:   a.pos(),
+			Type:  "identifier",
+			Value: x.Name,
+		}
+	case *ast.BasicLit:
+		lType, _ := basicLitName[x.Kind]
+		return &identifier{
+			id:    a.newID(),
+			pos:   a.pos(),
+			Type:  lType,
+			Value: strUnquote(x.Value),
+		}
+	}
+	return nil
+}
+
 func (a *AST) assignIdToDataType(dType *dataType) *dataType {
 	if dType == nil {
 		return nil
@@ -221,21 +242,10 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		default:
 			return nil
 		}
-		id := &identifier{
-			id:    a.newID(),
-			pos:   a.pos(),
-			Type:  "identifier",
-			Value: x.Name,
-		}
+		id := a.parseExpr(x)
 		a.addStmt(id)
 	case *ast.BasicLit:
-		lType, _ := basicLitName[x.Kind]
-		lit := &identifier{
-			id:    a.newID(),
-			pos:   a.pos(),
-			Type:  lType,
-			Value: strUnquote(x.Value),
-		}
+		lit := a.parseExpr(x)
 		a.addStmt(lit)
 	case *ast.CallExpr:
 		name := exprString(x.Fun)
@@ -313,61 +323,36 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		case token.DEFINE:
 			aType = "variable-declaration"
 		}
-		for i, expr := range x.Lhs {
-			n := exprString(expr)
-			var v value
+		for i, l := range x.Lhs {
 			var t string
-			switch r := x.Rhs[i].(type) {
+			r := x.Rhs[i]
+			switch rx := r.(type) {
 			case *ast.BasicLit:
-				t, _ = basicLitName[r.Kind]
-				v = strUnquote(r.Value)
+				t, _ = basicLitName[rx.Kind]
 			case *ast.CompositeLit:
-				t = exprString(r.Type)
+				t = exprString(rx.Type)
 			default:
 			}
 			asg := &varDecl{
 				id:   a.newID(),
 				pos:  a.pos(),
 				Type: aType,
-				Name: n,
+				Name: exprString(l),
 				DataType: &dataType{
 					id:   a.newID(),
 					Name: t,
 				},
-				Init: &identifier{
-					id:    a.newID(),
-					pos:   a.pos(),
-					Type:  t,
-					Value: v,
-				},
+				Init: a.parseExpr(r),
 			}
 			a.addStmt(asg)
 		}
 		return nil
 	case *ast.UnaryExpr:
-		var e expr
-		switch y := x.X.(type) {
-		case *ast.Ident:
-			e = &identifier{
-				id:    a.newID(),
-				pos:   a.pos(),
-				Type:  "identifier",
-				Value: y.Name,
-			}
-		case *ast.BasicLit:
-			lType, _ := basicLitName[y.Kind]
-			e = &identifier{
-				id:    a.newID(),
-				pos:   a.pos(),
-				Type:  lType,
-				Value: strUnquote(y.Value),
-			}
-		}
 		unary := &unary{
 			id:   a.newID(),
 			pos:  a.pos(),
 			Type: x.Op.String(),
-			Expr: e,
+			Expr: a.parseExpr(x.X),
 		}
 		a.addStmt(unary)
 		return nil
