@@ -37,29 +37,91 @@
             "data-type": {
               "id": 7,
               "name": ""
+            },
+            "init": {
+              "id": 8,
+              "line": 7,
+              "col": 2,
+              "type": "-",
+              "expression": {
+                "id": 9,
+                "line": 7,
+                "col": 2,
+                "type": "identifier",
+                "value": "i"
+              }
             }
           },
           {
-            "id": 8,
+            "id": 10,
             "line": 8,
             "col": 2,
             "type": "=",
             "name": "i",
             "data-type": {
-              "id": 9,
+              "id": 11,
               "name": ""
+            },
+            "init": {
+              "id": 12,
+              "line": 8,
+              "col": 2,
+              "type": "+",
+              "expression": {
+                "id": 13,
+                "line": 8,
+                "col": 2,
+                "type": "identifier",
+                "value": "i"
+              }
             }
           },
           {
-            "id": 10,
+            "id": 14,
             "line": 9,
+            "col": 2,
+            "type": "=",
+            "name": "i",
+            "data-type": {
+              "id": 15,
+              "name": ""
+            },
+            "init": {
+              "id": 16,
+              "line": 9,
+              "col": 2,
+              "type": "-",
+              "expression": {
+                "id": 17,
+                "line": 9,
+                "col": 2,
+                "type": "+",
+                "expression": {
+                  "id": 18,
+                  "line": 9,
+                  "col": 2,
+                  "type": "-",
+                  "expression": {
+                    "id": 19,
+                    "line": 9,
+                    "col": 2,
+                    "type": "identifier",
+                    "value": "i"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": 20,
+            "line": 10,
             "col": 2,
             "type": "function-call",
             "name": "fmt.Println",
             "arguments": [
               {
-                "id": 11,
-                "line": 9,
+                "id": 21,
+                "line": 10,
                 "col": 14,
                 "type": "identifier",
                 "value": "i"

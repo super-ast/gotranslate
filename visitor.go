@@ -180,6 +180,13 @@ func (a *AST) parseExpr(expr ast.Expr) expr {
 			Type:  lType,
 			Value: strUnquote(x.Value),
 		}
+	case *ast.UnaryExpr:
+		return &unary{
+			id:   a.newID(),
+			pos:  a.pos(),
+			Type: x.Op.String(),
+			Expr: a.parseExpr(x.X),
+		}
 	}
 	return nil
 }
@@ -348,12 +355,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		}
 		return nil
 	case *ast.UnaryExpr:
-		unary := &unary{
-			id:   a.newID(),
-			pos:  a.pos(),
-			Type: x.Op.String(),
-			Expr: a.parseExpr(x.X),
-		}
+		unary := a.parseExpr(x)
 		a.addStmt(unary)
 		return nil
 	case *ast.File:
