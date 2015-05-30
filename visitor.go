@@ -3,9 +3,7 @@ package superast
 import (
 	"go/ast"
 	"go/token"
-	"log"
 	"strconv"
-	"strings"
 )
 
 type AST struct {
@@ -113,9 +111,6 @@ func exprValue(x ast.Expr) value {
 			return s
 		}
 		return t.Value
-	}
-	if v := exprString(x); v != "" {
-		return v
 	}
 	return nil
 }
@@ -249,7 +244,6 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		return nil
 	}
 	a.pos = node.Pos()
-	log.Printf("%s%#v", strings.Repeat("  ", len(a.nodeStack)), node)
 	switch x := node.(type) {
 	case *ast.TypeSpec:
 		n := ""
