@@ -81,46 +81,78 @@
             "id": 14,
             "line": 16,
             "col": 2,
-            "type": "function-call",
-            "name": "fmt.Println",
-            "arguments": [
-              {
-                "id": 15,
-                "line": 16,
-                "col": 14,
-                "type": "identifier",
-                "value": "f1"
-              },
-              {
-                "id": 16,
-                "line": 16,
-                "col": 18,
-                "type": "identifier",
-                "value": "f2"
-              }
-            ]
-          },
-          {
-            "id": 17,
-            "line": 17,
-            "col": 2,
             "type": "variable-declaration",
             "name": "s1",
             "data-type": {
-              "id": 18,
+              "id": 15,
               "name": "vector",
               "data-type": {
-                "id": 19,
+                "id": 16,
                 "name": "int"
               }
+            },
+            "init": {
+              "id": 17,
+              "line": 16,
+              "col": 2,
+              "type": "vector",
+              "value": null
+            }
+          },
+          {
+            "id": 18,
+            "line": 17,
+            "col": 2,
+            "type": "variable-declaration",
+            "name": "s2",
+            "data-type": {
+              "id": 19,
+              "name": ""
             },
             "init": {
               "id": 20,
               "line": 17,
               "col": 2,
-              "type": "vector",
+              "type": "",
               "value": null
             }
+          },
+          {
+            "id": 21,
+            "line": 18,
+            "col": 2,
+            "type": "function-call",
+            "name": "fmt.Println",
+            "arguments": [
+              {
+                "id": 22,
+                "line": 18,
+                "col": 14,
+                "type": "identifier",
+                "value": "f1"
+              },
+              {
+                "id": 23,
+                "line": 18,
+                "col": 18,
+                "type": "identifier",
+                "value": "f2"
+              },
+              {
+                "id": 24,
+                "line": 18,
+                "col": 22,
+                "type": "identifier",
+                "value": "s1"
+              },
+              {
+                "id": 25,
+                "line": 18,
+                "col": 26,
+                "type": "identifier",
+                "value": "s2"
+              }
+            ]
           }
         ]
       }
