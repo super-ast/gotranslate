@@ -23,7 +23,7 @@
             "init": {
               "id": 5,
               "line": 6,
-              "col": 9,
+              "col": 7,
               "type": "+",
               "left": {
                 "id": 6,
@@ -76,12 +76,12 @@
             "right": {
               "id": 13,
               "line": 8,
-              "col": 15,
+              "col": 7,
               "type": "/",
               "left": {
                 "id": 14,
                 "line": 8,
-                "col": 10,
+                "col": 8,
                 "type": "*",
                 "left": {
                   "id": 15,

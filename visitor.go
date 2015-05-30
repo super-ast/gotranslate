@@ -38,6 +38,11 @@ func (a *AST) newPos(p token.Pos) pos {
 	return pos{Line: position.Line, Col: position.Column}
 }
 
+func (a *AST) exprPos(e ast.Expr) pos {
+	position := a.fset.Position(e.Pos())
+	return pos{Line: position.Line, Col: position.Column}
+}
+
 func (a *AST) curPos() pos {
 	return a.newPos(a.pos)
 }
@@ -185,7 +190,7 @@ func (a *AST) parseExpr(expr ast.Expr) expr {
 	case *ast.Ident:
 		return &identifier{
 			id:    a.newID(),
-			pos:   a.newPos(x.NamePos),
+			pos:   a.exprPos(x),
 			Type:  "identifier",
 			Value: x.Name,
 		}
@@ -193,21 +198,21 @@ func (a *AST) parseExpr(expr ast.Expr) expr {
 		lType, _ := basicLitName[x.Kind]
 		return &identifier{
 			id:    a.newID(),
-			pos:   a.newPos(x.ValuePos),
+			pos:   a.exprPos(x),
 			Type:  lType,
 			Value: exprValue(x),
 		}
 	case *ast.UnaryExpr:
 		return &unary{
 			id:   a.newID(),
-			pos:  a.newPos(x.OpPos),
+			pos:  a.exprPos(x),
 			Type: x.Op.String(),
 			Expr: a.parseExpr(x.X),
 		}
 	case *ast.CallExpr:
 		call := &funcCall{
 			id:   a.newID(),
-			pos:  a.curPos(),
+			pos:  a.exprPos(x),
 			Type: "function-call",
 			Name: exprString(x.Fun),
 		}
@@ -218,7 +223,7 @@ func (a *AST) parseExpr(expr ast.Expr) expr {
 	case *ast.BinaryExpr:
 		return &binary{
 			id:    a.newID(),
-			pos:   a.newPos(x.OpPos),
+			pos:   a.exprPos(x),
 			Type:  x.Op.String(),
 			Left:  a.parseExpr(x.X),
 			Right: a.parseExpr(x.Y),
