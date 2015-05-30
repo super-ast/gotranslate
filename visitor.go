@@ -304,8 +304,8 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 	case *ast.DeclStmt:
 		gd, _ := x.Decl.(*ast.GenDecl)
 		for _, spec := range gd.Specs {
-			s, e := spec.(*ast.ValueSpec)
-			if !e {
+			s, ok := spec.(*ast.ValueSpec)
+			if !ok {
 				continue
 			}
 			for i, t := range flattenNames(s.Type, s.Names) {
