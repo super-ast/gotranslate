@@ -22,7 +22,6 @@ type AST struct {
 	stmtsStack []*[]stmt
 	fset       *token.FileSet
 	pos        token.Pos
-	status     int
 }
 
 func NewAST(fset *token.FileSet) *AST {
