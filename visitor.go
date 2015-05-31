@@ -61,16 +61,10 @@ func (a *AST) pushNode(node ast.Node) {
 }
 
 func (a *AST) curNode() ast.Node {
-	if len(a.nodeStack) == 0 {
-		return nil
-	}
 	return a.nodeStack[len(a.nodeStack)-1]
 }
 
 func (a *AST) popNode() {
-	if len(a.nodeStack) == 0 {
-		return
-	}
 	a.nodeStack = a.nodeStack[:len(a.nodeStack)-1]
 }
 
@@ -79,24 +73,15 @@ func (a *AST) pushStmts(stmts *[]stmt) {
 }
 
 func (a *AST) curStmts() *[]stmt {
-	if len(a.stmtsStack) == 0 {
-		return nil
-	}
 	return a.stmtsStack[len(a.stmtsStack)-1]
 }
 
 func (a *AST) addStmt(s stmt) {
 	curStmts := a.curStmts()
-	if curStmts == nil {
-		return
-	}
 	*curStmts = append(*curStmts, s)
 }
 
 func (a *AST) popStmts() {
-	if len(a.stmtsStack) == 0 {
-		return
-	}
 	a.stmtsStack = a.stmtsStack[:len(a.stmtsStack)-1]
 }
 
