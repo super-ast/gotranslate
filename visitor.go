@@ -3,7 +3,16 @@ package superast
 import (
 	"go/ast"
 	"go/token"
+	"log"
 	"strconv"
+	"strings"
+)
+
+const (
+	Default = iota
+	IfBody
+	IfElse
+	FuncBody
 )
 
 type AST struct {
@@ -13,6 +22,7 @@ type AST struct {
 	stmtsStack []*[]stmt
 	fset       *token.FileSet
 	pos        token.Pos
+	status     int
 }
 
 func NewAST(fset *token.FileSet) *AST {
@@ -68,11 +78,18 @@ func (a *AST) pushStmts(stmts *[]stmt) {
 	a.stmtsStack = append(a.stmtsStack, stmts)
 }
 
-func (a *AST) addStmt(s stmt) {
+func (a *AST) curStmts() *[]stmt {
 	if len(a.stmtsStack) == 0 {
+		return nil
+	}
+	return a.stmtsStack[len(a.stmtsStack)-1]
+}
+
+func (a *AST) addStmt(s stmt) {
+	curStmts := a.curStmts()
+	if curStmts == nil {
 		return
 	}
-	curStmts := a.stmtsStack[len(a.stmtsStack)-1]
 	*curStmts = append(*curStmts, s)
 }
 
@@ -248,18 +265,16 @@ func (a *AST) assignIdToDataType(dType *dataType) *dataType {
 }
 
 func (a *AST) Visit(node ast.Node) ast.Visitor {
-	parentNode := a.curNode()
 	if node == nil {
-		switch parentNode.(type) {
-		case *ast.CallExpr:
-			a.popStmts()
-		case *ast.FuncDecl:
+		switch a.curNode().(type) {
+		case *ast.BlockStmt:
 			a.popStmts()
 		}
 		a.popNode()
 		return nil
 	}
 	a.pos = node.Pos()
+	log.Printf("%s%#v", strings.Repeat("  ", len(a.nodeStack)), node)
 	switch x := node.(type) {
 	case *ast.TypeSpec:
 		n := ""
@@ -402,8 +417,14 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				id:    a.newID(),
 				Stmts: make([]stmt, 0),
 			},
+			Else: &block{
+				id:    a.newID(),
+				Stmts: make([]stmt, 0),
+			},
 		}
 		a.addStmt(cond)
+		a.pushStmts(&cond.Else.Stmts)
+		a.pushNode(node)
 		a.pushStmts(&cond.Then.Stmts)
 	case *ast.File:
 	case *ast.BlockStmt:

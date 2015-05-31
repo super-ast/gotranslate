@@ -39,18 +39,39 @@
               "id": 7,
               "statements": [
                 {
-                  "id": 8,
+                  "id": 9,
                   "line": 7,
                   "col": 3,
                   "type": "function-call",
                   "name": "fmt.Println",
                   "arguments": [
                     {
-                      "id": 9,
+                      "id": 10,
                       "line": 7,
                       "col": 15,
                       "type": "string",
                       "value": "foo"
+                    }
+                  ]
+                }
+              ]
+            },
+            "else": {
+              "id": 8,
+              "statements": [
+                {
+                  "id": 11,
+                  "line": 9,
+                  "col": 3,
+                  "type": "function-call",
+                  "name": "fmt.Println",
+                  "arguments": [
+                    {
+                      "id": 12,
+                      "line": 9,
+                      "col": 15,
+                      "type": "string",
+                      "value": "bar"
                     }
                   ]
                 }
