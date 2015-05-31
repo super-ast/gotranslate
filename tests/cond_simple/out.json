@@ -19,34 +19,60 @@
               "id": 4,
               "line": 6,
               "col": 5,
-              "type": "\u003c",
+              "type": "||",
               "left": {
                 "id": 5,
                 "line": 6,
                 "col": 5,
-                "type": "int",
-                "value": 3
+                "type": "\u003c",
+                "left": {
+                  "id": 6,
+                  "line": 6,
+                  "col": 5,
+                  "type": "int",
+                  "value": 3
+                },
+                "right": {
+                  "id": 7,
+                  "line": 6,
+                  "col": 9,
+                  "type": "int",
+                  "value": 4
+                }
               },
               "right": {
-                "id": 6,
+                "id": 8,
                 "line": 6,
-                "col": 9,
-                "type": "int",
-                "value": 4
+                "col": 14,
+                "type": "\u003c",
+                "left": {
+                  "id": 9,
+                  "line": 6,
+                  "col": 14,
+                  "type": "int",
+                  "value": 4
+                },
+                "right": {
+                  "id": 10,
+                  "line": 6,
+                  "col": 18,
+                  "type": "int",
+                  "value": 5
+                }
               }
             },
             "then": {
-              "id": 7,
+              "id": 11,
               "statements": [
                 {
-                  "id": 8,
+                  "id": 12,
                   "line": 7,
                   "col": 3,
                   "type": "function-call",
                   "name": "fmt.Println",
                   "arguments": [
                     {
-                      "id": 9,
+                      "id": 13,
                       "line": 7,
                       "col": 15,
                       "type": "string",
