@@ -288,9 +288,11 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			}
 			a.addStmt(decl)
 		}
+		return nil
 	case *ast.BasicLit:
 		lit := a.parseExpr(x)
 		a.addStmt(lit)
+		return nil
 	case *ast.UnaryExpr:
 		unary := a.parseExpr(x)
 		a.addStmt(unary)
@@ -359,6 +361,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				a.addStmt(decl)
 			}
 		}
+		return nil
 	case *ast.AssignStmt:
 		for i, l := range x.Lhs {
 			r := x.Rhs[i]
