@@ -39,14 +39,14 @@
               "id": 7,
               "statements": [
                 {
-                  "id": 9,
+                  "id": 8,
                   "line": 7,
                   "col": 3,
                   "type": "function-call",
                   "name": "fmt.Println",
                   "arguments": [
                     {
-                      "id": 10,
+                      "id": 9,
                       "line": 7,
                       "col": 15,
                       "type": "string",
@@ -55,10 +55,6 @@
                   ]
                 }
               ]
-            },
-            "else": {
-              "id": 8,
-              "statements": []
             }
           }
         ]

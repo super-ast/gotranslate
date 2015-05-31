@@ -417,14 +417,16 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				id:    a.newID(),
 				Stmts: make([]stmt, 0),
 			},
-			Else: &block{
-				id:    a.newID(),
-				Stmts: make([]stmt, 0),
-			},
 		}
 		a.addStmt(cond)
-		a.pushStmts(&cond.Else.Stmts)
-		a.pushNode(node)
+		if x.Else != nil {
+			cond.Else = &block{
+				id:    a.newID(),
+				Stmts: make([]stmt, 0),
+			}
+			a.pushStmts(&cond.Else.Stmts)
+			a.pushNode(node)
+		}
 		a.pushStmts(&cond.Then.Stmts)
 	case *ast.File:
 	case *ast.BlockStmt:
