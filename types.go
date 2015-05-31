@@ -29,9 +29,19 @@ type conditional struct {
 	id
 	pos
 	Type string `json:"type"`
-	Cond expr   `json:"condition"`
+	Cond expr   `json:"condition,omitempty"`
 	Then *block `json:"then,omitempty"`
 	Else *block `json:"else,omitempty"`
+}
+
+type forStmt struct {
+	id
+	pos
+	Type  string `json:"type"`
+	Init  expr   `json:"init,omitempty"`
+	Cond  expr   `json:"condition,omitempty"`
+	Post  expr   `json:"post,omitempty"`
+	Block *block `json:"block"`
 }
 
 type dataType struct {

@@ -418,7 +418,6 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				Stmts: make([]stmt, 0),
 			},
 		}
-		a.addStmt(c)
 		if x.Else != nil {
 			c.Else = &block{
 				id:    a.newID(),
@@ -427,7 +426,31 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			a.pushStmts(&c.Else.Stmts)
 			a.pushNode(node)
 		}
+		a.addStmt(c)
 		a.pushStmts(&c.Then.Stmts)
+	case *ast.ForStmt:
+		f := &forStmt{
+			id:   a.newID(),
+			pos:  a.nodePos(x),
+			Type: "while",
+			Cond: a.parseExpr(x.Cond),
+			Block: &block{
+				id:    a.newID(),
+				Stmts: make([]stmt, 0),
+			},
+		}
+		if x.Init != nil {
+			f.Type = "for"
+			log.Println("%T", x.Init)
+			//f.Init = a.parseExpr(x.Init)
+		}
+		if x.Post != nil {
+			f.Type = "for"
+			log.Println("%T", x.Post)
+			//f.Post = a.parseExpr(x.Post)
+		}
+		a.addStmt(f)
+		a.pushStmts(&f.Block.Stmts)
 	case *ast.File:
 	case *ast.BlockStmt:
 	case *ast.ExprStmt:
