@@ -1,0 +1,137 @@
+{
+  "id": 0,
+  "statements": [
+    {
+      "id": 1,
+      "line": 5,
+      "col": 1,
+      "type": "function-declaration",
+      "name": "main",
+      "block": {
+        "id": 2,
+        "statements": [
+          {
+            "id": 3,
+            "line": 6,
+            "col": 2,
+            "type": "conditional",
+            "condition": {
+              "id": 4,
+              "line": 6,
+              "col": 5,
+              "type": "\u003c",
+              "left": {
+                "id": 5,
+                "line": 6,
+                "col": 5,
+                "type": "int",
+                "value": 3
+              },
+              "right": {
+                "id": 6,
+                "line": 6,
+                "col": 9,
+                "type": "int",
+                "value": 4
+              }
+            },
+            "then": {
+              "id": 7,
+              "statements": [
+                {
+                  "id": 9,
+                  "line": 7,
+                  "col": 3,
+                  "type": "function-call",
+                  "name": "fmt.Println",
+                  "arguments": [
+                    {
+                      "id": 10,
+                      "line": 7,
+                      "col": 15,
+                      "type": "string",
+                      "value": "foo"
+                    }
+                  ]
+                }
+              ]
+            },
+            "else": {
+              "id": 8,
+              "statements": [
+                {
+                  "id": 11,
+                  "line": 8,
+                  "col": 9,
+                  "type": "conditional",
+                  "condition": {
+                    "id": 12,
+                    "line": 8,
+                    "col": 12,
+                    "type": "\u003c",
+                    "left": {
+                      "id": 13,
+                      "line": 8,
+                      "col": 12,
+                      "type": "int",
+                      "value": 4
+                    },
+                    "right": {
+                      "id": 14,
+                      "line": 8,
+                      "col": 16,
+                      "type": "int",
+                      "value": 5
+                    }
+                  },
+                  "then": {
+                    "id": 15,
+                    "statements": [
+                      {
+                        "id": 17,
+                        "line": 9,
+                        "col": 3,
+                        "type": "function-call",
+                        "name": "fmt.Println",
+                        "arguments": [
+                          {
+                            "id": 18,
+                            "line": 9,
+                            "col": 15,
+                            "type": "string",
+                            "value": "bar"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "else": {
+                    "id": 16,
+                    "statements": [
+                      {
+                        "id": 19,
+                        "line": 11,
+                        "col": 3,
+                        "type": "function-call",
+                        "name": "fmt.Println",
+                        "arguments": [
+                          {
+                            "id": 20,
+                            "line": 11,
+                            "col": 15,
+                            "type": "string",
+                            "value": "nil"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
