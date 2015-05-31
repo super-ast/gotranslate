@@ -269,7 +269,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		}
 		switch t := x.Type.(type) {
 		case *ast.StructType:
-			decl := &structDecl{
+			d := &structDecl{
 				id:   a.newID(),
 				pos:  a.curPos(),
 				Type: "struct-declaration",
@@ -283,22 +283,22 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 					Name:     f.vName,
 					DataType: a.assignIdToDataType(f.dType),
 				}
-				decl.Attrs = append(decl.Attrs, attr)
+				d.Attrs = append(d.Attrs, attr)
 			}
-			a.addStmt(decl)
+			a.addStmt(d)
 		}
 		return nil
 	case *ast.BasicLit:
-		lit := a.parseExpr(x)
-		a.addStmt(lit)
+		l := a.parseExpr(x)
+		a.addStmt(l)
 		return nil
 	case *ast.UnaryExpr:
-		unary := a.parseExpr(x)
-		a.addStmt(unary)
+		u := a.parseExpr(x)
+		a.addStmt(u)
 		return nil
 	case *ast.CallExpr:
-		call := a.parseExpr(x)
-		a.addStmt(call)
+		c := a.parseExpr(x)
+		a.addStmt(c)
 		return nil
 	case *ast.FuncDecl:
 		name := x.Name.Name
@@ -308,7 +308,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		case 1:
 			retType = results[0].dType
 		}
-		fn := &funcDecl{
+		d := &funcDecl{
 			id:      a.newID(),
 			pos:     a.nodePos(x),
 			Type:    "function-declaration",
@@ -327,10 +327,10 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				Name:     f.vName,
 				DataType: a.assignIdToDataType(f.dType),
 			}
-			fn.Params = append(fn.Params, param)
+			d.Params = append(d.Params, param)
 		}
-		a.addStmt(fn)
-		a.pushStmts(&fn.Block.Stmts)
+		a.addStmt(d)
+		a.pushStmts(&d.Block.Stmts)
 	case *ast.DeclStmt:
 		gd, _ := x.Decl.(*ast.GenDecl)
 		for _, spec := range gd.Specs {
@@ -344,7 +344,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				if s.Values != nil {
 					v = exprValue(s.Values[i])
 				}
-				decl := &varDecl{
+				d := &varDecl{
 					id:       a.newID(),
 					pos:      a.curPos(),
 					Type:     "variable-declaration",
@@ -357,7 +357,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 						Value: v,
 					},
 				}
-				a.addStmt(decl)
+				a.addStmt(d)
 			}
 		}
 		return nil
@@ -397,18 +397,18 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		}
 		return nil
 	case *ast.ReturnStmt:
-		ret := &retStmt{
+		r := &retStmt{
 			id:   a.newID(),
 			pos:  a.nodePos(x),
 			Type: "return",
 		}
 		if len(x.Results) > 0 {
-			ret.Expr = a.parseExpr(x.Results[0])
+			r.Expr = a.parseExpr(x.Results[0])
 		}
-		a.addStmt(ret)
+		a.addStmt(r)
 		return nil
 	case *ast.IfStmt:
-		cond := &conditional{
+		c := &conditional{
 			id:   a.newID(),
 			pos:  a.nodePos(x),
 			Type: "conditional",
@@ -418,16 +418,16 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				Stmts: make([]stmt, 0),
 			},
 		}
-		a.addStmt(cond)
+		a.addStmt(c)
 		if x.Else != nil {
-			cond.Else = &block{
+			c.Else = &block{
 				id:    a.newID(),
 				Stmts: make([]stmt, 0),
 			}
-			a.pushStmts(&cond.Else.Stmts)
+			a.pushStmts(&c.Else.Stmts)
 			a.pushNode(node)
 		}
-		a.pushStmts(&cond.Then.Stmts)
+		a.pushStmts(&c.Then.Stmts)
 	case *ast.File:
 	case *ast.BlockStmt:
 	case *ast.ExprStmt:
