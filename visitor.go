@@ -233,6 +233,8 @@ func (a *AST) parseExpr(expr ast.Expr) expr {
 		}
 	case *ast.ParenExpr:
 		return a.parseExpr(x.X)
+	default:
+		log.Printf("Unknown expression: %#v", x)
 	}
 	return nil
 }
