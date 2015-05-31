@@ -18,6 +18,15 @@ type stmt interface{}
 type expr interface{}
 type value interface{}
 
+type conditional struct {
+	id
+	pos
+	Type string `json:"type"`
+	Cond expr   `json:"condition"`
+	Then *block `json:"then,omitempty"`
+	Else *block `json:"else,omitempty"`
+}
+
 type dataType struct {
 	id
 	Name    string    `json:"name"`

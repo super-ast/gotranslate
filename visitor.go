@@ -392,6 +392,19 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			a.addStmt(s)
 		}
 		return nil
+	case *ast.IfStmt:
+		cond := &conditional{
+			id:   a.newID(),
+			pos:  a.nodePos(x),
+			Type: "conditional",
+			Cond: a.parseExpr(x.Cond),
+			Then: &block{
+				id:    a.newID(),
+				Stmts: make([]stmt, 0),
+			},
+		}
+		a.addStmt(cond)
+		a.pushStmts(&cond.Then.Stmts)
 	case *ast.File:
 	case *ast.BlockStmt:
 	case *ast.ExprStmt:

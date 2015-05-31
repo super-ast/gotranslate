@@ -1,0 +1,64 @@
+{
+  "id": 0,
+  "statements": [
+    {
+      "id": 1,
+      "line": 5,
+      "col": 1,
+      "type": "function-declaration",
+      "name": "main",
+      "block": {
+        "id": 2,
+        "statements": [
+          {
+            "id": 3,
+            "line": 6,
+            "col": 2,
+            "type": "conditional",
+            "condition": {
+              "id": 4,
+              "line": 6,
+              "col": 5,
+              "type": "\u003c",
+              "left": {
+                "id": 5,
+                "line": 6,
+                "col": 5,
+                "type": "int",
+                "value": 3
+              },
+              "right": {
+                "id": 6,
+                "line": 6,
+                "col": 9,
+                "type": "int",
+                "value": 4
+              }
+            },
+            "then": {
+              "id": 7,
+              "statements": [
+                {
+                  "id": 8,
+                  "line": 7,
+                  "col": 3,
+                  "type": "function-call",
+                  "name": "fmt.Println",
+                  "arguments": [
+                    {
+                      "id": 9,
+                      "line": 7,
+                      "col": 15,
+                      "type": "string",
+                      "value": "foo"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
