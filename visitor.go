@@ -396,6 +396,17 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			a.addStmt(s)
 		}
 		return nil
+	case *ast.ReturnStmt:
+		ret := &retStmt{
+			id:   a.newID(),
+			pos:  a.nodePos(x),
+			Type: "return",
+		}
+		if len(x.Results) > 0 {
+			ret.Expr = a.parseExpr(x.Results[0])
+		}
+		a.addStmt(ret)
+		return nil
 	case *ast.IfStmt:
 		cond := &conditional{
 			id:   a.newID(),

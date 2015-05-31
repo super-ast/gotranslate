@@ -18,6 +18,13 @@ type stmt interface{}
 type expr interface{}
 type value interface{}
 
+type retStmt struct {
+	id
+	pos
+	Type string `json:"type"`
+	Expr expr   `json:"expression"`
+}
+
 type conditional struct {
 	id
 	pos
