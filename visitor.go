@@ -441,12 +441,12 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		}
 		if x.Init != nil {
 			f.Type = "for"
-			log.Println("%T", x.Init)
+			//log.Println("%T", x.Init)
 			//f.Init = a.parseExpr(x.Init)
 		}
 		if x.Post != nil {
 			f.Type = "for"
-			log.Println("%T", x.Post)
+			//log.Println("%T", x.Post)
 			//f.Post = a.parseExpr(x.Post)
 		}
 		a.addStmt(f)
