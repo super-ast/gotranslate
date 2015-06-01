@@ -415,6 +415,20 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		}
 		a.addStmt(r)
 		return nil
+	case *ast.IncDecStmt:
+		u := &unary{
+			id:   a.newID(),
+			pos:  a.nodePos(x),
+			Expr: a.parseExpr(x.X),
+		}
+		switch x.Tok {
+		case token.INC:
+			u.Type = "_++"
+		case token.DEC:
+			u.Type = "_--"
+		}
+		a.addStmt(u)
+		return nil
 	case *ast.IfStmt:
 		c := &conditional{
 			id:   a.newID(),
