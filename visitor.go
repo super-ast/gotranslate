@@ -19,7 +19,7 @@ type AST struct {
 	curID      int
 	RootBlock  *block
 	nodeStack  []ast.Node
-	stmtsStack []*[]stmt
+	blockStack []*block
 	fset       *token.FileSet
 	pos        token.Pos
 }
@@ -32,7 +32,7 @@ func NewAST(fset *token.FileSet) *AST {
 		id:    a.newID(),
 		Stmts: make([]stmt, 0),
 	}
-	a.pushStmts(&a.RootBlock.Stmts)
+	a.pushBlock(a.RootBlock)
 	return a
 }
 
@@ -67,21 +67,21 @@ func (a *AST) popNode() {
 	a.nodeStack = a.nodeStack[:len(a.nodeStack)-1]
 }
 
-func (a *AST) pushStmts(stmts *[]stmt) {
-	a.stmtsStack = append(a.stmtsStack, stmts)
+func (a *AST) pushBlock(b *block) {
+	a.blockStack = append(a.blockStack, b)
 }
 
-func (a *AST) curStmts() *[]stmt {
-	return a.stmtsStack[len(a.stmtsStack)-1]
+func (a *AST) curBlock() *block {
+	return a.blockStack[len(a.blockStack)-1]
 }
 
 func (a *AST) addStmt(s stmt) {
-	curStmts := a.curStmts()
-	*curStmts = append(*curStmts, s)
+	b := a.curBlock()
+	b.Stmts = append(b.Stmts, s)
 }
 
-func (a *AST) popStmts() {
-	a.stmtsStack = a.stmtsStack[:len(a.stmtsStack)-1]
+func (a *AST) popBlock() {
+	a.blockStack = a.blockStack[:len(a.blockStack)-1]
 }
 
 func exprString(x ast.Expr) string {
@@ -254,7 +254,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 	if node == nil {
 		switch a.curNode().(type) {
 		case *ast.BlockStmt:
-			a.popStmts()
+			a.popBlock()
 		}
 		a.popNode()
 		return nil
@@ -330,7 +330,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			d.Params = append(d.Params, param)
 		}
 		a.addStmt(d)
-		a.pushStmts(&d.Block.Stmts)
+		a.pushBlock(d.Block)
 	case *ast.DeclStmt:
 		gd, _ := x.Decl.(*ast.GenDecl)
 		for _, spec := range gd.Specs {
@@ -424,10 +424,10 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				id:    a.newID(),
 				Stmts: make([]stmt, 0),
 			}
-			a.pushStmts(&c.Else.Stmts)
+			a.pushBlock(c.Else)
 			a.pushNode(node)
 		}
-		a.pushStmts(&c.Then.Stmts)
+		a.pushBlock(c.Then)
 	case *ast.ForStmt:
 		f := &forStmt{
 			id:   a.newID(),
@@ -450,7 +450,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			//f.Post = a.parseExpr(x.Post)
 		}
 		a.addStmt(f)
-		a.pushStmts(&f.Block.Stmts)
+		a.pushBlock(f.Block)
 	case *ast.File:
 	case *ast.BlockStmt:
 	case *ast.ExprStmt:
