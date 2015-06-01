@@ -3,9 +3,9 @@ package superast
 import (
 	"go/ast"
 	"go/token"
-	"log"
+	//"log"
 	"strconv"
-	"strings"
+	//"strings"
 )
 
 const (
@@ -233,7 +233,7 @@ func (a *AST) parseExpr(expr ast.Expr) expr {
 	case *ast.ParenExpr:
 		return a.parseExpr(x.X)
 	default:
-		log.Printf("Unknown expression: %#v", x)
+		//log.Printf("Unknown expression: %#v", x)
 	}
 	return nil
 }
@@ -260,7 +260,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		return nil
 	}
 	a.pos = node.Pos()
-	log.Printf("%s%#v", strings.Repeat("  ", len(a.nodeStack)), node)
+	//log.Printf("%s%#v", strings.Repeat("  ", len(a.nodeStack)), node)
 	switch x := node.(type) {
 	case *ast.TypeSpec:
 		n := ""
