@@ -1,0 +1,84 @@
+{
+  "id": 0,
+  "statements": [
+    {
+      "id": 1,
+      "line": 5,
+      "col": 1,
+      "type": "function-declaration",
+      "name": "main",
+      "block": {
+        "id": 2,
+        "statements": [
+          {
+            "id": 3,
+            "line": 6,
+            "col": 2,
+            "type": "variable-declaration",
+            "name": "a",
+            "data-type": {
+              "id": 4,
+              "name": "vector",
+              "data-type": {
+                "id": 5,
+                "name": "int"
+              }
+            },
+            "init": {
+              "id": 6,
+              "line": 6,
+              "col": 2,
+              "type": "vector",
+              "value": null
+            }
+          },
+          {
+            "id": 7,
+            "line": 7,
+            "col": 2,
+            "type": "function-call",
+            "name": "fmt.Println",
+            "arguments": [
+              {
+                "id": 8,
+                "line": 7,
+                "col": 14,
+                "type": "identifier",
+                "value": "a"
+              }
+            ]
+          },
+          {
+            "id": 9,
+            "line": 8,
+            "col": 2,
+            "type": "function-call",
+            "name": "fmt.Println",
+            "arguments": [
+              {
+                "id": 10,
+                "line": 8,
+                "col": 14,
+                "type": "[]",
+                "left": {
+                  "id": 11,
+                  "line": 8,
+                  "col": 14,
+                  "type": "identifier",
+                  "value": "a"
+                },
+                "right": {
+                  "id": 12,
+                  "line": 8,
+                  "col": 16,
+                  "type": "int",
+                  "value": 0
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

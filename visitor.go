@@ -90,10 +90,10 @@ func exprString(x ast.Expr) string {
 		return t.Name
 	case *ast.BasicLit:
 		return t.Value
-	case *ast.SelectorExpr:
-		return exprString(t.X) + "." + t.Sel.Name
 	case *ast.StarExpr:
 		return exprString(t.X)
+	case *ast.SelectorExpr:
+		return exprString(t.X) + "." + t.Sel.Name
 	}
 	return ""
 }
@@ -229,6 +229,14 @@ func (a *AST) parseExpr(expr ast.Expr) expr {
 			Type:  x.Op.String(),
 			Left:  a.parseExpr(x.X),
 			Right: a.parseExpr(x.Y),
+		}
+	case *ast.IndexExpr:
+		return &binary{
+			id:    a.newID(),
+			pos:   a.nodePos(x),
+			Type:  "[]",
+			Left:  a.parseExpr(x.X),
+			Right: a.parseExpr(x.Index),
 		}
 	case *ast.ParenExpr:
 		return a.parseExpr(x.X)
