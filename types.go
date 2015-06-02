@@ -106,3 +106,11 @@ type structDecl struct {
 	Name  string    `json:"name"`
 	Attrs []varDecl `json:"attributes"`
 }
+
+type errorNode struct {
+	id
+	pos
+	Type  string `json:"type"`
+	Value string `json:"value"`
+	Desc  string `json:"description"`
+}

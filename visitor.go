@@ -80,6 +80,17 @@ func (a *AST) addStmt(s stmt) {
 	b.Stmts = append(b.Stmts, s)
 }
 
+func (a *AST) addInvalid(n ast.Node, desc string) {
+	e := &errorNode{
+		id:    a.newID(),
+		pos:   a.nodePos(n),
+		Type:  "error",
+		Value: "Unsupported statement or expression",
+		Desc:  desc,
+	}
+	a.addStmt(e)
+}
+
 func (a *AST) popBlock() {
 	a.blockStack = a.blockStack[:len(a.blockStack)-1]
 }
@@ -477,6 +488,8 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 	case *ast.BlockStmt:
 	case *ast.ExprStmt:
 	case *ast.GenDecl:
+	case *ast.BranchStmt:
+		a.addInvalid(node, "branch statements not supported")
 	default:
 		return nil
 	}
