@@ -144,7 +144,9 @@ func exprType(x ast.Expr) *dataType {
 			SubType: exprType(t.Elt),
 		}
 	}
-	return nil
+	return &dataType{
+		Name: "unknown",
+	}
 }
 
 type namedType struct {
@@ -490,6 +492,22 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 	case *ast.GenDecl:
 	case *ast.BranchStmt:
 		a.addInvalid(node, "branch statements not supported")
+		return nil
+	case *ast.RangeStmt:
+		a.addInvalid(node, "range statements not supported")
+		return nil
+	case *ast.SendStmt:
+		a.addInvalid(node, "send statements not supported")
+		return nil
+	case *ast.SwitchStmt:
+		a.addInvalid(node, "switch statements not supported")
+		return nil
+	case *ast.DeferStmt:
+		a.addInvalid(node, "defer statements not supported")
+		return nil
+	case *ast.GoStmt:
+		a.addInvalid(node, "go statements not supported")
+		return nil
 	default:
 		return nil
 	}
