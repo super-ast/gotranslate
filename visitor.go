@@ -3,9 +3,9 @@ package superast
 import (
 	"go/ast"
 	"go/token"
-	"log"
+	//"log"
 	"strconv"
-	"strings"
+	//"strings"
 )
 
 const (
@@ -262,7 +262,7 @@ func (a *AST) parseExpr(expr ast.Expr) expr {
 	case *ast.ParenExpr:
 		return a.parseExpr(x.X)
 	default:
-		log.Printf("Unknown expression: %#v", x)
+		//log.Printf("Unknown expression: %#v", x)
 	}
 	return nil
 }
@@ -517,7 +517,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		a.addInvalid(node, "go statements not supported")
 		return nil
 	default:
-		log.Printf("%s!%#v", strings.Repeat("  ", len(a.nodeStack)), node)
+		//log.Printf("%s!%#v", strings.Repeat("  ", len(a.nodeStack)), node)
 		return nil
 	}
 	a.pushNode(node)
