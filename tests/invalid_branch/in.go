@@ -3,8 +3,8 @@ package main
 import "fmt"
 
 func main() {
-	goto foo
 	i := 3
-	foo:
+	goto foo
 	fmt.Println(i)
+	foo:
 }
