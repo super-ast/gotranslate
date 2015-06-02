@@ -3,7 +3,7 @@
   "statements": [
     {
       "id": 1,
-      "line": 5,
+      "line": 6,
       "col": 1,
       "type": "function-declaration",
       "name": "main",
@@ -12,7 +12,7 @@
         "statements": [
           {
             "id": 3,
-            "line": 6,
+            "line": 7,
             "col": 2,
             "type": "variable-declaration",
             "name": "a",
@@ -26,7 +26,7 @@
             },
             "init": {
               "id": 6,
-              "line": 6,
+              "line": 7,
               "col": 2,
               "type": "vector",
               "value": null
@@ -34,14 +34,14 @@
           },
           {
             "id": 7,
-            "line": 7,
+            "line": 8,
             "col": 2,
             "type": "function-call",
             "name": "fmt.Println",
             "arguments": [
               {
                 "id": 8,
-                "line": 7,
+                "line": 8,
                 "col": 14,
                 "type": "identifier",
                 "value": "a"
@@ -50,29 +50,58 @@
           },
           {
             "id": 9,
-            "line": 8,
+            "line": 9,
             "col": 2,
             "type": "function-call",
             "name": "fmt.Println",
             "arguments": [
               {
                 "id": 10,
-                "line": 8,
+                "line": 9,
                 "col": 14,
                 "type": "[]",
                 "left": {
                   "id": 11,
-                  "line": 8,
+                  "line": 9,
                   "col": 14,
                   "type": "identifier",
                   "value": "a"
                 },
                 "right": {
                   "id": 12,
-                  "line": 8,
+                  "line": 9,
                   "col": 16,
                   "type": "int",
                   "value": 0
+                }
+              }
+            ]
+          },
+          {
+            "id": 13,
+            "line": 10,
+            "col": 2,
+            "type": "function-call",
+            "name": "fmt.Println",
+            "arguments": [
+              {
+                "id": 14,
+                "line": 10,
+                "col": 14,
+                "type": ".",
+                "left": {
+                  "id": 15,
+                  "line": 10,
+                  "col": 14,
+                  "type": "identifier",
+                  "value": "token"
+                },
+                "right": {
+                  "id": 16,
+                  "line": 10,
+                  "col": 20,
+                  "type": "identifier",
+                  "value": "COMMENT"
                 }
               }
             ]
