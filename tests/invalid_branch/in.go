@@ -6,5 +6,5 @@ func main() {
 	i := 3
 	goto foo
 	fmt.Println(i)
-	foo:
+foo:
 }
