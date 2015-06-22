@@ -7,28 +7,33 @@
       "column": 1,
       "type": "function-declaration",
       "name": "main",
-      "block": {
+      "parameters": [],
+      "return-type": {
         "id": 2,
+        "name": "void"
+      },
+      "block": {
+        "id": 3,
         "statements": [
           {
-            "id": 3,
+            "id": 4,
             "line": 6,
             "column": 2,
             "type": "conditional",
             "condition": {
-              "id": 4,
+              "id": 5,
               "line": 6,
               "column": 5,
               "type": "\u003c",
               "left": {
-                "id": 5,
+                "id": 6,
                 "line": 6,
                 "column": 5,
                 "type": "int",
                 "value": 3
               },
               "right": {
-                "id": 6,
+                "id": 7,
                 "line": 6,
                 "column": 9,
                 "type": "int",
@@ -36,17 +41,17 @@
               }
             },
             "then": {
-              "id": 7,
+              "id": 8,
               "statements": [
                 {
-                  "id": 9,
+                  "id": 10,
                   "line": 7,
                   "column": 3,
                   "type": "function-call",
                   "name": "fmt.Println",
                   "arguments": [
                     {
-                      "id": 10,
+                      "id": 11,
                       "line": 7,
                       "column": 15,
                       "type": "string",
@@ -57,27 +62,27 @@
               ]
             },
             "else": {
-              "id": 8,
+              "id": 9,
               "statements": [
                 {
-                  "id": 11,
+                  "id": 12,
                   "line": 8,
                   "column": 9,
                   "type": "conditional",
                   "condition": {
-                    "id": 12,
+                    "id": 13,
                     "line": 8,
                     "column": 12,
                     "type": "\u003c",
                     "left": {
-                      "id": 13,
+                      "id": 14,
                       "line": 8,
                       "column": 12,
                       "type": "int",
                       "value": 4
                     },
                     "right": {
-                      "id": 14,
+                      "id": 15,
                       "line": 8,
                       "column": 16,
                       "type": "int",
@@ -85,17 +90,17 @@
                     }
                   },
                   "then": {
-                    "id": 15,
+                    "id": 16,
                     "statements": [
                       {
-                        "id": 17,
+                        "id": 18,
                         "line": 9,
                         "column": 3,
                         "type": "function-call",
                         "name": "fmt.Println",
                         "arguments": [
                           {
-                            "id": 18,
+                            "id": 19,
                             "line": 9,
                             "column": 15,
                             "type": "string",
@@ -106,17 +111,17 @@
                     ]
                   },
                   "else": {
-                    "id": 16,
+                    "id": 17,
                     "statements": [
                       {
-                        "id": 19,
+                        "id": 20,
                         "line": 11,
                         "column": 3,
                         "type": "function-call",
                         "name": "fmt.Println",
                         "arguments": [
                           {
-                            "id": 20,
+                            "id": 21,
                             "line": 11,
                             "column": 15,
                             "type": "string",

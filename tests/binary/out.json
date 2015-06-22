@@ -7,33 +7,38 @@
       "column": 1,
       "type": "function-declaration",
       "name": "main",
-      "block": {
+      "parameters": [],
+      "return-type": {
         "id": 2,
+        "name": "void"
+      },
+      "block": {
+        "id": 3,
         "statements": [
           {
-            "id": 3,
+            "id": 4,
             "line": 6,
             "column": 2,
             "type": "variable-declaration",
             "name": "i",
             "data-type": {
-              "id": 4,
+              "id": 5,
               "name": ""
             },
             "init": {
-              "id": 5,
+              "id": 6,
               "line": 6,
               "column": 7,
               "type": "+",
               "left": {
-                "id": 6,
+                "id": 7,
                 "line": 6,
                 "column": 7,
                 "type": "int",
                 "value": 3
               },
               "right": {
-                "id": 7,
+                "id": 8,
                 "line": 6,
                 "column": 11,
                 "type": "int",
@@ -42,36 +47,36 @@
             }
           },
           {
-            "id": 8,
+            "id": 9,
             "line": 7,
             "column": 2,
             "type": "+=",
             "left": {
-              "id": 9,
+              "id": 10,
               "line": 7,
               "column": 2,
               "type": "identifier",
               "value": "i"
             },
             "right": {
-              "id": 10,
+              "id": 11,
               "line": 7,
               "column": 7,
               "type": "/",
               "left": {
-                "id": 11,
+                "id": 12,
                 "line": 7,
                 "column": 8,
                 "type": "*",
                 "left": {
-                  "id": 12,
+                  "id": 13,
                   "line": 7,
                   "column": 8,
                   "type": "int",
                   "value": 2
                 },
                 "right": {
-                  "id": 13,
+                  "id": 14,
                   "line": 7,
                   "column": 12,
                   "type": "int",
@@ -79,7 +84,7 @@
                 }
               },
               "right": {
-                "id": 14,
+                "id": 15,
                 "line": 7,
                 "column": 17,
                 "type": "int",
@@ -88,17 +93,17 @@
             }
           },
           {
-            "id": 15,
+            "id": 16,
             "line": 8,
             "column": 2,
             "type": "variable-declaration",
             "name": "j",
             "data-type": {
-              "id": 16,
+              "id": 17,
               "name": "int"
             },
             "init": {
-              "id": 17,
+              "id": 18,
               "line": 8,
               "column": 2,
               "type": "int",
@@ -106,19 +111,19 @@
             }
           },
           {
-            "id": 18,
+            "id": 19,
             "line": 9,
             "column": 2,
             "type": "=",
             "left": {
-              "id": 19,
+              "id": 20,
               "line": 9,
               "column": 2,
               "type": "identifier",
               "value": "j"
             },
             "right": {
-              "id": 20,
+              "id": 21,
               "line": 9,
               "column": 6,
               "type": "int",
@@ -126,21 +131,21 @@
             }
           },
           {
-            "id": 21,
+            "id": 22,
             "line": 10,
             "column": 2,
             "type": "function-call",
             "name": "fmt.Println",
             "arguments": [
               {
-                "id": 22,
+                "id": 23,
                 "line": 10,
                 "column": 14,
                 "type": "identifier",
                 "value": "i"
               },
               {
-                "id": 23,
+                "id": 24,
                 "line": 10,
                 "column": 17,
                 "type": "identifier",

@@ -64,8 +64,8 @@ type funcDecl struct {
 	pos
 	Type    string    `json:"type"`
 	Name    string    `json:"name"`
-	Params  []varDecl `json:"parameters,omitempty"`
-	RetType *dataType `json:"return-type,omitempty"`
+	Params  []varDecl `json:"parameters"`
+	RetType *dataType `json:"return-type"`
 	Block   *block    `json:"block"`
 }
 

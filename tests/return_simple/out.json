@@ -7,6 +7,7 @@
       "column": 1,
       "type": "function-declaration",
       "name": "foo",
+      "parameters": [],
       "return-type": {
         "id": 2,
         "name": "string"
@@ -36,8 +37,13 @@
       "column": 1,
       "type": "function-declaration",
       "name": "main",
-      "block": {
+      "parameters": [],
+      "return-type": {
         "id": 7,
+        "name": "void"
+      },
+      "block": {
+        "id": 8,
         "statements": []
       }
     }

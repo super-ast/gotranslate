@@ -331,7 +331,9 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 		return nil
 	case *ast.FuncDecl:
 		name := x.Name.Name
-		var retType *dataType
+		retType := &dataType{
+			Name: "void",
+		}
 		results := flattenFieldList(x.Type.Results)
 		switch len(results) {
 		case 1:
@@ -347,6 +349,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 				id:    a.newID(),
 				Stmts: make([]stmt, 0),
 			},
+			Params: make([]varDecl, 0),
 		}
 		for _, f := range flattenFieldList(x.Type.Params) {
 			param := varDecl{
