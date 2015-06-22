@@ -28,24 +28,17 @@
                 "id": 6,
                 "name": "int"
               }
-            },
-            "init": {
-              "id": 7,
-              "line": 7,
-              "column": 2,
-              "type": "vector",
-              "value": null
             }
           },
           {
-            "id": 8,
+            "id": 7,
             "line": 8,
             "column": 2,
             "type": "function-call",
             "name": "fmt.Println",
             "arguments": [
               {
-                "id": 9,
+                "id": 8,
                 "line": 8,
                 "column": 14,
                 "type": "identifier",
@@ -54,26 +47,26 @@
             ]
           },
           {
-            "id": 10,
+            "id": 9,
             "line": 9,
             "column": 2,
             "type": "function-call",
             "name": "fmt.Println",
             "arguments": [
               {
-                "id": 11,
+                "id": 10,
                 "line": 9,
                 "column": 14,
                 "type": "[]",
                 "left": {
-                  "id": 12,
+                  "id": 11,
                   "line": 9,
                   "column": 14,
                   "type": "identifier",
                   "value": "a"
                 },
                 "right": {
-                  "id": 13,
+                  "id": 12,
                   "line": 9,
                   "column": 16,
                   "type": "int",
@@ -83,26 +76,26 @@
             ]
           },
           {
-            "id": 14,
+            "id": 13,
             "line": 10,
             "column": 2,
             "type": "function-call",
             "name": "fmt.Println",
             "arguments": [
               {
-                "id": 15,
+                "id": 14,
                 "line": 10,
                 "column": 14,
                 "type": ".",
                 "left": {
-                  "id": 16,
+                  "id": 15,
                   "line": 10,
                   "column": 14,
                   "type": "identifier",
                   "value": "token"
                 },
                 "right": {
-                  "id": 17,
+                  "id": 16,
                   "line": 10,
                   "column": 20,
                   "type": "identifier",

@@ -398,12 +398,14 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 					Type:     "variable-declaration",
 					Name:     t.vName,
 					DataType: a.assignIdToDataType(t.dType),
-					Init: &identifier{
+				}
+				if v != nil {
+					d.Init = &identifier{
 						id:    a.newID(),
 						pos:   a.curPos(),
 						Type:  vType,
 						Value: v,
-					},
+					}
 				}
 				a.addStmt(d)
 			}

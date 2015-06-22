@@ -55,89 +55,75 @@
             "data-type": {
               "id": 10,
               "name": "foo"
-            },
-            "init": {
-              "id": 11,
-              "line": 11,
-              "column": 2,
-              "type": "foo",
-              "value": null
             }
           },
           {
-            "id": 12,
+            "id": 11,
             "line": 12,
             "column": 2,
             "type": "variable-declaration",
             "name": "f2",
             "data-type": {
-              "id": 13,
+              "id": 12,
               "name": "foo"
             }
           },
           {
-            "id": 14,
+            "id": 13,
             "line": 16,
             "column": 2,
             "type": "variable-declaration",
             "name": "s1",
             "data-type": {
-              "id": 15,
+              "id": 14,
               "name": "vector",
               "data-type": {
-                "id": 16,
+                "id": 15,
                 "name": "int"
               }
-            },
-            "init": {
-              "id": 17,
-              "line": 16,
-              "column": 2,
-              "type": "vector",
-              "value": null
             }
           },
           {
-            "id": 18,
+            "id": 16,
             "line": 17,
             "column": 2,
             "type": "variable-declaration",
             "name": "s2",
             "data-type": {
-              "id": 19,
+              "id": 17,
               "name": ""
             }
           },
           {
-            "id": 20,
+            "id": 18,
             "line": 18,
             "column": 2,
             "type": "function-call",
             "name": "fmt.Println",
             "arguments": [
               {
-                "id": 21,
+                "id": 19,
                 "line": 18,
                 "column": 14,
                 "type": "identifier",
                 "value": "f1"
               },
               {
-                "id": 22,
+                "id": 20,
                 "line": 18,
                 "column": 18,
                 "type": "identifier",
                 "value": "f2"
               },
               {
-                "id": 23,
+                "id": 21,
                 "line": 18,
                 "column": 22,
                 "type": "identifier",
                 "value": "s1"
               },
               {
-                "id": 24,
+                "id": 22,
                 "line": 18,
                 "column": 26,
                 "type": "identifier",
