@@ -135,16 +135,28 @@ func exprValue(x ast.Expr) value {
 }
 
 func exprType(x ast.Expr) *dataType {
-	if s := exprString(x); s != "" {
-		return &dataType{
-			Name: s,
-		}
-	}
 	switch t := x.(type) {
 	case *ast.ArrayType:
 		return &dataType{
 			Name:    "vector",
 			SubType: exprType(t.Elt),
+		}
+	case *ast.BasicLit:
+		n, _ := basicLitName[t.Kind]
+		return &dataType{
+			Name: n,
+		}
+	case *ast.BinaryExpr:
+		return exprType(t.X)
+	case *ast.CompositeLit:
+		n := exprString(t.Type)
+		return &dataType{
+			Name: n,
+		}
+	}
+	if n := exprString(x); n != "" {
+		return &dataType{
+			Name: n,
 		}
 	}
 	return &dataType{
@@ -421,13 +433,6 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 	case *ast.AssignStmt:
 		for i, l := range x.Lhs {
 			r := x.Rhs[i]
-			var t string
-			switch rx := r.(type) {
-			case *ast.BasicLit:
-				t, _ = basicLitName[rx.Kind]
-			case *ast.CompositeLit:
-				t = exprString(rx.Type)
-			}
 			var s stmt
 			if x.Tok == token.DEFINE {
 				s = &varDecl{
@@ -435,10 +440,7 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 					pos:  a.curPos(),
 					Type: "variable-declaration",
 					Name: exprString(l),
-					DataType: &dataType{
-						id:   a.newID(),
-						Name: t,
-					},
+					DataType: a.assignIdToDataType(exprType(r)),
 					Init: a.parseExpr(r),
 				}
 			} else {

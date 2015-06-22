@@ -23,7 +23,7 @@
             "name": "i",
             "data-type": {
               "id": 5,
-              "name": ""
+              "name": "int"
             },
             "init": {
               "id": 6,
