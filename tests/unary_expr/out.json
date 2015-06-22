@@ -49,7 +49,7 @@
               "id": 9,
               "line": 7,
               "column": 6,
-              "type": "-",
+              "type": "neg",
               "expression": {
                 "id": 10,
                 "line": 7,
@@ -75,7 +75,7 @@
               "id": 13,
               "line": 8,
               "column": 6,
-              "type": "+",
+              "type": "pos",
               "expression": {
                 "id": 14,
                 "line": 8,
@@ -101,17 +101,17 @@
               "id": 17,
               "line": 9,
               "column": 6,
-              "type": "-",
+              "type": "neg",
               "expression": {
                 "id": 18,
                 "line": 9,
                 "column": 7,
-                "type": "+",
+                "type": "pos",
                 "expression": {
                   "id": 19,
                   "line": 9,
                   "column": 8,
-                  "type": "-",
+                  "type": "neg",
                   "expression": {
                     "id": 20,
                     "line": 9,

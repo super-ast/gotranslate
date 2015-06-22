@@ -80,15 +80,18 @@ func (a *AST) addStmt(s stmt) {
 	b.Stmts = append(b.Stmts, s)
 }
 
-func (a *AST) addInvalid(n ast.Node, desc string) {
-	e := &errorNode{
+func (a *AST) getInvalid(n ast.Node, desc string) expr {
+	return &errorNode{
 		id:    a.newID(),
 		pos:   a.nodePos(n),
 		Type:  "error",
 		Value: "Unsupported statement or expression",
 		Desc:  desc,
 	}
-	a.addStmt(e)
+}
+
+func (a *AST) addInvalid(n ast.Node, desc string) {
+	a.addStmt(a.getInvalid(n, desc))
 }
 
 func (a *AST) popBlock() {
@@ -218,10 +221,23 @@ func (a *AST) parseExpr(expr ast.Expr) expr {
 			Value: exprValue(x),
 		}
 	case *ast.UnaryExpr:
+		var t string
+		switch x.Op {
+		case token.ADD:
+			t = "pos"
+		case token.SUB:
+			t = "neg"
+		case token.NOT:
+			t = "not"
+		//case token.XOR:
+		//case token.AND:
+		default:
+			return a.getInvalid(expr, "Invalid unary expression: " + x.Op.String())
+		}
 		return &unary{
 			id:   a.newID(),
 			pos:  a.nodePos(x),
-			Type: x.Op.String(),
+			Type: t,
 			Expr: a.parseExpr(x.X),
 		}
 	case *ast.CallExpr:
