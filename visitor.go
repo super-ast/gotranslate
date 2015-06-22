@@ -252,10 +252,17 @@ func (a *AST) parseExpr(expr ast.Expr) expr {
 		}
 		return call
 	case *ast.BinaryExpr:
+		t := x.Op.String()
+		switch x.Op {
+		case token.LAND:
+			t = "and"
+		case token.LOR:
+			t = "or"
+		}
 		return &binary{
 			id:    a.newID(),
 			pos:   a.nodePos(x),
-			Type:  x.Op.String(),
+			Type:  t,
 			Left:  a.parseExpr(x.X),
 			Right: a.parseExpr(x.Y),
 		}

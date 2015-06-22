@@ -24,7 +24,7 @@
               "id": 5,
               "line": 6,
               "column": 5,
-              "type": "||",
+              "type": "or",
               "left": {
                 "id": 6,
                 "line": 6,
