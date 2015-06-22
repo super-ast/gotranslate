@@ -4,14 +4,14 @@
     {
       "id": 1,
       "line": 5,
-      "col": 6,
+      "column": 6,
       "type": "struct-declaration",
       "name": "foo",
       "attributes": [
         {
           "id": 2,
           "line": 5,
-          "col": 6,
+          "column": 6,
           "type": "variable-declaration",
           "name": "a",
           "data-type": {
@@ -22,7 +22,7 @@
         {
           "id": 4,
           "line": 5,
-          "col": 6,
+          "column": 6,
           "type": "variable-declaration",
           "name": "b",
           "data-type": {
@@ -35,7 +35,7 @@
     {
       "id": 6,
       "line": 10,
-      "col": 1,
+      "column": 1,
       "type": "function-declaration",
       "name": "main",
       "block": {
@@ -44,7 +44,7 @@
           {
             "id": 8,
             "line": 11,
-            "col": 2,
+            "column": 2,
             "type": "variable-declaration",
             "name": "f1",
             "data-type": {
@@ -54,7 +54,7 @@
             "init": {
               "id": 10,
               "line": 11,
-              "col": 2,
+              "column": 2,
               "type": "foo",
               "value": null
             }
@@ -62,7 +62,7 @@
           {
             "id": 11,
             "line": 12,
-            "col": 2,
+            "column": 2,
             "type": "variable-declaration",
             "name": "f2",
             "data-type": {
@@ -73,7 +73,7 @@
           {
             "id": 13,
             "line": 16,
-            "col": 2,
+            "column": 2,
             "type": "variable-declaration",
             "name": "s1",
             "data-type": {
@@ -87,7 +87,7 @@
             "init": {
               "id": 16,
               "line": 16,
-              "col": 2,
+              "column": 2,
               "type": "vector",
               "value": null
             }
@@ -95,7 +95,7 @@
           {
             "id": 17,
             "line": 17,
-            "col": 2,
+            "column": 2,
             "type": "variable-declaration",
             "name": "s2",
             "data-type": {
@@ -106,35 +106,35 @@
           {
             "id": 19,
             "line": 18,
-            "col": 2,
+            "column": 2,
             "type": "function-call",
             "name": "fmt.Println",
             "arguments": [
               {
                 "id": 20,
                 "line": 18,
-                "col": 14,
+                "column": 14,
                 "type": "identifier",
                 "value": "f1"
               },
               {
                 "id": 21,
                 "line": 18,
-                "col": 18,
+                "column": 18,
                 "type": "identifier",
                 "value": "f2"
               },
               {
                 "id": 22,
                 "line": 18,
-                "col": 22,
+                "column": 22,
                 "type": "identifier",
                 "value": "s1"
               },
               {
                 "id": 23,
                 "line": 18,
-                "col": 26,
+                "column": 26,
                 "type": "identifier",
                 "value": "s2"
               }

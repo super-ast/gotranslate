@@ -4,7 +4,7 @@
     {
       "id": 1,
       "line": 5,
-      "col": 1,
+      "column": 1,
       "type": "function-declaration",
       "name": "main",
       "block": {
@@ -13,7 +13,7 @@
           {
             "id": 3,
             "line": 6,
-            "col": 2,
+            "column": 2,
             "type": "variable-declaration",
             "name": "i",
             "data-type": {
@@ -23,7 +23,7 @@
             "init": {
               "id": 5,
               "line": 6,
-              "col": 2,
+              "column": 2,
               "type": "int",
               "value": 0
             }
@@ -31,7 +31,7 @@
           {
             "id": 6,
             "line": 7,
-            "col": 2,
+            "column": 2,
             "type": "variable-declaration",
             "name": "s",
             "data-type": {
@@ -41,7 +41,7 @@
             "init": {
               "id": 8,
               "line": 7,
-              "col": 2,
+              "column": 2,
               "type": "string",
               "value": ""
             }
@@ -49,7 +49,7 @@
           {
             "id": 9,
             "line": 8,
-            "col": 2,
+            "column": 2,
             "type": "variable-declaration",
             "name": "i1",
             "data-type": {
@@ -59,7 +59,7 @@
             "init": {
               "id": 11,
               "line": 8,
-              "col": 2,
+              "column": 2,
               "type": "int",
               "value": 0
             }
@@ -67,7 +67,7 @@
           {
             "id": 12,
             "line": 8,
-            "col": 2,
+            "column": 2,
             "type": "variable-declaration",
             "name": "i2",
             "data-type": {
@@ -77,7 +77,7 @@
             "init": {
               "id": 14,
               "line": 8,
-              "col": 2,
+              "column": 2,
               "type": "int",
               "value": 0
             }
@@ -85,7 +85,7 @@
           {
             "id": 15,
             "line": 9,
-            "col": 2,
+            "column": 2,
             "type": "variable-declaration",
             "name": "i3",
             "data-type": {
@@ -95,7 +95,7 @@
             "init": {
               "id": 17,
               "line": 9,
-              "col": 2,
+              "column": 2,
               "type": "int",
               "value": 4
             }
@@ -103,7 +103,7 @@
           {
             "id": 18,
             "line": 9,
-            "col": 2,
+            "column": 2,
             "type": "variable-declaration",
             "name": "i4",
             "data-type": {
@@ -113,7 +113,7 @@
             "init": {
               "id": 20,
               "line": 9,
-              "col": 2,
+              "column": 2,
               "type": "int",
               "value": 5
             }
@@ -121,19 +121,19 @@
           {
             "id": 21,
             "line": 10,
-            "col": 2,
+            "column": 2,
             "type": "=",
             "left": {
               "id": 22,
               "line": 10,
-              "col": 2,
+              "column": 2,
               "type": "identifier",
               "value": "i"
             },
             "right": {
               "id": 23,
               "line": 10,
-              "col": 9,
+              "column": 9,
               "type": "int",
               "value": 3
             }
@@ -141,19 +141,19 @@
           {
             "id": 24,
             "line": 10,
-            "col": 2,
+            "column": 2,
             "type": "=",
             "left": {
               "id": 25,
               "line": 10,
-              "col": 5,
+              "column": 5,
               "type": "identifier",
               "value": "s"
             },
             "right": {
               "id": 26,
               "line": 10,
-              "col": 12,
+              "column": 12,
               "type": "string",
               "value": "foo"
             }
@@ -161,7 +161,7 @@
           {
             "id": 27,
             "line": 11,
-            "col": 2,
+            "column": 2,
             "type": "variable-declaration",
             "name": "c",
             "data-type": {
@@ -171,7 +171,7 @@
             "init": {
               "id": 29,
               "line": 11,
-              "col": 10,
+              "column": 10,
               "type": "int",
               "value": 5
             }
@@ -179,7 +179,7 @@
           {
             "id": 30,
             "line": 11,
-            "col": 2,
+            "column": 2,
             "type": "variable-declaration",
             "name": "d",
             "data-type": {
@@ -189,7 +189,7 @@
             "init": {
               "id": 32,
               "line": 11,
-              "col": 13,
+              "column": 13,
               "type": "int",
               "value": 6
             }
@@ -197,63 +197,63 @@
           {
             "id": 33,
             "line": 12,
-            "col": 2,
+            "column": 2,
             "type": "function-call",
             "name": "fmt.Println",
             "arguments": [
               {
                 "id": 34,
                 "line": 12,
-                "col": 14,
+                "column": 14,
                 "type": "identifier",
                 "value": "i"
               },
               {
                 "id": 35,
                 "line": 12,
-                "col": 17,
+                "column": 17,
                 "type": "identifier",
                 "value": "s"
               },
               {
                 "id": 36,
                 "line": 12,
-                "col": 20,
+                "column": 20,
                 "type": "identifier",
                 "value": "c"
               },
               {
                 "id": 37,
                 "line": 12,
-                "col": 23,
+                "column": 23,
                 "type": "identifier",
                 "value": "d"
               },
               {
                 "id": 38,
                 "line": 12,
-                "col": 26,
+                "column": 26,
                 "type": "identifier",
                 "value": "i1"
               },
               {
                 "id": 39,
                 "line": 12,
-                "col": 30,
+                "column": 30,
                 "type": "identifier",
                 "value": "i2"
               },
               {
                 "id": 40,
                 "line": 12,
-                "col": 34,
+                "column": 34,
                 "type": "identifier",
                 "value": "i3"
               },
               {
                 "id": 41,
                 "line": 12,
-                "col": 38,
+                "column": 38,
                 "type": "identifier",
                 "value": "i4"
               }

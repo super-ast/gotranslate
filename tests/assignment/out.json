@@ -4,7 +4,7 @@
     {
       "id": 1,
       "line": 5,
-      "col": 1,
+      "column": 1,
       "type": "function-declaration",
       "name": "main",
       "block": {
@@ -13,7 +13,7 @@
           {
             "id": 3,
             "line": 6,
-            "col": 2,
+            "column": 2,
             "type": "variable-declaration",
             "name": "i",
             "data-type": {
@@ -23,7 +23,7 @@
             "init": {
               "id": 5,
               "line": 6,
-              "col": 2,
+              "column": 2,
               "type": "int",
               "value": 0
             }
@@ -31,19 +31,19 @@
           {
             "id": 6,
             "line": 7,
-            "col": 2,
+            "column": 2,
             "type": "=",
             "left": {
               "id": 7,
               "line": 7,
-              "col": 2,
+              "column": 2,
               "type": "identifier",
               "value": "i"
             },
             "right": {
               "id": 8,
               "line": 7,
-              "col": 6,
+              "column": 6,
               "type": "int",
               "value": 3
             }
@@ -51,7 +51,7 @@
           {
             "id": 9,
             "line": 8,
-            "col": 2,
+            "column": 2,
             "type": "variable-declaration",
             "name": "j",
             "data-type": {
@@ -61,7 +61,7 @@
             "init": {
               "id": 11,
               "line": 8,
-              "col": 7,
+              "column": 7,
               "type": "int",
               "value": 4
             }
@@ -69,21 +69,21 @@
           {
             "id": 12,
             "line": 9,
-            "col": 2,
+            "column": 2,
             "type": "function-call",
             "name": "fmt.Println",
             "arguments": [
               {
                 "id": 13,
                 "line": 9,
-                "col": 14,
+                "column": 14,
                 "type": "identifier",
                 "value": "i"
               },
               {
                 "id": 14,
                 "line": 9,
-                "col": 17,
+                "column": 17,
                 "type": "identifier",
                 "value": "j"
               }

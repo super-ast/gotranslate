@@ -4,7 +4,7 @@
     {
       "id": 1,
       "line": 5,
-      "col": 1,
+      "column": 1,
       "type": "function-declaration",
       "name": "main",
       "block": {
@@ -13,7 +13,7 @@
           {
             "id": 3,
             "line": 6,
-            "col": 2,
+            "column": 2,
             "type": "variable-declaration",
             "name": "i",
             "data-type": {
@@ -23,7 +23,7 @@
             "init": {
               "id": 5,
               "line": 6,
-              "col": 7,
+              "column": 7,
               "type": "int",
               "value": 0
             }
@@ -31,7 +31,7 @@
           {
             "id": 6,
             "line": 7,
-            "col": 2,
+            "column": 2,
             "type": "error",
             "value": "Unsupported statement or expression",
             "description": "go statements not supported"

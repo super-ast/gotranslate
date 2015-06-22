@@ -4,7 +4,7 @@
     {
       "id": 1,
       "line": 5,
-      "col": 1,
+      "column": 1,
       "type": "function-declaration",
       "name": "main",
       "block": {
@@ -13,7 +13,7 @@
           {
             "id": 3,
             "line": 6,
-            "col": 2,
+            "column": 2,
             "type": "variable-declaration",
             "name": "i",
             "data-type": {
@@ -23,7 +23,7 @@
             "init": {
               "id": 5,
               "line": 6,
-              "col": 7,
+              "column": 7,
               "type": "int",
               "value": 3
             }
@@ -31,12 +31,12 @@
           {
             "id": 6,
             "line": 7,
-            "col": 2,
+            "column": 2,
             "type": "_++",
             "expression": {
               "id": 7,
               "line": 7,
-              "col": 2,
+              "column": 2,
               "type": "identifier",
               "value": "i"
             }
@@ -44,12 +44,12 @@
           {
             "id": 8,
             "line": 8,
-            "col": 2,
+            "column": 2,
             "type": "_--",
             "expression": {
               "id": 9,
               "line": 8,
-              "col": 2,
+              "column": 2,
               "type": "identifier",
               "value": "i"
             }
@@ -57,14 +57,14 @@
           {
             "id": 10,
             "line": 9,
-            "col": 2,
+            "column": 2,
             "type": "function-call",
             "name": "fmt.Println",
             "arguments": [
               {
                 "id": 11,
                 "line": 9,
-                "col": 14,
+                "column": 14,
                 "type": "identifier",
                 "value": "i"
               }

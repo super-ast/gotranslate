@@ -4,14 +4,14 @@
     {
       "id": 1,
       "line": 5,
-      "col": 1,
+      "column": 1,
       "type": "function-declaration",
       "name": "foo",
       "parameters": [
         {
           "id": 4,
           "line": 5,
-          "col": 10,
+          "column": 10,
           "type": "variable-declaration",
           "name": "a",
           "data-type": {
@@ -22,7 +22,7 @@
         {
           "id": 6,
           "line": 5,
-          "col": 13,
+          "column": 13,
           "type": "variable-declaration",
           "name": "b",
           "data-type": {
@@ -33,7 +33,7 @@
         {
           "id": 8,
           "line": 5,
-          "col": 20,
+          "column": 20,
           "type": "variable-declaration",
           "name": "c",
           "data-type": {
@@ -52,40 +52,40 @@
           {
             "id": 10,
             "line": 6,
-            "col": 2,
+            "column": 2,
             "type": "return",
             "expression": {
               "id": 11,
               "line": 6,
-              "col": 9,
+              "column": 9,
               "type": "function-call",
               "name": "fmt.Sprintf",
               "arguments": [
                 {
                   "id": 12,
                   "line": 6,
-                  "col": 21,
+                  "column": 21,
                   "type": "string",
                   "value": "%d %d %s"
                 },
                 {
                   "id": 13,
                   "line": 6,
-                  "col": 33,
+                  "column": 33,
                   "type": "identifier",
                   "value": "a"
                 },
                 {
                   "id": 14,
                   "line": 6,
-                  "col": 36,
+                  "column": 36,
                   "type": "identifier",
                   "value": "b"
                 },
                 {
                   "id": 15,
                   "line": 6,
-                  "col": 39,
+                  "column": 39,
                   "type": "identifier",
                   "value": "c"
                 }
@@ -98,7 +98,7 @@
     {
       "id": 16,
       "line": 9,
-      "col": 1,
+      "column": 1,
       "type": "function-declaration",
       "name": "main",
       "block": {
@@ -107,35 +107,35 @@
           {
             "id": 18,
             "line": 10,
-            "col": 2,
+            "column": 2,
             "type": "function-call",
             "name": "fmt.Println",
             "arguments": [
               {
                 "id": 19,
                 "line": 10,
-                "col": 14,
+                "column": 14,
                 "type": "function-call",
                 "name": "foo",
                 "arguments": [
                   {
                     "id": 20,
                     "line": 10,
-                    "col": 18,
+                    "column": 18,
                     "type": "int",
                     "value": 1
                   },
                   {
                     "id": 21,
                     "line": 10,
-                    "col": 21,
+                    "column": 21,
                     "type": "int",
                     "value": 2
                   },
                   {
                     "id": 22,
                     "line": 10,
-                    "col": 24,
+                    "column": 24,
                     "type": "string",
                     "value": "bar"
                   }

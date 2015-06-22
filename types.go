@@ -6,7 +6,7 @@ type id struct {
 
 type pos struct {
 	Line int `json:"line"`
-	Col  int `json:"col"`
+	Col  int `json:"column"`
 }
 
 type block struct {

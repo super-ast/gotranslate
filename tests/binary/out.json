@@ -4,7 +4,7 @@
     {
       "id": 1,
       "line": 5,
-      "col": 1,
+      "column": 1,
       "type": "function-declaration",
       "name": "main",
       "block": {
@@ -13,7 +13,7 @@
           {
             "id": 3,
             "line": 6,
-            "col": 2,
+            "column": 2,
             "type": "variable-declaration",
             "name": "i",
             "data-type": {
@@ -23,19 +23,19 @@
             "init": {
               "id": 5,
               "line": 6,
-              "col": 7,
+              "column": 7,
               "type": "+",
               "left": {
                 "id": 6,
                 "line": 6,
-                "col": 7,
+                "column": 7,
                 "type": "int",
                 "value": 3
               },
               "right": {
                 "id": 7,
                 "line": 6,
-                "col": 11,
+                "column": 11,
                 "type": "int",
                 "value": 4
               }
@@ -44,36 +44,36 @@
           {
             "id": 8,
             "line": 7,
-            "col": 2,
+            "column": 2,
             "type": "+=",
             "left": {
               "id": 9,
               "line": 7,
-              "col": 2,
+              "column": 2,
               "type": "identifier",
               "value": "i"
             },
             "right": {
               "id": 10,
               "line": 7,
-              "col": 7,
+              "column": 7,
               "type": "/",
               "left": {
                 "id": 11,
                 "line": 7,
-                "col": 8,
+                "column": 8,
                 "type": "*",
                 "left": {
                   "id": 12,
                   "line": 7,
-                  "col": 8,
+                  "column": 8,
                   "type": "int",
                   "value": 2
                 },
                 "right": {
                   "id": 13,
                   "line": 7,
-                  "col": 12,
+                  "column": 12,
                   "type": "int",
                   "value": 4
                 }
@@ -81,7 +81,7 @@
               "right": {
                 "id": 14,
                 "line": 7,
-                "col": 17,
+                "column": 17,
                 "type": "int",
                 "value": 3
               }
@@ -90,7 +90,7 @@
           {
             "id": 15,
             "line": 8,
-            "col": 2,
+            "column": 2,
             "type": "variable-declaration",
             "name": "j",
             "data-type": {
@@ -100,7 +100,7 @@
             "init": {
               "id": 17,
               "line": 8,
-              "col": 2,
+              "column": 2,
               "type": "int",
               "value": 0
             }
@@ -108,19 +108,19 @@
           {
             "id": 18,
             "line": 9,
-            "col": 2,
+            "column": 2,
             "type": "=",
             "left": {
               "id": 19,
               "line": 9,
-              "col": 2,
+              "column": 2,
               "type": "identifier",
               "value": "j"
             },
             "right": {
               "id": 20,
               "line": 9,
-              "col": 6,
+              "column": 6,
               "type": "int",
               "value": 4
             }
@@ -128,21 +128,21 @@
           {
             "id": 21,
             "line": 10,
-            "col": 2,
+            "column": 2,
             "type": "function-call",
             "name": "fmt.Println",
             "arguments": [
               {
                 "id": 22,
                 "line": 10,
-                "col": 14,
+                "column": 14,
                 "type": "identifier",
                 "value": "i"
               },
               {
                 "id": 23,
                 "line": 10,
-                "col": 17,
+                "column": 17,
                 "type": "identifier",
                 "value": "j"
               }

@@ -4,7 +4,7 @@
     {
       "id": 1,
       "line": 5,
-      "col": 1,
+      "column": 1,
       "type": "function-declaration",
       "name": "main",
       "block": {
@@ -13,24 +13,24 @@
           {
             "id": 3,
             "line": 6,
-            "col": 2,
+            "column": 2,
             "type": "conditional",
             "condition": {
               "id": 4,
               "line": 6,
-              "col": 5,
+              "column": 5,
               "type": "\u003c",
               "left": {
                 "id": 5,
                 "line": 6,
-                "col": 5,
+                "column": 5,
                 "type": "int",
                 "value": 3
               },
               "right": {
                 "id": 6,
                 "line": 6,
-                "col": 9,
+                "column": 9,
                 "type": "int",
                 "value": 4
               }
@@ -41,14 +41,14 @@
                 {
                   "id": 9,
                   "line": 7,
-                  "col": 3,
+                  "column": 3,
                   "type": "function-call",
                   "name": "fmt.Println",
                   "arguments": [
                     {
                       "id": 10,
                       "line": 7,
-                      "col": 15,
+                      "column": 15,
                       "type": "string",
                       "value": "foo"
                     }
@@ -62,14 +62,14 @@
                 {
                   "id": 11,
                   "line": 9,
-                  "col": 3,
+                  "column": 3,
                   "type": "function-call",
                   "name": "fmt.Println",
                   "arguments": [
                     {
                       "id": 12,
                       "line": 9,
-                      "col": 15,
+                      "column": 15,
                       "type": "string",
                       "value": "bar"
                     }

@@ -4,7 +4,7 @@
     {
       "id": 1,
       "line": 5,
-      "col": 1,
+      "column": 1,
       "type": "function-declaration",
       "name": "main",
       "block": {
@@ -13,35 +13,35 @@
           {
             "id": 3,
             "line": 6,
-            "col": 2,
+            "column": 2,
             "type": "function-call",
             "name": "fmt.Println",
             "arguments": [
               {
                 "id": 4,
                 "line": 6,
-                "col": 14,
+                "column": 14,
                 "type": "string",
                 "value": "foo"
               },
               {
                 "id": 5,
                 "line": 6,
-                "col": 21,
+                "column": 21,
                 "type": "int",
                 "value": 3
               },
               {
                 "id": 6,
                 "line": 6,
-                "col": 24,
+                "column": 24,
                 "type": "char",
                 "value": 0
               },
               {
                 "id": 7,
                 "line": 6,
-                "col": 29,
+                "column": 29,
                 "type": "double",
                 "value": 4.3
               }
