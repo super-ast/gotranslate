@@ -11,7 +11,7 @@ import (
 	"go/token"
 	"io/ioutil"
 	"os"
-	"path"
+	"path/filepath"
 	"testing"
 )
 
@@ -41,7 +41,7 @@ const (
 
 func doTest(t *testing.T, name string) {
 	fset := token.NewFileSet()
-	in, err := os.Open(path.Join(testsDir, name, inFilename))
+	in, err := os.Open(filepath.Join(testsDir, name, inFilename))
 	if err != nil {
 		t.Errorf("Failed opening file: %s", err)
 	}
@@ -52,7 +52,7 @@ func doTest(t *testing.T, name string) {
 	a := NewAST(fset)
 	ast.Walk(a, f)
 	got := toJSON(t, a)
-	outPath := path.Join(testsDir, name, outFilename)
+	outPath := filepath.Join(testsDir, name, outFilename)
 	if *write {
 		out, err := os.Create(outPath)
 		if err != nil {
