@@ -45,6 +45,7 @@ func doTest(t *testing.T, name string) {
 	if err != nil {
 		t.Errorf("Failed opening file: %s", err)
 	}
+	defer in.Close()
 	f, err := parser.ParseFile(fset, name+".go", in, 0)
 	if err != nil {
 		t.Errorf("Failed parsing source file: %s", err)
@@ -58,6 +59,7 @@ func doTest(t *testing.T, name string) {
 		if err != nil {
 			t.Errorf("Failed opening file: %s", err)
 		}
+		defer out.Close()
 		_, err = out.Write(got)
 		if err != nil {
 			t.Errorf("Failed writing json file: %s", err)
@@ -67,6 +69,7 @@ func doTest(t *testing.T, name string) {
 		if err != nil {
 			t.Errorf("Failed opening file: %s", err)
 		}
+		defer out.Close()
 		want, err := ioutil.ReadAll(out)
 		if err != nil {
 			t.Errorf("Failed reading json file: %s", err)
