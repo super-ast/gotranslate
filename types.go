@@ -1,7 +1,7 @@
 /* Copyright (c) 2015, Daniel Martí <mvdan@mvdan.cc> */
 /* See LICENSE for licensing information */
 
-package superast
+package gotranslate
 
 type id struct {
 	ID int `json:"id"`

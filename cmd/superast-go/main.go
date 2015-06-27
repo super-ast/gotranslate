@@ -13,7 +13,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/mvdan/superast"
+	"github.com/super-ast/gotranslate"
 )
 
 var pretty = flag.Bool("p", false, "pretty print output")
@@ -26,7 +26,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	a := superast.NewAST(fset)
+	a := gotranslate.NewAST(fset)
 	ast.Walk(a, f)
 
 	var b []byte
