@@ -24,13 +24,13 @@ func init() {
 	flag.Parse()
 }
 
-func toJSON(t *testing.T, a *AST) []byte {
+func toJSON(t *testing.T, a *AST) ([]byte, error) {
 	b, err := json.MarshalIndent(a.RootBlock, "", "  ")
 	if err != nil {
-		t.Errorf("Could not generate JSON from AST: %s", err)
+		return nil, err
 	}
 	b = append(b, '\n')
-	return b
+	return b, nil
 }
 
 const (
@@ -43,39 +43,50 @@ func doTest(t *testing.T, name string) {
 	fset := token.NewFileSet()
 	in, err := os.Open(filepath.Join(testsDir, name, inFilename))
 	if err != nil {
-		t.Errorf("Failed opening file: %s", err)
+		t.Errorf("Failed opening file: %v", err)
+		return
 	}
 	defer in.Close()
 	f, err := parser.ParseFile(fset, name+".go", in, 0)
 	if err != nil {
-		t.Errorf("Failed parsing source file: %s", err)
+		t.Errorf("Failed parsing source file: %v", err)
+		return
 	}
 	a := NewAST(fset)
 	ast.Walk(a, f)
-	got := toJSON(t, a)
+	got, err := toJSON(t, a)
+	if err != nil {
+		t.Errorf("Could not generate JSON from AST: %v", err)
+		return
+	}
 	outPath := filepath.Join(testsDir, name, outFilename)
 	if *write {
 		out, err := os.Create(outPath)
 		if err != nil {
-			t.Errorf("Failed opening file: %s", err)
+			t.Errorf("Failed opening file: %v", err)
+			return
 		}
 		defer out.Close()
 		_, err = out.Write(got)
 		if err != nil {
-			t.Errorf("Failed writing json file: %s", err)
+			t.Errorf("Failed writing json file: %v", err)
+			return
 		}
 	} else {
 		out, err := os.Open(outPath)
 		if err != nil {
-			t.Errorf("Failed opening file: %s", err)
+			t.Errorf("Failed opening file: %v", err)
+			return
 		}
 		defer out.Close()
 		want, err := ioutil.ReadAll(out)
 		if err != nil {
-			t.Errorf("Failed reading json file: %s", err)
+			t.Errorf("Failed reading json file: %v", err)
+			return
 		}
 		if string(want) != string(got) {
-			t.Errorf("Mismatching JSON outputs in the test '%s'", name)
+			t.Errorf("Mismatching JSON outputs in the test '%v'", name)
+			return
 		}
 	}
 }
