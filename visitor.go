@@ -247,7 +247,7 @@ func (a *AST) parseExpr(expr ast.Expr) expr {
 		//case token.XOR:
 		//case token.AND:
 		default:
-			return a.getInvalid(expr, "Invalid unary expression: " + x.Op.String())
+			return a.getInvalid(expr, "Invalid unary expression: "+x.Op.String())
 		}
 		return &unary{
 			id:   a.newID(),
@@ -439,12 +439,12 @@ func (a *AST) Visit(node ast.Node) ast.Visitor {
 			var s stmt
 			if x.Tok == token.DEFINE {
 				s = &varDecl{
-					id:   a.newID(),
-					pos:  a.curPos(),
-					Type: "variable-declaration",
-					Name: exprString(l),
+					id:       a.newID(),
+					pos:      a.curPos(),
+					Type:     "variable-declaration",
+					Name:     exprString(l),
 					DataType: a.assignIdToDataType(exprType(r)),
-					Init: a.parseExpr(r),
+					Init:     a.parseExpr(r),
 				}
 			} else {
 				s = &binary{
